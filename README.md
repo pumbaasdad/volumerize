@@ -1,10 +1,10 @@
 # Blacklabelops Volumerize
 
-[![Circle CI](https://circleci.com/gh/blacklabelops/volumerize.svg?style=shield)](https://circleci.com/gh/blacklabelops/volumerize)
-[![Open Issues](https://img.shields.io/github/issues/blacklabelops/volumerize.svg)](https://github.com/blacklabelops/volumerize/issues) [![Stars on GitHub](https://img.shields.io/github/stars/blacklabelops/volumerize.svg)](https://github.com/blacklabelops/volumerize/stargazers)
-[![Docker Stars](https://img.shields.io/docker/stars/blacklabelops/volumerize.svg)](https://hub.docker.com/r/blacklabelops/volumerize/) [![Docker Pulls](https://img.shields.io/docker/pulls/blacklabelops/volumerize.svg)](https://hub.docker.com/r/blacklabelops/volumerize/)
+[![Circle CI](https://circleci.com/gh/motionbank/volumerize.svg?style=shield)](https://circleci.com/gh/motionbank/volumerize)
+[![Open Issues](https://img.shields.io/github/issues/motionbank/volumerize.svg)](https://github.com/motionbank/volumerize/issues) [![Stars on GitHub](https://img.shields.io/github/stars/motionbank/volumerize.svg)](https://github.com/motionbank/volumerize/stargazers)
+[![Docker Stars](https://img.shields.io/docker/stars/motionbank/volumerize.svg)](https://hub.docker.com/r/motionbank/volumerize/) [![Docker Pulls](https://img.shields.io/docker/pulls/motionbank/volumerize.svg)](https://hub.docker.com/r/motionbank/volumerize/)
 
-[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/blacklabelops/volumerize/master/dc-pwd.yml)
+[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/motionbank/volumerize/master/dc-pwd.yml)
 
 Blacklabelops backup and restore solution for Docker volume backups. It is based on the command line tool Duplicity. Dockerized and Parameterized for easier use and configuration.
 
@@ -33,13 +33,13 @@ and many more: [Duplicity Supported Backends](http://duplicity.nongnu.org/index.
 
 Docker Volume Backups on:
 
-Backblaze B2: [Readme](https://github.com/blacklabelops/volumerize/tree/master/backends/BackblazeB2)
+Backblaze B2: [Readme](https://github.com/motionbank/volumerize/tree/master/backends/BackblazeB2)
 
-Amazon S3: [Readme](https://github.com/blacklabelops/volumerize/tree/master/backends/AmazonS3)
+Amazon S3: [Readme](https://github.com/motionbank/volumerize/tree/master/backends/AmazonS3)
 
-Dropbox: [Readme](https://github.com/blacklabelops/volumerize/tree/master/backends/Dropbox)
+Dropbox: [Readme](https://github.com/motionbank/volumerize/tree/master/backends/Dropbox)
 
-Google Drive: [Readme](https://github.com/blacklabelops/volumerize/tree/master/backends/GoogleDrive)
+Google Drive: [Readme](https://github.com/motionbank/volumerize/tree/master/backends/GoogleDrive)
 
 # Make It Short
 
@@ -53,7 +53,7 @@ $ docker run --rm \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    blacklabelops/volumerize backup
+    motionbank/volumerize backup
 ~~~~
 
 > Hooks up your volume with the name `yourvolume` and backups to the volume `backup_volume`
@@ -71,12 +71,12 @@ $ docker run \
      -d -p 80:8080 \
      --name jenkins \
      -v jenkins_volume:/jenkins \
-     blacklabelops/jenkins
+     motionbank/jenkins
 ~~~~
 
 > Starts Jenkins and stores its data inside the Docker volume `jenkins_volume`.
 
-Now attach the Jenkins data to folders inside the container and tell blacklabelops/volumerize to backup folder `/source` to folder `/backup`.
+Now attach the Jenkins data to folders inside the container and tell motionbank/volumerize to backup folder `/source` to folder `/backup`.
 
 ~~~~
 $ docker run -d \
@@ -86,7 +86,7 @@ $ docker run -d \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 
 > Will start the Volumerizer. The volume jenkins_volume is now folder `/source` and backups_volume is now folder `/backup` inside the container.
@@ -121,7 +121,7 @@ $ docker run -d \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 
 > Will run Volumerize on the common parent folder `/source`.
@@ -145,7 +145,7 @@ $ docker run -d \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 
 Then stop the backup container and restore with the following command. The only difference is that we exclude the read-only option `:ro` from the source volume and added it to the backup volume:
@@ -158,7 +158,7 @@ $ docker run --rm \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    blacklabelops/volumerize restore
+    motionbank/volumerize restore
 $ docker start volumerize
 ~~~~
 
@@ -179,7 +179,7 @@ $ docker run --rm \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    blacklabelops/volumerize restore --dry-run
+    motionbank/volumerize restore --dry-run
 ~~~~
 
 But in order to see the differences between backup and source you need the verify command:
@@ -191,7 +191,7 @@ $ docker run --rm \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    blacklabelops/volumerize verify
+    motionbank/volumerize verify
 ~~~~
 
 # Periodic Backups
@@ -214,7 +214,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
     -e "VOLUMERIZE_JOBBER_TIME=0 0 3 * * *" \
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 
 > Backups at three o'clock in the morning according to german local time.
@@ -242,7 +242,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
     -e "VOLUMERIZE_CONTAINERS=application application_database" \
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 
 > The startup routine will be applied to the following scripts: backup, backupFull, restore and periodBackup.
@@ -285,16 +285,16 @@ $ docker run -d \
     -e "DOCKER_API_VERSION=1.23" \
     ...
     ...
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 ### Additional Docker considerations
 Warning: Make sure your container is running under the correct restart policy. Tools like Docker, Docker-Compose, Docker-Swarm, Kubernetes and Cattle may restart the container even when Volumerize stops it. Backups done under running instances may end in corrupted backups and even corrupted data. Always make sure that the command `docker stop` really stops an instance and there will be no restart of the underlying deployment technology. You can test this by running `docker stop` and check with `docker ps` that the container is really stopped.
 
 # Duplicity Parameters
 
-Under the hood blacklabelops/volumerize uses duplicity. See here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
+Under the hood motionbank/volumerize uses duplicity. See here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
 
-You can pass duplicity options inside Volumerize. Duplicity options will be passed by the environment-variable `VOLUMERIZE_DUPLICITY_OPTIONS`. The options will be added to all blacklabelops/volumerize commands and scripts. E.g. the option `--dry-run` will put the whole container in demo mode as all duplicity commands will only be simulated.
+You can pass duplicity options inside Volumerize. Duplicity options will be passed by the environment-variable `VOLUMERIZE_DUPLICITY_OPTIONS`. The options will be added to all motionbank/volumerize commands and scripts. E.g. the option `--dry-run` will put the whole container in demo mode as all duplicity commands will only be simulated.
 
 Example:
 
@@ -307,7 +307,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
     -e "VOLUMERIZE_DUPLICITY_OPTIONS=--dry-run" \
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 
 > Will only operate in dry-run simulation mode.
@@ -319,7 +319,7 @@ You can encrypt your backups by setting a secure passphrase inside the environme
 Creating a secure passphrase:
 
 ~~~~
-$ docker run --rm blacklabelops/volumerize openssl rand 128 -base64
+$ docker run --rm motionbank/volumerize openssl rand 128 -base64
 ~~~~
 
 > Prints an appropriate password on the console.
@@ -335,7 +335,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
     -e "PASSPHRASE=Jzwv1V83LHwtsbulVS7mMyijStBAs7Qr/V2MjuYtKg4KQVadRM" \
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 
 > Same functionality as described above but all backups will be encrypted.
@@ -405,7 +405,7 @@ $ docker run -d \
     -e "VOLUMERIZE_GPG_PRIVATE_KEY=/key/MyKey.asc" \
     -e GPG_KEY_ID=<MyKeyID>
     -e "PASSPHRASE=" \
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 
 > This will import a key without a password set.
@@ -440,7 +440,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
     -e "VOLUMERIZE_FULL_IF_OLDER_THAN=7D" \
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 
 > Will enforce a full backup after seven days.
@@ -467,7 +467,7 @@ Some premade strategies are available at [prepost strategies](prepost_strategies
 # Container Scripts
 
 This image creates at container startup some convenience scripts.
-Under the hood blacklabelops/volumerize uses duplicity. To pass script parameters, see here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
+Under the hood motionbank/volumerize uses duplicity. To pass script parameters, see here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
 
 | Script | Description |
 |--------|-------------|
@@ -553,17 +553,17 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE2=/source2" \
     -e "VOLUMERIZE_TARGET2=file:///backup2" \
     -e "VOLUMERIZE_CACHE2=/volumerize-cache2" \
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 
 ## Build the Image
 
 ~~~~
-$ docker build -t blacklabelops/volumerize .
+$ docker build -t motionbank/volumerize .
 ~~~~
 
 ## Run the Image
 
 ~~~~
-$ docker run -it --rm blacklabelops/volumerize bash
+$ docker run -it --rm motionbank/volumerize bash
 ~~~~
