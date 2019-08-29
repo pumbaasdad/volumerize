@@ -35,7 +35,7 @@ $ docker run -it --rm \
     -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
     -e "GOOGLE_DRIVE_ID=12312786-e99grj1k5lwjepofjwpoejfpe5nqvkd3e.apps.googleusercontent.com" \
     -e "GOOGLE_DRIVE_SECRET=FWeofWefkefnkef" \
-    blacklabelops/volumerize backup
+    motionbank/volumerize backup
 ~~~~
 
 > Note: The routine will fail, you still have to enable the Google Drive API for your project. See the URL inside the log output.
@@ -52,7 +52,7 @@ $ docker run -d \
     -v jenkins_volume:/source:ro \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 
 > `volumerize_cache` is the local data cache.
@@ -75,7 +75,7 @@ $ docker run --rm \
     -v volumerize_credentials:/credentials \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
-    blacklabelops/volumerize restore
+    motionbank/volumerize restore
 ~~~~
 
 > Will perform a test restore inside a separate volume `jenkins_test_restore`
@@ -98,7 +98,7 @@ $ docker run --rm \
     -v volumerize_credentials:/credentials \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
-    blacklabelops/volumerize verify
+    motionbank/volumerize verify
 ~~~~
 
 > Will perform a single verification of the volume contents against the Google Drive archive.
@@ -131,7 +131,7 @@ $ docker run -d \
     -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
     -e "VOLUMERIZE_CONTAINERS=jenkins" \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    blacklabelops/volumerize
+    motionbank/volumerize
 ~~~~
 
 > Needs access to the docker host over the directive `-v /var/run/docker.sock:/var/run/docker.sock`

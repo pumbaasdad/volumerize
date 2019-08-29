@@ -1,4 +1,4 @@
-FROM blacklabelops/volumerize
+FROM motionbank/volumerize
 
 RUN apk add --no-cache \
     mysql-client pv
