@@ -13,7 +13,7 @@ Aside of the required environment variables by Volumerize, this prepost strategy
 | MYSQL_USERNAME | Username of the user who will perform the restore or dump. |
 | MYSQL_PASSWORD | Password of the user who will perform the restore or dump. |
 | MYSQL_HOST     | IP or domain of the host machine.                          |
-
+| MYSQL_DATABASE | Database to restore. (only available for restore)          |	
 
 ## Example with Docker Compose
 
