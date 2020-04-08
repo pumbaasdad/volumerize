@@ -95,7 +95,7 @@ function prepareJobConfiguration() {
   local jobNumber=$1
   local VARIABLE_SOURCE="VOLUMERIZE_SOURCE${jobNumber}"
   local VARIABLE_TARGET="VOLUMERIZE_TARGET${jobNumber}"
-
+  local VARIABLE_RESTORE="VOLUMERIZE_RESTORE${jobNumber}"
   if [ -n "${!VARIABLE_SOURCE}" ]; then
     VOLUMERIZE_JOB_SOURCE=${!VARIABLE_SOURCE}
   else
@@ -105,6 +105,12 @@ function prepareJobConfiguration() {
     VOLUMERIZE_JOB_TARGET=${!VARIABLE_TARGET}
   else
     VOLUMERIZE_JOB_TARGET=
+  fi
+  
+  if [ -n "${!VARIABLE_RESTORE}" ]; then
+    VOLUMERIZE_JOB_RESTORE=${!VARIABLE_RESTORE}
+  else
+    VOLUMERIZE_JOB_RESTORE=
   fi
 }
 
