@@ -42,6 +42,9 @@ RUN apk upgrade --update && \
       librsync-dev \
       python2-dev \
       duplicity \
+	  mysql-client \
+	  pv \
+	  nano\
       py-pip && \
     pip install --upgrade pip && \
     pip install \

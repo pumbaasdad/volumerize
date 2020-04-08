@@ -1,0 +1,11 @@
+echo usage restoremysql MYSQL_DATABASE otherparams 
+source /preexecute/utils/check-env.sh
+MYSQL_DATABASE=$1
+shift
+check_env "mysqlimport" "MYSQL_PASSWORD" "MYSQL_USERNAME" "MYSQL_HOST"  
+
+restore --file-to-restore volumerize-mysql/dump-${MYSQL_DATABASE}.sql $@
+
+echo "mysql import starts $MYSQL_DATABASE"
+pv ${VOLUMERIZE_RESTORE}/volumerize-mysql/dump-${MYSQL_DATABASE}.sql | mysql -u ${MYSQL_USERNAME} -p${MYSQL_PASSWORD} $MYSQL_DATABASE
+echo "Import done"
