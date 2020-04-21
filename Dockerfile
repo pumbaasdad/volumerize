@@ -1,5 +1,5 @@
 FROM alpine:20190508
-MAINTAINER Steffen Bleul <sbl@blacklabelops.com>
+MAINTAINER Felix Haase <it@feki.de>
 
 ARG JOBBER_VERSION=1.3.4
 ARG DOCKER_VERSION=1.12.2
@@ -53,6 +53,7 @@ RUN apk upgrade --update && \
       boto \
       lockfile \
       paramiko \
+      pexpect \
       pycryptopp \
       python-keystoneclient \
       python-swiftclient \

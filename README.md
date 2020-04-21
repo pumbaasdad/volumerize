@@ -71,7 +71,7 @@ $ docker run \
      -d -p 80:8080 \
      --name jenkins \
      -v jenkins_volume:/jenkins \
-     blacklabelops/jenkins
+     motionbank/jenkins
 ~~~~
 
 > Starts Jenkins and stores its data inside the Docker volume `jenkins_volume`.
