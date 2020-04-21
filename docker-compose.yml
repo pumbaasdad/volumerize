@@ -1,0 +1,24 @@
+version: 2
+
+services:
+  volumerize:
+    build: .
+    environment:
+      - VOLUMERIZE_SOURCE=/source
+      - VOLUMERIZE_TARGET=s3://s3.<bucket-region>.amazonaws.com/<bucket-name>[/<path>]
+      - AWS_ACCESS_KEY_ID=accesskey
+      - AWS_SECRET_ACCESS_KEY=secretkey
+      - TZ=Europe/Paris
+      - VOLUMERIZE_JOBBER_TIME=0 0 3 * * *
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=1234
+      - MYSQL_HOST=dbhost
+      - VOLUMERIZE_DUPLICITY_OPTIONS=
+      - VOLUMERIZE_FULL_IF_OLDER_THAN=14D
+      - REMOVE_ALL_BUT_N_FULL=4
+    volumes:
+      - volumerize-cache:/volumerize-cache
+
+
+volumes:
+  volumerize-cache:
