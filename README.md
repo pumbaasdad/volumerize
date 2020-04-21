@@ -1,6 +1,6 @@
 # Blacklabelops Volumerize
 
-[![Circle CI](https://circleci.com/gh/fekide/volumerize.svg?style=shield)](https://circleci.com/gh/fekide/volumerize)
+[![Circle CI](https://circleci.com/gh/Fekide/volumerize.svg?style=shield)](https://circleci.com/gh/Fekide/volumerize)
 [![Open Issues](https://img.shields.io/github/issues/fekide/volumerize.svg)](https://github.com/fekide/volumerize/issues) [![Stars on GitHub](https://img.shields.io/github/stars/fekide/volumerize.svg)](https://github.com/fekide/volumerize/stargazers)
 [![Docker Stars](https://img.shields.io/docker/stars/fekide/volumerize.svg)](https://hub.docker.com/r/fekide/volumerize/) [![Docker Pulls](https://img.shields.io/docker/pulls/fekide/volumerize.svg)](https://hub.docker.com/r/fekide/volumerize/)
 
