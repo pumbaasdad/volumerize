@@ -5,7 +5,7 @@
 /**
  * Build parameters, must be adjusted when forked!
  **/
-dockerImageName = 'blacklabelops/volumerize'
+dockerImageName = 'fekide/volumerize'
 dockerTags = ["latest"] as String[]
 dockerTestCommands =
  ["echo hello world",

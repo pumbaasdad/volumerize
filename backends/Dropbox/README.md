@@ -38,7 +38,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=dpbx:///Apps/Volumerize" \
     -e "DPBX_ACCESS_TOKEN=JUtoLXXwNNMAAAAAAA" \
-    blacklabelops/volumerize
+    fekide/volumerize
 ~~~~
 
 > `volumerize_cache` is the local data cache.
@@ -61,7 +61,7 @@ $ docker run --rm \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=dpbx:///Apps/Volumerize" \
     -e "DPBX_ACCESS_TOKEN=JUtoLXXwNNMAAAAAAA" \
-    blacklabelops/volumerize restore
+    fekide/volumerize restore
 ~~~~
 
 > Will perform a test restore inside a separate volume `jenkins_test_restore`
@@ -84,7 +84,7 @@ $ docker run --rm \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=dpbx:///Apps/Volumerize" \
     -e "DPBX_ACCESS_TOKEN=JUtoLXXwNNMAAAAAAA" \
-    blacklabelops/volumerize verify
+    fekide/volumerize verify
 ~~~~
 
 > Will perform a single verification of the volume contents against the dropbox archive.
@@ -117,7 +117,7 @@ $ docker run -d \
     -e "DPBX_ACCESS_TOKEN=JUtoLXXwNNMAAAAAAA" \
     -e "VOLUMERIZE_CONTAINERS=jenkins" \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    blacklabelops/volumerize
+    fekide/volumerize
 ~~~~
 
 > Needs access to the docker host over the directive `-v /var/run/docker.sock:/var/run/docker.sock`

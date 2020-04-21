@@ -67,7 +67,7 @@ $ docker run -d \
     -e "VOLUMERIZE_TARGET=s3://s3.eu-central-1.amazonaws.com/duplicitytest" \
     -e "AWS_ACCESS_KEY_ID=QQWDQIWIDO1QO" \
     -e "AWS_SECRET_ACCESS_KEY=ewlfkwkejflkjwlkej3fjw381" \
-    blacklabelops/volumerize
+    fekide/volumerize
 ~~~~
 
 > `volumerize_cache` is the local data cache.
@@ -91,7 +91,7 @@ $ docker run --rm \
     -e "VOLUMERIZE_TARGET=s3://s3.eu-central-1.amazonaws.com/duplicitytest" \
     -e "AWS_ACCESS_KEY_ID=QQWDQIWIDO1QO" \
     -e "AWS_SECRET_ACCESS_KEY=ewlfkwkejflkjwlkej3fjw381" \
-    blacklabelops/volumerize restore
+    fekide/volumerize restore
 ~~~~
 
 > Will perform a test restore inside a separate volume `jenkins_test_restore`
@@ -115,7 +115,7 @@ $ docker run --rm \
     -e "VOLUMERIZE_TARGET=s3://s3.eu-central-1.amazonaws.com/duplicitytest" \
     -e "AWS_ACCESS_KEY_ID=QQWDQIWIDO1QO" \
     -e "AWS_SECRET_ACCESS_KEY=ewlfkwkejflkjwlkej3fjw381" \
-    blacklabelops/volumerize verify
+    fekide/volumerize verify
 ~~~~
 
 > Will perform a single verification of the volume contents against the Amazon S3 archive.
@@ -149,7 +149,7 @@ $ docker run -d \
     -e "AWS_SECRET_ACCESS_KEY=ewlfkwkejflkjwlkej3fjw381" \
     -e "VOLUMERIZE_CONTAINERS=jenkins" \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    blacklabelops/volumerize
+    fekide/volumerize
 ~~~~
 
 > Needs access to the docker host over the directive `-v /var/run/docker.sock:/var/run/docker.sock`

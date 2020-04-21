@@ -4,7 +4,7 @@ services:
   volumerize:
     depends_on:
       - jenkins
-    image: blacklabelops/volumerize
+    image: fekide/volumerize
     container_name: volumerize
     volumes:
       - jenkins_volume:/source

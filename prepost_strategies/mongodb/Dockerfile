@@ -1,4 +1,4 @@
-FROM blacklabelops/volumerize
+FROM fekide/volumerize
 
 RUN apk add --no-cache \
     mongodb-tools

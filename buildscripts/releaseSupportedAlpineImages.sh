@@ -15,7 +15,7 @@ function pushImage() {
   local tagname=$1
   local repository=$2
 
-  docker push blacklabelops/volumerize:$tagname
+  docker push fekide/volumerize:$tagname
 }
 
 pushImage latest

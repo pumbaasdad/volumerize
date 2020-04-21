@@ -39,7 +39,7 @@ $ docker run -d \
     -v jenkins_volume:/source:ro \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=b2://003945h951emn6p0000000001:H006yG2V7+pogtolEFwCexcZUWJdkNc@volumerizetest/" \
-    blacklabelops/volumerize
+    fekide/volumerize
 ~~~~
 
 > Will backup to application id 003945h951emn6p0000000001 using application key H006yG2V7+pogtolEFwCexcZUWJdkNc inside bucket volumerizetest.
@@ -62,7 +62,7 @@ $ docker run --rm \
     -v volumerize_cache:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=b2://003945h951emn6p0000000001:H006yG2V7+pogtolEFwCexcZUWJdkNc@volumerizetest/" \
-    blacklabelops/volumerize restore
+    fekide/volumerize restore
 ~~~~
 
 > Will perform a test restore inside a separate volume `jenkins_test_restore`
@@ -85,7 +85,7 @@ $ docker run --rm \
     -v volumerize_cache:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=b2://003945h951emn6p0000000001:H006yG2V7+pogtolEFwCexcZUWJdkNc@volumerizetest/" \
-    blacklabelops/volumerize verify
+    fekide/volumerize verify
 ~~~~
 
 > Will perform a single verification of the volume contents against the Backblaze B2 archive.
@@ -117,7 +117,7 @@ $ docker run -d \
     -e "VOLUMERIZE_TARGET=b2://003945h951emn6p0000000001:H006yG2V7+pogtolEFwCexcZUWJdkNc@volumerizetest/" \
     -e "VOLUMERIZE_CONTAINERS=jenkins" \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    blacklabelops/volumerize
+    fekide/volumerize
 ~~~~
 
 > Needs access to the docker host over the directive `-v /var/run/docker.sock:/var/run/docker.sock`
