@@ -110,7 +110,7 @@ function prepareJobConfiguration() {
   if [ -n "${!VARIABLE_RESTORE}" ]; then
     VOLUMERIZE_JOB_RESTORE=${!VARIABLE_RESTORE}
   else
-    VOLUMERIZE_JOB_RESTORE=
+    VOLUMERIZE_JOB_RESTORE=${!VARIABLE_SOURCE}
   fi
 }
 
