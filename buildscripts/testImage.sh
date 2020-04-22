@@ -4,8 +4,7 @@ set -o errexit    # abort script at first error
 
 function testPrintVersion() {
   local tagname=$1
-  local imagename=$tagname
-  docker run --rm fekide/volumerize:$imagename duplicity -V
+  docker run --rm fekide/volumerize:$tagname duplicity -V
 }
 
 testPrintVersion $1

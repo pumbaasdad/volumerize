@@ -18,5 +18,4 @@ function pushImage() {
   docker push fekide/volumerize:$tagname
 }
 
-pushImage latest
-pushImage $PUSH_IMAGE_VERSION
+pushImage $PUSH_IMAGE_VERSION $PUSH_REPOSITORY

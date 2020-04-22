@@ -21,5 +21,4 @@ function cleanContainer() {
   docker rm -f -v $imagename || true
 }
 
-cleanContainer latest
 cleanContainer $TEST_IMAGE_VERSION
