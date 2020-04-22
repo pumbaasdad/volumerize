@@ -36,7 +36,9 @@ if [ -n "${VOLUMERIZE_DELAYED_START}" ]; then
   sleep ${VOLUMERIZE_DELAYED_START}
 fi
 
-if [ -n "${VOLUMERIZE_SOURCE}" ]; then
+# Checks if any variable prefixed with VOLUMERIZE_SOURCE is set 
+# not sure if there is a better way to check for that?
+if [ -n "${!VOLUMERIZE_SOURCE*}" ]; then
   source $CUR_DIR/create_jobber.sh
   source $CUR_DIR/create_gdocs_file.sh
 fi
