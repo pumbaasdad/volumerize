@@ -1,4 +1,16 @@
 version: 2
+
+commands:
+  setup_env_var:
+    description: "Sets up environment variables that need depend on predefined Variables"
+    parameters:
+      dest:
+        type: string
+      source:
+        type: string
+    steps:
+      - run: echo "export << parameters.dest >>=<< parameters.source >>" >> $BASH_ENV
+
 jobs:
   build_branch:
     working_directory: /app
@@ -6,10 +18,12 @@ jobs:
       - image: docker:17.05.0-ce-git
     environment:
       IMAGE_VERSION: latest
-      BUILD_BRANCH: ${CIRCLE_BRANCH}
     steps:
       - checkout
       - setup_remote_docker
+      - setup_env_var:
+          dest: BUILD_BRANCH
+          source: ${CIRCLE_BRANCH}
       - run:
           name: Install dependencies
           command: |
@@ -33,10 +47,12 @@ jobs:
       - image: docker:17.05.0-ce-git
     environment:
       IMAGE_VERSION: latest
-      BUILD_BRANCH: ${CIRCLE_BRANCH}
     steps:
       - checkout
       - setup_remote_docker
+      - setup_env_var:
+          dest: BUILD_BRANCH
+          source: ${CIRCLE_BRANCH}
       - run:
           name: Install dependencies
           command: |
@@ -63,12 +79,15 @@ jobs:
     working_directory: /app
     docker:
       - image: docker:17.05.0-ce-git
-    environment:
-      IMAGE_VERSION: ${CIRCLE_TAG}
-      BUILD_BRANCH: ${CIRCLE_BRANCH}
     steps:
       - checkout
       - setup_remote_docker
+      - setup_env_var:
+          dest: IMAGE_VERSION
+          source: ${CIRCLE_TAG}
+      - setup_env_var:
+          dest: BUILD_BRANCH
+          source: ${CIRCLE_BRANCH}
       - run:
           name: Install dependencies
           command: |
