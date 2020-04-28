@@ -1,5 +1,5 @@
 FROM alpine:3.11.5
-MAINTAINER Felix Haase <it@feki.de>
+LABEL maintainer="Felix Haase <felix.haase@feki.de>"
 
 ARG JOBBER_VERSION=1.4.1
 ARG DOCKER_VERSION=1.12.2
