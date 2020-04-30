@@ -43,9 +43,6 @@ RUN apk upgrade --update && \
       librsync \
       librsync-dev \
       # python2-dev \
-      mysql-client \
-      pv \
-      nano \
       py-pip && \
     pip install --upgrade pip && \
     pip install --no-cache-dir \
