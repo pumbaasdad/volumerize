@@ -6,9 +6,9 @@ set -o errexit
 
 function pipeEnvironmentVariables() {
   local environmentfile="/etc/profile.d/jobber.sh"
-  cat > ${environmentfile} <<_EOF_
+  cat > ${environmentfile} <<EOF
   #!/bin/sh
-_EOF_
+EOF
   sh -c export >> ${environmentfile}
 }
 
