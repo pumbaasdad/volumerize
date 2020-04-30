@@ -1,3 +1,4 @@
+
 # Blacklabelops Volumerize
 
 [![Circle CI](https://circleci.com/gh/Fekide/volumerize.svg?style=shield)](https://circleci.com/gh/Fekide/volumerize)
@@ -5,6 +6,29 @@
 [![Docker Stars](https://img.shields.io/docker/stars/fekide/volumerize.svg)](https://hub.docker.com/r/fekide/volumerize/) [![Docker Pulls](https://img.shields.io/docker/pulls/fekide/volumerize.svg)](https://hub.docker.com/r/fekide/volumerize/)
 
 [![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/fekide/volumerize/master/dc-pwd.yml)
+
+- [Blacklabelops Volumerize](#blacklabelops-volumerize)
+  - [Volume Backups Tutorials](#volume-backups-tutorials)
+  - [Make It Short](#make-it-short)
+  - [How It Works](#how-it-works)
+  - [Backup Multiple volumes](#backup-multiple-volumes)
+  - [Backup Restore](#backup-restore)
+    - [Dry run](#dry-run)
+  - [Periodic Backups](#periodic-backups)
+  - [Docker Container Restarts](#docker-container-restarts)
+      - [Additional Docker CLI API configurations](#additional-docker-cli-api-configurations)
+      - [Additional Docker considerations](#additional-docker-considerations)
+  - [Duplicity Parameters](#duplicity-parameters)
+  - [Symmetric Backup Encryption](#symmetric-backup-encryption)
+  - [Asymmetric Key-Based Backup Encryption](#asymmetric-key-based-backup-encryption)
+  - [Enforcing Full Backups Periodically](#enforcing-full-backups-periodically)
+  - [Automatically remove old backups](#automatically-remove-old-backups)
+  - [Post scripts and pre scripts (prepost strategies)](#post-scripts-and-pre-scripts-prepost-strategies)
+  - [Container Scripts](#container-scripts)
+  - [Build The Project](#build-the-project)
+  - [Multiple Backups](#multiple-backups)
+  - [Build the Image](#build-the-image)
+  - [Run the Image](#run-the-image)
 
 Blacklabelops backup and restore solution for Docker volume backups. It is based on the command line tool Duplicity. Dockerized and Parameterized for easier use and configuration.
 
@@ -29,7 +53,7 @@ Supported backends:
 
 and many more: [Duplicity Supported Backends](http://duplicity.nongnu.org/index.html)
 
-# Volume Backups Tutorials
+## Volume Backups Tutorials
 
 Docker Volume Backups on:
 
@@ -41,7 +65,7 @@ Dropbox: [Readme](https://github.com/fekide/volumerize/tree/master/backends/Drop
 
 Google Drive: [Readme](https://github.com/fekide/volumerize/tree/master/backends/GoogleDrive)
 
-# Make It Short
+## Make It Short
 
 You can make backups of your Docker application volume just by typing:
 
@@ -58,7 +82,7 @@ $ docker run --rm \
 
 > Hooks up your volume with the name `yourvolume` and backups to the volume `backup_volume`
 
-# How It Works
+## How It Works
 
 The container has a default startup mode. Any specific behavior is done by defining envrionment variables at container startup (`docker run`). The default container behavior is to start in daemon mode and do incremental daily backups.
 
@@ -99,7 +123,7 @@ $ docker exec volumerize backup
 
 > Will trigger a backup.
 
-# Backup Multiple volumes
+## Backup Multiple volumes
 
 The container can backup one source folder, see environment variable `VOLUMERIZE_TARGET`. If you want to backup multiple volumes you will have to hook up multiple volumes under the same source folder.
 
@@ -126,7 +150,7 @@ $ docker run -d \
 
 > Will run Volumerize on the common parent folder `/source`.
 
-# Backup Restore
+## Backup Restore
 
 A restore is simple. First stop your Volumerize container and start a another container with the same
 environment variables and the same volume but without read-only mode! This is important in order to get the same directory structure as when you did your backup!
@@ -168,7 +192,7 @@ You can restore from a particular backup by adding a time parameter to the comma
 
 To see the available backups, use the command `list` before doing a `restore`.
 
-## Dry run
+### Dry run
 
 You can pass the `--dry-run` parameter to the restore command in order to test the restore functionality:
 
@@ -194,7 +218,7 @@ $ docker run --rm \
     fekide/volumerize verify
 ~~~~
 
-# Periodic Backups
+## Periodic Backups
 
 The default cron setting for this container is: `0 0 4 * * *`. That's four o'clock in the morning UTC. You can set your own schedule with the environment variable `VOLUMERIZE_JOBBER_TIME`.
 
@@ -219,7 +243,7 @@ $ docker run -d \
 
 > Backups at three o'clock in the morning according to german local time.
 
-# Docker Container Restarts
+## Docker Container Restarts
 
 This image can stop and start Docker containers before and after backup. Docker containers are specified using the environment variable `VOLUMERIZE_CONTAINERS`. Just enter their names in a empty space separated list.
 
@@ -253,7 +277,7 @@ Test the routine!
 $ docker exec volumerize backup
 ~~~~
 
-### Additional Docker CLI API configurations
+#### Additional Docker CLI API configurations
 > If the docker host version is earlier than 1.12 then include the following docker api setting, Volumerize uses docker CLI ver 1.12 which uses Docker API version 1.24. One needs to set the compatible API version of the docker host 
 ie. Docker host version 1.11 uses API 1.23
 
@@ -287,10 +311,10 @@ $ docker run -d \
     ...
     fekide/volumerize
 ~~~~
-### Additional Docker considerations
+#### Additional Docker considerations
 Warning: Make sure your container is running under the correct restart policy. Tools like Docker, Docker-Compose, Docker-Swarm, Kubernetes and Cattle may restart the container even when Volumerize stops it. Backups done under running instances may end in corrupted backups and even corrupted data. Always make sure that the command `docker stop` really stops an instance and there will be no restart of the underlying deployment technology. You can test this by running `docker stop` and check with `docker ps` that the container is really stopped.
 
-# Duplicity Parameters
+## Duplicity Parameters
 
 Under the hood fekide/volumerize uses duplicity. See here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
 
@@ -312,7 +336,7 @@ $ docker run -d \
 
 > Will only operate in dry-run simulation mode.
 
-# Symmetric Backup Encryption
+## Symmetric Backup Encryption
 
 You can encrypt your backups by setting a secure passphrase inside the environment variable `PASSPHRASE`.
 
@@ -340,7 +364,7 @@ $ docker run -d \
 
 > Same functionality as described above but all backups will be encrypted.
 
-# Asymmetric Key-Based Backup Encryption
+## Asymmetric Key-Based Backup Encryption
 
 You can encrypt your backups with secure secret keys.
 
@@ -416,7 +440,7 @@ Test the routine!
 $ docker exec volumerize backup
 ~~~~
 
-# Enforcing Full Backups Periodically
+## Enforcing Full Backups Periodically
 
 The default behavior is that the initial backup is a full backup. Afterwards, Volumerize will perform incremental backups. You can enforce another full backup periodically by specifying the environment variable `VOLUMERIZE_FULL_IF_OLDER_THAN`.
 
@@ -447,7 +471,29 @@ $ docker run -d \
 
 For the difference between a full and incremental backup, see [Duplicity's documentation](http://duplicity.nongnu.org/duplicity.1.html).
 
-# Post scripts and pre scripts (prepost strategies)
+## Automatically remove old backups
+> **Use with caution!**
+
+The removal is executed as post-strategy. The following options are available:
+
+* `REMOVE_ALL_BUT_N_FULL`: remove all backups except the latest n full backups
+* `REMOVE_ALL_INC_BUT_N_FULL`: remove all incremental backups except the one from the latest n chains
+* `REMOVE_OLDER_THAN`: remove all backups older than [timestamp](http://duplicity.nongnu.org/vers8/duplicity.1.html#sect8)
+
+~~~~
+$ docker run -d \
+    --name volumerize \
+    -v jenkins_volume:/source:ro \
+    -v backup_volume:/backup \
+    -v cache_volume:/volumerize-cache \
+    -e "TZ=Europe/Berlin" \
+    -e "VOLUMERIZE_SOURCE=/source" \
+    -e "VOLUMERIZE_TARGET=file:///backup" \
+    -e "REMOVE_OLDER_THAN=30D" \
+    fekide/volumerize
+~~~~
+
+## Post scripts and pre scripts (prepost strategies)
 
 
 Pre-scripts must be located at `/preexecute/$duplicity_action/$your_scripts_here`.
@@ -464,7 +510,7 @@ When using prepost strategies, this will be the execution flow: `pre-scripts -> 
 
 Some premade strategies are available at [prepost strategies](prepost_strategies).
 
-# Container Scripts
+## Container Scripts
 
 This image creates at container startup some convenience scripts.
 Under the hood fekide/volumerize uses duplicity. To pass script parameters, see here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
@@ -505,11 +551,11 @@ $ docker exec volumerize backup --dry-run
 > `--dry-run` will simulate not execute the backup procedure.
 
 
-# Build The Project
+## Build The Project
 
 Check out the project at Github.
 
-# Multiple Backups
+## Multiple Backups
 
 You can specify multiple backup jobs with one container with enumerated environment variables. Each environment variable must be followed by a number starting with 1. Example `VOLUMERIZE_SOURCE1`, `VOLUMERIZE_SOURCE2` or `VOLUMERIZE_SOURCE3`.
 

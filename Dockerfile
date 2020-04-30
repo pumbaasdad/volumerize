@@ -131,5 +131,6 @@ WORKDIR /etc/volumerize
 VOLUME ["/volumerize-cache"]
 COPY imagescripts/ /opt/volumerize/
 COPY scripts/ /etc/volumerize/
+COPY postexecute/ /postexecute
 ENTRYPOINT ["/sbin/tini","--","/opt/volumerize/docker-entrypoint.sh"]
 CMD ["volumerize"]
