@@ -8,7 +8,7 @@ readonly CUR_DIR=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
 printf '%b\n' ":: Reading release config...."
 source $CUR_DIR/release.sh
 
-readonly TEST_IMAGEVERSION=$IMAGE_VERSION
+readonly TEST_IMAGE_TAG=$IMAGE_TAG
 
 function cleanContainer() {
   local container=$1
@@ -21,4 +21,4 @@ function cleanContainer() {
   docker rm -f -v $imagename || true
 }
 
-cleanContainer $TEST_IMAGE_VERSION
+cleanContainer $TEST_IMAGE_TAG

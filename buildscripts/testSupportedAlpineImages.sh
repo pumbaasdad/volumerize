@@ -8,6 +8,6 @@ readonly CUR_DIR=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
 printf '%b\n' ":: Reading release config...."
 source $CUR_DIR/release.sh
 
-readonly TEST_IMAGE_VERSION=$IMAGE_VERSION
+readonly TEST_IMAGE_TAG=$IMAGE_TAG
 
-source $CUR_DIR/testImage.sh $TEST_IMAGE_VERSION
+source $CUR_DIR/testImage.sh $TEST_IMAGE_TAG

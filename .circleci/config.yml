@@ -1,114 +1,89 @@
 version: 2.1
 
 commands:
-  setup_env_var:
-    description: "Sets up environment variables that need depend on predefined Variables"
-    parameters:
-      dest:
-        type: string
-      source:
-        type: string
+  install_deps:
+    description: "Install Dependencies"
     steps:
-      - run: echo "export << parameters.dest >>=<< parameters.source >>" >> $BASH_ENV
+      - run:
+          name: Install Dependencies
+          command: |
+            apk add --no-cache \
+              py-pip \
+              curl \
+              curl-dev
+  build_image:
+    description: "Builds a Docker Image"
+    steps:
+      - run:
+          name: Build Image
+          command: |
+            set +o pipefail
+            sh buildscripts/buildSupportedAlpineImages.sh
+  test_image:
+    description: "Test Image"
+    steps:
+      - run:
+          name: Test Image
+          command: |
+              sh buildscripts/testSupportedAlpineImages.sh
+  push_image:
+    description: "Push Image to DockerHub"
+    steps:
+      - run:
+          name: Push Dockerhub Image
+          command: |
+              docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+              sh buildscripts/releaseSupportedAlpineImages.sh
 
 jobs:
   build_branch:
     working_directory: /app
     docker:
-      - image: docker:17.05.0-ce-git
-    environment:
-      IMAGE_VERSION: latest
+      - image: docker:19.03.8-git
     steps:
       - checkout
       - setup_remote_docker
-      - setup_env_var:
-          dest: BUILD_BRANCH
-          source: ${CIRCLE_BRANCH}
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --no-cache \
-              py-pip \
-              curl \
-              curl-dev
-      - run:
-          name: Build Branch Images
-          command: |
-            set +o pipefail
-            sh buildscripts/buildSupportedAlpineImages.sh
-      - run:
-          name: Test Branch Images
-          command: |
-              sh buildscripts/testSupportedAlpineImages.sh
+      - install_deps
+      - build_image
+      - test_image
 
   build_master:
     working_directory: /app
     docker:
-      - image: docker:17.05.0-ce-git
-    environment:
-      IMAGE_VERSION: latest
+      - image: docker:19.03.8-git
     steps:
       - checkout
       - setup_remote_docker
-      - setup_env_var:
-          dest: BUILD_BRANCH
-          source: ${CIRCLE_BRANCH}
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --no-cache \
-              py-pip \
-              curl \
-              curl-dev
-      - run:
-          name: Build Docker Release Images
-          command: |
-            set +o pipefail
-            sh buildscripts/buildSupportedAlpineImages.sh
-      - run:
-          name: Test Docker Release Images
-          command: |
-            sh buildscripts/testSupportedAlpineImages.sh
-      - run:
-          name: Push Dockerhub Release Images
-          command: |
-              docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
-              sh buildscripts/releaseSupportedAlpineImages.sh
+      - install_deps
+      - build_image
+      - test_image
+      - push_image
+
+  build_nightly:
+    working_directory: /app
+    environment:
+      IMAGE_VERSION: nightly
+    docker:
+      - image: docker:19.03.8-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - install_deps
+      - build_image
+      - test_image
+      - push_image
 
   build_tags:
     working_directory: /app
     docker:
-      - image: docker:17.05.0-ce-git
+      - image: docker:19.03.8-git
     steps:
       - checkout
       - setup_remote_docker
-      - setup_env_var:
-          dest: IMAGE_VERSION
-          source: ${CIRCLE_TAG}
-      - setup_env_var:
-          dest: BUILD_BRANCH
-          source: ${CIRCLE_BRANCH}
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --no-cache \
-              py-pip \
-              curl \
-              curl-dev
-      - run:
-          name: Build Docker Release Images
-          command: |
-            set +o pipefail
-            sh buildscripts/buildSupportedAlpineImages.sh
-      - run:
-          name: Test Docker Release Images
-          command: |
-            sh buildscripts/testSupportedAlpineImages.sh
-      - run:
-          name: Push Dockerhub Release Images
-          command: |
-              docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
-              sh buildscripts/releaseSupportedAlpineImages.sh
+      - install_deps
+      - build_image
+      - test_image
+      - push_image
 
 workflows:
   version: 2
@@ -138,4 +113,4 @@ workflows:
               only:
                 - master
     jobs:
-      - build_master
+      - build_nightly
