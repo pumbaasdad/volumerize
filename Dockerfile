@@ -45,6 +45,7 @@ RUN apk upgrade --update && \
       # python2-dev \
       py-pip && \
     pip install --upgrade pip && \
+    pip install --no-cache-dir wheel && \
     pip install --no-cache-dir \
       fasteners \
       PyDrive \
