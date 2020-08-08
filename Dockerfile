@@ -1,69 +1,63 @@
-FROM alpine:3.11.5
+FROM rclone/rclone:1.52.3 as rclone
+FROM docker:19.03.12 as docker
+
+FROM alpine:3.12.0
 LABEL maintainer="Felix Haase <felix.haase@feki.de>"
 
-ARG JOBBER_VERSION=1.4.1
-ARG DOCKER_VERSION=1.12.2
-ARG DUPLICITY_VERSION=0.8.12
-ARG DUPLICITY_SERIES=0.8
-ARG DUPLICITY_STABILITY=1612
+ARG JOBBER_VERSION=1.4.4
+ARG DUPLICITY_VERSION=0.8.15
 ARG MEGATOOLS_VERSION=1.10.3
 
 RUN apk upgrade --update && \
     apk add \
       bash \
       tzdata \
-      vim \
       tini \
       su-exec \
       gzip \
+      gettext \
       tar \
       wget \
       curl \
-      build-base \
-      glib-dev \
       gmp-dev \
-      asciidoc \
-      curl-dev \
       tzdata \
       openssh \
-      libressl-dev \
-      libressl \
-      duply \
+      openssl \
       ca-certificates \
-      python-dev \
-      libffi-dev \
-      librsync-dev \
+      python3-dev \
       gcc \
+      glib \
+      gnupg \
       alpine-sdk \
       linux-headers \
       musl-dev \
       rsync \
       lftp \
       py-cryptography \
+      libffi-dev \
       librsync \
       librsync-dev \
-      # python2-dev \
-      py-pip && \
-    pip install --upgrade pip && \
-    pip install --no-cache-dir wheel && \
-    pip install --no-cache-dir \
+      libcurl \
+      py3-pip && \
+    pip3 install --upgrade pip && \
+    pip3 install --no-cache-dir wheel setuptools-scm && \
+    pip3 install --no-cache-dir \
       fasteners \
       PyDrive \
       chardet \
       azure-storage-blob \
-      boto \
-      lockfile \
+      boto3 \
       paramiko \
       pexpect \
-      pycryptopp \
+      pycrypto \
       python-keystoneclient \
       python-swiftclient \
-      requests==2.23.0 \
+      requests \
       requests_oauthlib \
       urllib3 \
-      b2 \
-      dropbox==6.9.0 \
-      duplicity==${DUPLICITY_VERSION}.${DUPLICITY_STABILITY} && \
+      b2sdk \
+      dropbox \
+      duplicity==${DUPLICITY_VERSION} && \
     mkdir -p /etc/volumerize /volumerize-cache /opt/volumerize && \
     # Setup users
     export CONTAINER_UID=1000 && \
@@ -72,23 +66,20 @@ RUN apk upgrade --update && \
     export CONTAINER_GROUP=jobber_client && \
     # Install tools
     apk add \
-      go \
-      git \
-      curl \
-      wget \
+      asciidoc \
+      automake \
+      autoconf \
+      build-base \
+      curl-dev \
+      openssl-dev \
+      glib-dev \
+      libtool \
       make && \
     # Install Jobber
     addgroup -g $CONTAINER_GID jobber_client && \
     adduser -u $CONTAINER_UID -G jobber_client -s /bin/bash -S jobber_client && \
     wget --directory-prefix=/tmp https://github.com/dshearer/jobber/releases/download/v${JOBBER_VERSION}/jobber-${JOBBER_VERSION}-r0.apk && \
     apk add --allow-untrusted --no-scripts /tmp/jobber-${JOBBER_VERSION}-r0.apk && \
-    # Install Docker CLI
-    curl -fSL "https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz" -o /tmp/docker.tgz && \
-    export DOCKER_SHA=43b2479764ecb367ed169076a33e83f99a14dc85 && \
-    echo 'Calculated checksum: '$(sha1sum /tmp/docker.tgz) && \
-    echo "$DOCKER_SHA  /tmp/docker.tgz" | sha1sum -c - && \
-    tar -xzvf /tmp/docker.tgz -C /tmp && \
-    cp /tmp/docker/docker /usr/local/bin/ && \
     # Install MEGAtools
     curl -fSL "https://megatools.megous.com/builds/megatools-${MEGATOOLS_VERSION}.tar.gz" -o /tmp/megatools.tgz && \
     tar -xzvf /tmp/megatools.tgz -C /tmp && \
@@ -98,14 +89,17 @@ RUN apk upgrade --update && \
     make install && \
     # Cleanup
     apk del \
-      go \
-      git \
+      asciidoc \
+      automake \
+      autoconf \
+      build-base \
       curl \
+      curl-dev \
+      glib-dev \
       wget \
-      python-dev \
-      libffi-dev \
-      libressl-dev \
-      libressl \
+      python3-dev \
+      openssl-dev \
+      libtool \
       alpine-sdk \
       linux-headers \
       gcc \
@@ -115,6 +109,9 @@ RUN apk upgrade --update && \
     apk add \
         openssl && \
     rm -rf /var/cache/apk/* && rm -rf /tmp/*
+
+COPY --from=rclone /usr/local/bin/rclone /usr/local/bin/rclone
+COPY --from=docker /usr/local/bin/ /usr/local/bin/
 
 ENV VOLUMERIZE_HOME=/etc/volumerize \
     VOLUMERIZE_CACHE=/volumerize-cache \
