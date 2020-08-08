@@ -1,10 +1,10 @@
 #!/bin/bash -x
 
-set -o errexit    # abort script at first error
+set -o errexit    # abort script at first erro
 
-function testPrintVersion() {
-  local tagname=$1
-  docker run --rm fekide/volumerize:$tagname duplicity -V
-}
+export IMAGE_VERSION=$1
 
-testPrintVersion $1
+cd test
+
+./libs/bats-core/bin/bats test.bats
+

@@ -4,7 +4,7 @@ services:
   volumerize:
     depends_on:
       - jenkins
-    image: fekide/volumerize
+    image: fekide/volumerize:$IMAGE_VERSION
     container_name: volumerize
     volumes:
       - jenkins_volume:/source
