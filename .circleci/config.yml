@@ -10,7 +10,14 @@ commands:
             apk add --no-cache \
               py-pip \
               curl \
-              curl-dev
+              curl-dev \
+              bash \
+              docker-compose 
+      - run:
+          name: Initialize Submodules
+          command: |
+            git submodule init &&
+            git submodule update --remote
   build_image:
     description: "Builds a Docker Image"
     steps:
@@ -26,6 +33,8 @@ commands:
           name: Test Image
           command: |
               sh buildscripts/testSupportedAlpineImages.sh
+      - store_artifacts:
+          path: report
   push_image:
     description: "Push Image to DockerHub"
     steps:

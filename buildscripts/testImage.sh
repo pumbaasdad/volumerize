@@ -1,10 +1,15 @@
 #!/bin/bash -x
 
-set -o errexit    # abort script at first error
+set -o errexit    # abort script at first erro
 
-function testPrintVersion() {
-  local tagname=$1
-  docker run --rm fekide/volumerize:$tagname duplicity -V
-}
+export IMAGE_VERSION=$1
+REPORT_DIR=report
 
-testPrintVersion $1
+./test/libs/bats-core/bin/bats --formatter junit test || TEST_RETURN_CODE=$? && true
+
+if [ ! -d "${REPORT_DIR}"  ]; then
+	mkdir ${REPORT_DIR}
+fi
+mv *.bats.xml ${REPORT_DIR}
+
+exit ${TEST_RETURN_CODE:-0}
