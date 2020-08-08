@@ -23,7 +23,7 @@ setup() {
   run docker-compose exec volumerize backup
   assert_success
 
-  run echo $(docker-compose exec -w "/" volumerize ls --color=never backup | grep -Ec "duplicity-full(-signatures)?\.[0-9A-Z]{16}\.(manifest|(vol1\.difftar|sigtar)\.gz)")
+  run echo $(docker-compose exec volumerize ls --color=never /backup | grep -Ec "duplicity-full(-signatures)?\.[0-9A-Z]{16}\.(manifest|(vol1\.difftar|sigtar)\.gz)")
   assert_output '3'
 
 }
