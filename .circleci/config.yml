@@ -11,7 +11,8 @@ commands:
               py-pip \
               curl \
               curl-dev \
-              bash
+              bash &&
+            pip install docker-compose
       - run:
           name: Initialize Submodules
           command: |
