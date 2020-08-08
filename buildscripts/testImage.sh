@@ -3,8 +3,13 @@
 set -o errexit    # abort script at first erro
 
 export IMAGE_VERSION=$1
+REPORT_DIR=report
 
-cd test
+./test/libs/bats-core/bin/bats --formatter junit test || TEST_RETURN_CODE=$? && true
 
-./libs/bats-core/bin/bats test.bats
+if [ ! -d "${REPORT_DIR}"  ]; then
+	mkdir ${REPORT_DIR}
+fi
+mv *.bats.xml ${REPORT_DIR}
 
+exit ${TEST_RETURN_CODE:-0}
