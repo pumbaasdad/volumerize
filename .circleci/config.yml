@@ -10,7 +10,8 @@ commands:
             apk add --no-cache \
               py-pip \
               curl \
-              curl-dev
+              curl-dev \
+              bash
       - run:
           name: Initialize Submodules
           command: |
