@@ -4,10 +4,19 @@ set -o errexit    # abort script at first error
 
 # Setting environment variables
 readonly CUR_DIR=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
-
-printf '%b\n' ":: Reading release config...."
 source $CUR_DIR/release.sh
+source $CUR_DIR/testImage.sh
 
-readonly TEST_IMAGE_TAG=$IMAGE_TAG
+printf '%b\n' ":: Testing default image...."
+release
+testImage $IMAGE_TAG
 
-source $CUR_DIR/testImage.sh $TEST_IMAGE_TAG
+export IMAGE_TYPE=mongodb
+printf '%b\n' ":: Testing ${IMAGE_TYPE} image...."
+release
+testImage $IMAGE_TAG $IMAGE_TYPE
+
+export IMAGE_TYPE=mysql
+printf '%b\n' ":: Testing ${IMAGE_TYPE} image...."
+release
+testImage $IMAGE_TAG $IMAGE_TYPE
