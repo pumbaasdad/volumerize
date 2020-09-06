@@ -30,6 +30,28 @@ setup_file() {
       echo "mysql took too long to initialize"
       return 1
     fi
+  elif [ $TEST_IMAGE_TYPE == mongodb ]; then
+    # Wait for database initialisation
+    wait_time=0
+    timeout=60
+    until docker-compose --no-ansi logs mongodb | grep "MongoDB init process complete; ready for start up." || [ $wait_time -ge 120 ];
+    do
+      echo "waiting for mongodb to be up and running"
+      wait_time=$(( $wait_time + 1 ))
+      sleep 1
+    done
+    # Wait unitl mysql can handle connections
+    wait_time=0
+    until docker-compose --no-ansi logs --tail 5 mongodb | grep "Waiting for connections" || [ $wait_time -ge 60 ];
+    do
+      echo "waiting for mongodb to be up and running"
+      wait_time=$(( $wait_time + 1 ))
+      sleep 1
+    done
+    if [ $wait_time -ge 60 ]; then
+      echo "mongodb took too long to initialize"
+      return 1
+    fi
   fi
 }
 
