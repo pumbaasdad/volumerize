@@ -90,9 +90,9 @@ jobs:
       - checkout
       - setup_remote_docker
       - install_deps
-      - build_image
-      - test_image
-      - push_image
+      - build_images
+      - test_images
+      - push_images
 
 workflows:
   version: 2
