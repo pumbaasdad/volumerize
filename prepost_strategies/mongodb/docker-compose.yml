@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+    volumes:
+      - mongodb:/data/db
+
+  volumerize:
+    image: fekide/volumerize:mongodb
+    environment:
+      - VOLUMERIZE_SOURCE=/source
+      - VOLUMERIZE_TARGET=file:///backup
+      - MONGO_USERNAME=root
+      - MONGO_PASSWORD=1234
+      - MONGO_PORT=27017
+      - MONGO_HOST=mongodb
+    volumes:
+      - volumerize-cache:/volumerize-cache
+      - backup:/backup
+    depends_on:
+      - mongodb
+
+volumes:
+  volumerize-cache:
+  mongodb:
+  backup:

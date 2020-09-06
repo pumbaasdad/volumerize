@@ -24,9 +24,11 @@
   - [Enforcing Full Backups Periodically](#enforcing-full-backups-periodically)
   - [Automatically remove old backups](#automatically-remove-old-backups)
   - [Post scripts and pre scripts (prepost strategies)](#post-scripts-and-pre-scripts-prepost-strategies)
+    - [Provided PrePost-Strategies](#provided-prepost-strategies)
   - [Container Scripts](#container-scripts)
   - [Build The Project](#build-the-project)
   - [Multiple Backups](#multiple-backups)
+  - [Docker Secrets](#docker-secrets)
   - [Build the Image](#build-the-image)
   - [Run the Image](#run-the-image)
 
@@ -508,7 +510,12 @@ All `.sh` files located in the `$duplicity_action` folder will be executed in al
 
 When using prepost strategies, this will be the execution flow: `pre-scripts -> stop containers -> duplicity action -> start containers -> post-scripts`.
 
-Some premade strategies are available at [prepost strategies](prepost_strategies).
+### Provided PrePost-Strategies
+Some premade strategies are available at [prepost strategies](prepost_strategies). These are
+
+- [mongodb](prepost_strategies/mongodb/README.md)
+- [mysql](prepost_strategies/mysql/README.md)
+
 
 ## Container Scripts
 
@@ -601,6 +608,13 @@ $ docker run -d \
     -e "VOLUMERIZE_CACHE2=/volumerize-cache2" \
     fekide/volumerize
 ~~~~
+
+## Docker Secrets
+
+The following variables are supported to be stored in files, the location specified in variables ending with `_FILE`. See [Docker Secrets Documentation](https://docs.docker.com/engine/swarm/secrets/) for more info.
+
+- `VOLUMERIZE_GPG_PRIVATE_KEY`
+- `PASSPHRASE`
 
 ## Build the Image
 
