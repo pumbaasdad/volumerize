@@ -12,7 +12,7 @@ esac
 
 case $2 in
     backup | verify | restore ) ;;
-    *) echo "Error: porepoststrategy second parameter 'duplicity action' must be backup, verify or restore"; exit 1 ;;
+    *) echo "Error: prepoststrategy second parameter 'duplicity action' must be backup, verify or restore"; exit 1 ;;
 esac
 
 strategy_path=$strategy_path/$2
