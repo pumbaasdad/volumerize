@@ -2,6 +2,8 @@
 
 set -o errexit
 
+source /opt/volumerize/env.sh
+
 DUPLICITY_COMMAND="duplicity"
 
 DUPLICITY_OPTIONS=""
