@@ -35,6 +35,8 @@ commands:
               sh buildscripts/testSupportedAlpineImages.sh
       - store_artifacts:
           path: report
+      - store_test_results:
+          path: report
   push_images:
     description: "Push Image to DockerHub"
     steps:
