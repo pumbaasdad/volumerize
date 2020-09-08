@@ -65,7 +65,27 @@ setup_file() {
 
 @test "manual backup" {
 
+  if [ $TEST_IMAGE_TYPE == default ]; then
+    run docker-compose exec volumerize bash -c 'echo test | cat > /source/test.txt'
+    assert_success
+  fi
+
   run docker-compose exec volumerize backup
+  assert_success
+
+  run echo $(docker-compose exec volumerize ls --color=never /backup | grep -Ec "duplicity-full(-signatures)?\.[0-9A-Z]{16}\.(manifest|(vol1\.difftar|sigtar)\.gz)")
+  assert_output '3'
+
+}
+
+@test "jobber" {
+
+  if [ $TEST_IMAGE_TYPE == default ]; then
+    run docker-compose exec volumerize bash -c 'echo test | cat > /source/test.txt'
+    assert_success
+  fi
+
+  run docker-compose exec volumerize jobber test VolumerizeBackupJob
   assert_success
 
   run echo $(docker-compose exec volumerize ls --color=never /backup | grep -Ec "duplicity-full(-signatures)?\.[0-9A-Z]{16}\.(manifest|(vol1\.difftar|sigtar)\.gz)")
@@ -76,6 +96,10 @@ setup_file() {
 @test "keep n backups" {
   for i in {1..5}
   do
+    if [ $TEST_IMAGE_TYPE == default ]; then
+      run docker-compose exec volumerize bash -c "echo test${i} | cat >> /source/test.txt"
+      assert_success
+    fi
     run docker-compose exec -e REMOVE_ALL_BUT_N_FULL=3 volumerize backupFull
     assert_success
     assert_output
@@ -88,12 +112,29 @@ setup_file() {
 }
 
 @test "restore" {
+
+  if [ $TEST_IMAGE_TYPE == default ]; then
+    run docker-compose exec volumerize bash -c 'echo actual | cat > /source/test.txt'
+    assert_success
+  fi
+
   run docker-compose exec volumerize backup
   assert_success
   assert_output
 
+  if [ $TEST_IMAGE_TYPE == default ]; then
+    run docker-compose exec volumerize bash -c 'echo wrong | cat > /source/test.txt'
+    assert_success
+  fi
+
   run docker-compose exec volumerize restore
   assert_success
+
+  if [ $TEST_IMAGE_TYPE == default ]; then
+    run docker-compose exec volumerize cat /source/test.txt 
+    assert_success
+    assert_output --partial actual
+  fi
 
 }
 

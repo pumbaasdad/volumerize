@@ -16,13 +16,12 @@ services:
     networks:
       - default
     environment:
-      - VOLUMERIZE_SOURCE1=/source
-      - VOLUMERIZE_TARGET1=file:///backup
+      - VOLUMERIZE_SOURCE=/source
+      - VOLUMERIZE_TARGET=file:///backup
       - MYSQL_USERNAME=root
       - MYSQL_PASSWORD=1234
       - MYSQL_HOST=mariadb
       - MYSQL_DATABASE=somedatabase
-      - VOLUMERIZE_MYSQL_SOURCE=VOLUMERIZE_SOURCE1
       - DEBUG=true
     volumes:
       - volumerize-cache:/volumerize-cache
