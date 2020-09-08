@@ -59,11 +59,6 @@ RUN apk upgrade --update && \
       dropbox \
       duplicity==${DUPLICITY_VERSION} && \
     mkdir -p /etc/volumerize /volumerize-cache /opt/volumerize && \
-    # Setup users
-    export CONTAINER_UID=1000 && \
-    export CONTAINER_GID=1000 && \
-    export CONTAINER_USER=jobber_client && \
-    export CONTAINER_GROUP=jobber_client && \
     # Install tools
     apk add \
       asciidoc \
@@ -76,8 +71,6 @@ RUN apk upgrade --update && \
       libtool \
       make && \
     # Install Jobber
-    addgroup -g $CONTAINER_GID jobber_client && \
-    adduser -u $CONTAINER_UID -G jobber_client -s /bin/bash -S jobber_client && \
     wget --directory-prefix=/tmp https://github.com/dshearer/jobber/releases/download/v${JOBBER_VERSION}/jobber-${JOBBER_VERSION}-r0.apk && \
     apk add --allow-untrusted --no-scripts /tmp/jobber-${JOBBER_VERSION}-r0.apk && \
     # Install MEGAtools

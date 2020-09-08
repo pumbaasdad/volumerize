@@ -10,7 +10,7 @@ DUPLICITY_OPTIONS=""
 
 DUPLICITY_INCLUDES=""
 
-DUPLICITY_TARGET=${VOLUMERIZE_TARGET}
+DUPLICITY_EXCLUDES=""
 
 DUPLICITY_MODE=""
 
@@ -47,6 +47,18 @@ function resolveIncludes() {
   done
 }
 
+function resolveExcludes() {
+  local x
+  for (( x=1; ; x++ ))
+  do
+    VOLUMERIZE_EXCLUDE="VOLUMERIZE_EXCLUDE${x}"
+    if [ ! -n "${!VOLUMERIZE_EXCLUDE}" ]; then
+      break
+    fi
+    VOLUMERIZE_EXCLUDES=$VOLUMERIZE_EXCLUDES" --exclude "${!VOLUMERIZE_EXCLUDE}
+  done
+}
+
 JOB_COUNT=
 
 function discoverJobs() {
@@ -67,6 +79,7 @@ DUPLICITY_JOB_OPTIONS=
 VOLUMERIZE_JOB_SOURCE=
 VOLUMERIZE_JOB_TARGET=
 VOLUMERIZE_JOB_INCLUDES=
+VOLUMERIZE_JOB_EXCLUDES=
 
 function prepareJobCommand() {
   local jobNumber=$1
@@ -76,7 +89,7 @@ function prepareJobCommand() {
   if [ -n "${!CACHE_VARIABLE}" ]; then
     DUPLICITY_JOB_OPTIONS=$DUPLICITY_JOB_OPTIONS" --archive-dir=${!CACHE_VARIABLE}"
   else
-    DUPLICITY_JOB_OPTIONS=$DUPLICITY_JOB_OPTIONS" --archive-dir=${VOLUMERIZE_CACHE}"
+    DUPLICITY_JOB_OPTIONS=$DUPLICITY_JOB_OPTIONS" --archive-dir=${VOLUMERIZE_CACHE}/${jobNumber}"
   fi
   if [ -n "${VOLUMERIZE_DUPLICITY_OPTIONS}" ]; then
     DUPLICITY_JOB_OPTIONS=$DUPLICITY_JOB_OPTIONS" "${VOLUMERIZE_DUPLICITY_OPTIONS}
@@ -100,6 +113,7 @@ function prepareJobConfiguration() {
   local VARIABLE_SOURCE="VOLUMERIZE_SOURCE${jobNumber}"
   local VARIABLE_TARGET="VOLUMERIZE_TARGET${jobNumber}"
   local VARIABLE_RESTORE="VOLUMERIZE_RESTORE${jobNumber}"
+  local VARIABLE_REPLICATE_TARGET="VOLUMERIZE_REPLICATE${jobNumber}"
   if [ -n "${!VARIABLE_SOURCE}" ]; then
     VOLUMERIZE_JOB_SOURCE=${!VARIABLE_SOURCE}
   else
@@ -110,11 +124,17 @@ function prepareJobConfiguration() {
   else
     VOLUMERIZE_JOB_TARGET=
   fi
-  
+
   if [ -n "${!VARIABLE_RESTORE}" ]; then
     VOLUMERIZE_JOB_RESTORE=${!VARIABLE_RESTORE}
   else
     VOLUMERIZE_JOB_RESTORE=${!VARIABLE_SOURCE}
+  fi
+
+  if [ -n "${!VARIABLE_REPLICATE_TARGET}" ]; then
+    VOLUMERIZE_JOB_REPLICATE_TARGET=${!VARIABLE_REPLICATE_TARGET}
+  else
+    VOLUMERIZE_JOB_REPLICATE_TARGET=
   fi
 }
 
@@ -133,6 +153,21 @@ function resolveJobIncludes() {
   done
 }
 
+function resolveJobExcludes() {
+  local jobNumber=$1
+  local x
+  local VARIABLE_EXCLUDE
+  VOLUMERIZE_JOB_EXCLUDES=
+  for (( x=1; ; x++ ))
+  do
+    VARIABLE_EXCLUDE="VOLUMERIZE_EXCLUDE${jobNumber}_${x}"
+    if [ ! -n "${!VARIABLE_EXCLUDE}" ]; then
+      break
+    fi
+    VOLUMERIZE_JOB_EXCLUDES=$VOLUMERIZE_JOB_EXCLUDES" --exclude "${!VARIABLE_EXCLUDE}
+  done
+}
+
 function prepareJob() {
   local jobNumber=$1
   JOB_VARIABLE="VOLUMERIZE_SOURCE${jobNumber}"
@@ -140,9 +175,35 @@ function prepareJob() {
     prepareJobCommand $jobNumber
     prepareJobConfiguration $jobNumber
     resolveJobIncludes $jobNumber
+    resolveJobExcludes $jobNumber
   fi
 }
 
+function commandLoop() {
+  local jobcount=$JOB_COUNT
+  local counter;
+
+  for (( counter=1; counter<=$jobcount; counter++ ))
+  do
+    JOB_ID=$counter
+    commandJob "$@"
+  done
+}
+
+function commandExecution() {
+  if [ -n "${VOLUMERIZE_SOURCE}" ] || [ -n "${JOB_ID}" ]; then
+    commandJob "$@"
+  elif [ -n "${JOB_COUNT}" ]; then
+    commandLoop "$@"
+  fi
+}
+
+function commandJob() {
+  echo "Fail: You need to override function 'commandJob' after sourcing this script"
+  exit 1
+}
+
 resolveIncludes
+resolveExcludes
 resolveOptions
 discoverJobs

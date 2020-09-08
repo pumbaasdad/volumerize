@@ -3,72 +3,105 @@
 set -o errexit
 
 readonly JOBBER_SCRIPT_DIR=$VOLUMERIZE_HOME
-
-source $CUR_DIR/base.sh
-
-JOBBER_CRON_SCHEDULE='0 0 4 * * *'
-
-if [ -n "${VOLUMERIZE_JOBBER_TIME}" ]; then
-  JOBBER_CRON_SCHEDULE=${VOLUMERIZE_JOBBER_TIME}
-fi
-
-stdout_failure_sink=$'\n'"      - *stdoutFailureSink"
-
-JOB_NAME1=VolumerizeBackupJob
-JOB_COMMAND1=${JOBBER_SCRIPT_DIR}/periodicBackup
-JOB_TIME1=$JOBBER_CRON_SCHEDULE
-JOB_ON_ERROR1=Continue
-JOB_NOTIFY_ERR1=${JOBBER_NOTIFY_ERR1:-$stdout_failure_sink}
-JOB_NOTIFY_FAIL1=${JOBBER_NOTIFY_FAIL1:-$stdout_failure_sink}
-
 readonly configfile="/root/.jobber"
 
-function pipeEnvironmentVariables() {
-  local environmentfile="/etc/profile.d/jobber.sh"
-  cat > ${environmentfile} <<EOF
-  #!/bin/sh
+
+if [[ "$JOBBER_DISABLE" == true ]]; then
+
+  # Exclude root from jobber
+  cat >> "/etc/jobber.conf" <<EOF
+users-exclude:
+  - username: root
 EOF
-  sh -c export >> ${environmentfile}
-  sed -i.bak '/^export [a-zA-Z0-9_]*:/d' ${environmentfile}
-}
 
-if [ ! -f "${configfile}" ]; then
-  touch ${configfile}
+elif [[ -n "$JOBBER_CUSTOM" ]]; then
 
-  cat >> ${configfile} <<EOF
+  returnCode=0
+  # Copy the file at location CUSTOM_JOBBER to the root jobs
+  cp $JOBBER_CUSTOM $configfile || returnCode=$? && true
+
+  if [ ${returnCode} -gt 0 ]; then
+    echo "failed to copy $CUSTOM_JOBBER to $configfile. Make sure this is not a problem!"
+  fi
+
+else
+  # Create a jobber file dynamically
+
+  source $CUR_DIR/base.sh
+
+  JOBBER_SCHEDULE=${VOLUMERIZE_JOBBER_TIME:-'0 0 4 * * *'}
+  stdout_sink=$'\n'"      - *stdoutSink"
+
+  job_count=${JOB_COUNT:-1}
+  counter=
+
+  for (( counter=1; counter<=$job_count; counter++ ))
+  do
+    job_time="VOLUMERIZE_JOBBER_TIME${counter}"
+    job_notify_err="JOBBER_NOTIFY_ERR${counter}"
+    job_notify_fail="JOBBER_NOTIFY_FAIL${counter}"
+
+    # only set job id if there is more than one job
+    job_id=
+    if [ $job_count -gt 1 ]; then
+      job_id=${counter}
+    fi
+
+    declare "JOB_NAME${counter}"="VolumerizeBackupJob${job_id}"
+    declare "JOB_COMMAND${counter}"="${JOBBER_SCRIPT_DIR}/periodicBackup ${job_id}"
+    declare "JOB_TIME${counter}"="${!job_time:-${JOBBER_SCHEDULE}}"
+    declare "JOB_ON_ERROR${counter}"="Continue"
+    declare "JOB_NOTIFY_ERR${counter}"="${!job_notify_err:-$stdout_sink}"
+    declare "JOB_NOTIFY_FAIL${counter}"="${!job_notify_fail:-$stdout_sink}"
+  done
+
+
+
+
+  if [ ! -f "${configfile}" ]; then
+    touch ${configfile}
+
+    cat >> ${configfile} <<EOF
 version: 1.4
 
 resultSinks:
-  - &stdoutFailureSink
+  - &stdoutSink
     type: stdout
     data:
       - stdout
       - stderr
 
+prefs:
+  runLog:
+    type: file
+    path: /var/log/jobber-runs
+    maxFileLen: 100m
+    maxHistories: 2
+
 jobs:
 
 EOF
-  for (( i = 1; ; i++ ))
-  do
-    VAR_JOB_ON_ERROR="JOB_ON_ERROR$i"
-    VAR_JOB_NAME="JOB_NAME$i"
-    VAR_JOB_COMMAND="JOB_COMMAND$i"
-    VAR_JOB_TIME="JOB_TIME$i"
-    VAR_JOB_NOTIFY_ERR="JOB_NOTIFY_ERR$i"
-    VAR_JOB_NOTIFY_FAIL="JOB_NOTIFY_FAIL$i"
+    for (( i = 1; ; i++ ))
+    do
+      VAR_JOB_ON_ERROR="JOB_ON_ERROR$i"
+      VAR_JOB_NAME="JOB_NAME$i"
+      VAR_JOB_COMMAND="JOB_COMMAND$i"
+      VAR_JOB_TIME="JOB_TIME$i"
+      VAR_JOB_NOTIFY_ERR="JOB_NOTIFY_ERR$i"
+      VAR_JOB_NOTIFY_FAIL="JOB_NOTIFY_FAIL$i"
 
-    if [ ! -n "${!VAR_JOB_NAME}" ]; then
-      break
-    fi
+      if [ ! -n "${!VAR_JOB_NAME}" ]; then
+        break
+      fi
 
-    it_job_on_error=${!VAR_JOB_ON_ERROR:-"Continue"}
-    it_job_name=${!VAR_JOB_NAME}
-    it_job_time=${!VAR_JOB_TIME}
-    it_job_command=${!VAR_JOB_COMMAND}
-    it_job_notify_error=${!VAR_JOB_NOTIFY_ERR:-$stdout_failure_sink}
-    it_job_notify_failure=${!VAR_JOB_NOTIFY_FAIL:-$stdout_failure_sink}
+      it_job_on_error=${!VAR_JOB_ON_ERROR:-"Continue"}
+      it_job_name=${!VAR_JOB_NAME}
+      it_job_time=${!VAR_JOB_TIME}
+      it_job_command=${!VAR_JOB_COMMAND}
+      it_job_notify_error=${!VAR_JOB_NOTIFY_ERR:-$stdout_failure_sink}
+      it_job_notify_failure=${!VAR_JOB_NOTIFY_FAIL:-$stdout_failure_sink}
 
-    cat >> ${configfile} <<EOF
+      cat >> ${configfile} <<EOF
   ${it_job_name}:
     cmd: ${it_job_command}
     time: '${it_job_time}'
@@ -77,7 +110,10 @@ EOF
     notifyOnFailure: ${it_job_notify_failure}
 
 EOF
-  done
+    done
+  fi
 fi
 
-cat ${configfile}
+if [ -f ${configfile} ]; then
+  cat ${configfile}
+fi

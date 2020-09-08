@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -o errexit
+
+[[ ${DEBUG} == true ]] && set -x
+
+source /opt/volumerize/base.sh
+
+export VOLUMERIZE_COMMAND="replicate"
+DUPLICITY_RETURN_CODE=0
+
+if [ ! -z "${1##*[!0-9]*}" ]; then
+  export JOB_ID=$1
+  shift
+fi
+
+function commandJob() {
+  local returnCode=0;
+  if [ -z "$JOB_ID" ]; then
+    eval ${DUPLICITY_COMMAND} replicate "$@" ${DUPLICITY_OPTIONS} ${VOLUMERIZE_TARGET} ${VOLUMERIZE_REPLICATE_TARGET} || returnCode=$? && true ;
+  else
+    prepareJob "$JOB_ID"
+    eval ${DUPLICITY_JOB_COMMAND} replicate "$@" ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_TARGET} ${VOLUMERIZE_JOB_REPLICATE_TARGET} || returnCode=$? && true ;
+  fi
+  if [ "$returnCode" -gt "$DUPLICITY_RETURN_CODE" ]; then
+    DUPLICITY_RETURN_CODE=$returnCode
+  fi
+}
+
+${VOLUMERIZE_SCRIPT_DIR}/prepoststrategy preAction replicate
+commandExecution "$@"
+export DUPLICITY_RETURN_CODE
+${VOLUMERIZE_SCRIPT_DIR}/prepoststrategy postAction replicate
+exit $DUPLICITY_RETURN_CODE

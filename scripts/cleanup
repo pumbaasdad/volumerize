@@ -6,36 +6,24 @@ set -o errexit
 
 source /opt/volumerize/base.sh
 
+export VOLUMERIZE_COMMAND="cleanup"
 DUPLICITY_RETURN_CODE=0
 
-function commandLoop() {
-  local jobcount=$JOB_COUNT
-  local counter;
-
-  for (( counter=1; counter<=$jobcount; counter++ ))
-  do
-    commandJob "$counter" "$@"
-  done
-}
+if [ ! -z "${1##*[!0-9]*}" ]; then
+  export JOB_ID=$1
+  shift
+fi
 
 function commandJob() {
-  local jobNumber=$1
   local returnCode=0;
-  prepareJob "$jobNumber"
-  shift;
-  eval ${DUPLICITY_JOB_COMMAND} cleanup "$@" ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_INCLUDES} ${VOLUMERIZE_JOB_TARGET} || returnCode=$? && true ;
+  if [ -z "$JOB_ID" ]; then
+    eval ${DUPLICITY_COMMAND} cleanup "$@" ${DUPLICITY_OPTIONS} ${VOLUMERIZE_INCLUDES} ${VOLUMERIZE_EXCLUDES} ${VOLUMERIZE_TARGET}  || returnCode=$? && true ;
+  else
+    prepareJob "$JOB_ID"
+    eval ${DUPLICITY_JOB_COMMAND} cleanup "$@" ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_INCLUDES} ${VOLUMERIZE_JOB_EXCLUDES} ${VOLUMERIZE_JOB_TARGET} || returnCode=$? && true ;
+  fi
   if [ "$returnCode" -gt "$DUPLICITY_RETURN_CODE" ]; then
     DUPLICITY_RETURN_CODE=$returnCode
-  fi
-}
-
-function commandExecution() {
-  if [ -n "${VOLUMERIZE_SOURCE}" ]; then
-    eval ${DUPLICITY_COMMAND} cleanup "$@" ${DUPLICITY_OPTIONS} ${VOLUMERIZE_JOB_INCLUDES} ${VOLUMERIZE_TARGET}  || DUPLICITY_RETURN_CODE=$? && true ;
-  elif [ ! -z "${1##*[!0-9]*}" ]; then
-    commandJob "$@"
-  elif [ -n "${JOB_COUNT}" ]; then
-    commandLoop "$@"
   fi
 }
 

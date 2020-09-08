@@ -6,14 +6,6 @@ set -o errexit
 
 source /opt/volumerize/env.sh
 
-function pipeEnvironmentVariables() {
-  local environmentfile="/etc/profile.d/jobber.sh"
-  cat > ${environmentfile} <<EOF
-  #!/bin/sh
-EOF
-  sh -c export >> ${environmentfile}
-}
-
 GPG_KEY_ID=""
 
 # Install GPG Key
@@ -47,7 +39,7 @@ if [ -n "${!VOLUMERIZE_SOURCE*}" ]; then
 fi
 
 if [ "$1" = 'volumerize' ]; then
-  pipeEnvironmentVariables
+  pipeEnvironmentVariables "/etc/profile.d/jobber.sh"
   exec /usr/libexec/jobbermaster
 else
   exec "$@"
