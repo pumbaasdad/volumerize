@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+  mariadb1:
+    image: mariadb
+    networks:
+      - default
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=somedatabase
+    volumes:
+      - mariadb1:/var/lib/mysql
+  
+  mariadb2:
+    image: mariadb
+    networks:
+      - default
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=somedatabase
+    volumes:
+      - mariadb2:/var/lib/mysql
+
+  volumerize:
+    image: fekide/volumerize:${TEST_IMAGE_TAG}
+    networks:
+      - default
+    environment:
+      - DEBUG=true
+      - VOLUMERIZE_SOURCE1=/source/1
+      - VOLUMERIZE_TARGET1=file:///backup/1
+      - VOLUMERIZE_SOURCE2=/source/2
+      - VOLUMERIZE_TARGET2=file:///backup/2
+      - VOLUMERIZE_MYSQL_USERNAME1=root
+      - VOLUMERIZE_MYSQL_PASSWORD1=1234
+      - VOLUMERIZE_MYSQL_HOST1=mariadb1
+      - VOLUMERIZE_MYSQL_DATABASE1=somedatabase
+      - VOLUMERIZE_MYSQL_SOURCE1=VOLUMERIZE_SOURCE1
+      - VOLUMERIZE_MYSQL_USERNAME2=root
+      - VOLUMERIZE_MYSQL_PASSWORD2=1234
+      - VOLUMERIZE_MYSQL_HOST2=mariadb2
+      - VOLUMERIZE_MYSQL_DATABASE2=somedatabase
+      - VOLUMERIZE_MYSQL_SOURCE2=VOLUMERIZE_SOURCE2
+    volumes:
+      - volumerize-cache:/volumerize-cache
+      - backup:/backup
+    depends_on:
+      - mariadb1
+      - mariadb2
+
+volumes:
+  volumerize-cache:
+  mariadb1:
+  mariadb2:
+  backup:
+
+networks:
+  default:

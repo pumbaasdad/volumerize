@@ -2,14 +2,27 @@
 
 set -o errexit
 
-source /opt/volumerize/env.sh
+[[ ${DEBUG} == true ]] && set -x
 
-VOLUMERIZE_MYSQL_SOURCE=${VOLUMERIZE_MYSQL_SOURCE:-VOLUMERIZE_SOURCE}
-export MYSQL_SOURCE=${!VOLUMERIZE_MYSQL_SOURCE}
+source /opt/volumerize/mysql_base.sh
 
-file_env "MYSQL_PASSWORD"
-check_env "mysqlimport" "MYSQL_PASSWORD" "MYSQL_USERNAME" "MYSQL_HOST" "MYSQL_DATABASE"
+MYSQL_RETURN_CODE=0
+MYSQL_JOB_TYPE="restore"
 
-echo "mysql import starts"
-pv ${MYSQL_SOURCE}/volumerize-mysql/dump-${MYSQL_DATABASE}.sql | mysql -u ${MYSQL_USERNAME} -p${MYSQL_PASSWORD} $MYSQL_DATABASE
-echo "Import done"
+function databaseJob() {
+  local returnCode=0;
+
+  MYSQL_SOURCE=${VOLUMERIZE_DB_SOURCE}/volumerize-mysql
+
+  echo "mysql import of ${VOLUMERIZE_DB_HOST} starts"
+  pv ${MYSQL_SOURCE}/dump-${MYSQL_DATABASE}.sql | mysql -h ${VOLUMERIZE_DB_HOST} -u ${VOLUMERIZE_DB_USERNAME} -p${VOLUMERIZE_DB_PASSWORD} ${VOLUMERIZE_DB_DATABASE} || returnCode=$? && true ;
+  echo "Import done"
+  if [ "$returnCode" -gt "$MYSQL_RETURN_CODE" ]; then
+    MYSQL_RETURN_CODE=$returnCode
+  fi
+}
+
+if [ "${DUPLICITY_RETURN_CODE:-0}" == 0 ]; then
+  databaseExecution "$@"
+  exit $MYSQL_RETURN_CODE
+fi

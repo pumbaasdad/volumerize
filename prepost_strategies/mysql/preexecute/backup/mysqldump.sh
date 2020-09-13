@@ -2,23 +2,35 @@
 
 set -o errexit
 
-source /opt/volumerize/env.sh
+[[ ${DEBUG} == true ]] && set -x
 
-VOLUMERIZE_MYSQL_SOURCE=${VOLUMERIZE_MYSQL_SOURCE:-VOLUMERIZE_SOURCE}
-export MYSQL_SOURCE=${!VOLUMERIZE_MYSQL_SOURCE}
+source /opt/volumerize/mysql_base.sh
 
-file_env "MYSQL_PASSWORD"
-check_env "Mysqldump" "MYSQL_PASSWORD" "MYSQL_USERNAME" "MYSQL_HOST" "MYSQL_SOURCE" "MYSQL_DATABASE"
+MYSQL_RETURN_CODE=0
+MYSQL_JOB_TYPE="dump"
 
-echo "Creating ${MYSQL_SOURCE}/volumerize-mysql folder if not exists"
-mkdir -p ${MYSQL_SOURCE}/volumerize-mysql
+function databaseJob() {
+  local returnCode=0;
 
-echo "Starting automatic repair and optimize for all databases..."
-mysqlcheck -h ${MYSQL_HOST} -u${MYSQL_USERNAME} -p${MYSQL_PASSWORD} --all-databases --optimize --auto-repair --silent 2>&1
+  MYSQL_SOURCE=${VOLUMERIZE_DB_SOURCE}/volumerize-mysql
 
-# Based on this answer https://stackoverflow.com/a/32361604
-SIZE_BYTES=$(mysql --skip-column-names -u ${MYSQL_USERNAME} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE} -e "SELECT ROUND(SUM(data_length * 0.8), 0) FROM information_schema.TABLES WHERE table_schema='${MYSQL_DATABASE}';")
-[[ ${SIZE_BYTES} == NULL ]] && SIZE_BYTES=0
+  echo "Creating ${MYSQL_SOURCE} folder if not exists"
+  mkdir -p ${MYSQL_SOURCE}
 
-echo "mysqldump starts for database ${MYSQL_DATABASE} (Progress is aproximated)"
-mysqldump --single-transaction --add-drop-database --user="${MYSQL_USERNAME}" --password="${MYSQL_PASSWORD}" --host="${MYSQL_HOST}" --databases "${MYSQL_DATABASE}"  | pv --progress --size "${SIZE_BYTES:-0}" > ${MYSQL_SOURCE}/volumerize-mysql/dump-${MYSQL_DATABASE}.sql
+  echo "Starting automatic repair and optimize for all databases..."
+  mysqlcheck -h ${VOLUMERIZE_DB_HOST} -u${VOLUMERIZE_DB_USERNAME} -p${VOLUMERIZE_DB_PASSWORD} --all-databases --optimize --auto-repair --silent 2>&1
+
+  # Based on this answer https://stackoverflow.com/a/32361604
+  SIZE_BYTES=$(mysql --skip-column-names -h ${VOLUMERIZE_DB_HOST} -u ${VOLUMERIZE_DB_USERNAME} -p${VOLUMERIZE_DB_PASSWORD} ${VOLUMERIZE_DB_DATABASE} -e "SELECT ROUND(SUM(data_length * 0.8), 0) FROM information_schema.TABLES WHERE table_schema='${VOLUMERIZE_DB_DATABASE}';")
+  [[ ${SIZE_BYTES} == NULL ]] && SIZE_BYTES=0
+
+  echo "mysqldump @ ${VOLUMERIZE_DB_HOST} starts for database ${MYSQL_DATABASE} (Progress is aproximated)"
+  mysqldump --single-transaction --add-drop-database --user="${VOLUMERIZE_DB_USERNAME}" --password="${VOLUMERIZE_DB_PASSWORD}" --host="${VOLUMERIZE_DB_HOST}" --databases "${VOLUMERIZE_DB_DATABASE}"  | pv --progress --size "${SIZE_BYTES:-0}" > ${MYSQL_SOURCE}/dump-${VOLUMERIZE_DB_DATABASE}.sql || returnCode=$? && true ;
+
+  if [ "$returnCode" -gt "$MYSQL_RETURN_CODE" ]; then
+    MYSQL_RETURN_CODE=$returnCode
+  fi
+}
+
+databaseExecution "$@"
+exit $MYSQL_RETURN_CODE

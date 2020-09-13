@@ -5,16 +5,21 @@ services:
     image: fekide/volumerize:${TEST_IMAGE_TAG}
     container_name: volumerize
     volumes:
-      - source_volume:/source
+      - source_volume1:/source/1
+      - source_volume2:/source/2
       - backup_volume:/backup
       - cache_volume:/volumerize-cache
     environment:
       - DEBUG=true
-      - VOLUMERIZE_SOURCE=/source
-      - VOLUMERIZE_TARGET=file:///backup
+      - VOLUMERIZE_SOURCE1=/source/1
+      - VOLUMERIZE_TARGET1=file:///backup/1
+      - VOLUMERIZE_SOURCE2=/source/2
+      - VOLUMERIZE_TARGET2=file:///backup/2
 
 volumes:
-  source_volume:
+  source_volume1:
+    external: false
+  source_volume2:
     external: false
   backup_volume:
     external: false

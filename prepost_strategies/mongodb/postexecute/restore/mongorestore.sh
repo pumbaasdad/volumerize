@@ -2,16 +2,27 @@
 
 set -o errexit
 
-source /opt/volumerize/env.sh
+[[ ${DEBUG} == true ]] && set -x
 
-VOLUMERIZE_MONGO_SOURCE=${VOLUMERIZE_MONGO_SOURCE:-VOLUMERIZE_SOURCE}
-export MONGO_SOURCE=${!VOLUMERIZE_MONGO_SOURCE}
+source /opt/volumerize/mongo_base.sh
 
-file_env "MONGO_PASSWORD"
-check_env "mongorestore" "MONGO_USERNAME" "MONGO_PASSWORD" "MONGO_HOST" "MONGO_PORT" "MONGO_SOURCE"
+MONGODUMP_RETURN_CODE=0
+MONGO_JOB_TYPE="restore"
 
-MONGO_SOURCE=${MONGO_SOURCE}/volumerize-mongo
+function databaseJob() {
+  local returnCode=0;
 
-echo "mongorestore starts"
-mongorestore --host ${MONGO_HOST} --port ${MONGO_PORT} --username ${MONGO_USERNAME} --password "${MONGO_PASSWORD}" ${MONGO_SOURCE}
-echo "Import done"
+  MONGO_SOURCE=${VOLUMERIZE_DB_SOURCE}/volumerize-mongo
+
+  echo "mongorestore of ${VOLUMERIZE_DB_HOST} starts"
+  mongorestore --host ${VOLUMERIZE_DB_HOST} --port ${VOLUMERIZE_DB_PORT} --username ${VOLUMERIZE_DB_USERNAME} --password "${VOLUMERIZE_DB_PASSWORD}" ${MONGO_SOURCE} || returnCode=$? && true ;
+
+  if [ "$returnCode" -gt "$MONGODUMP_RETURN_CODE" ]; then
+    MONGODUMP_RETURN_CODE=$returnCode
+  fi
+}
+
+if [ "${DUPLICITY_RETURN_CODE}" == 0 ]; then
+  databaseExecution "$@"
+  exit $MONGODUMP_RETURN_CODE
+fi

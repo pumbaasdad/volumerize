@@ -7,3 +7,4 @@ RUN apk add --no-cache \
 
 COPY postexecute /postexecute
 COPY preexecute /preexecute
+COPY utils /opt/volumerize
