@@ -6,7 +6,8 @@ load 'libs/bats-assert/load'
 setup_file() {
   docker version
   docker-compose version
-  export COMPOSE_FILE=${BATS_TEST_DIRNAME}/compose-files/${TEST_IMAGE_TYPE:-default}.yml
+  export COMPOSE_DIRECTORY=${BATS_TEST_DIRNAME}/compose-files
+  export COMPOSE_FILE=${COMPOSE_DIRECTORY}/${TEST_IMAGE_TYPE:-default}.yml
   docker-compose --no-ansi up -d
   if [ $TEST_IMAGE_TYPE == mysql ]; then
     # Wait for database initialisation

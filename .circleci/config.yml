@@ -49,8 +49,8 @@ commands:
 jobs:
   build_branch:
     working_directory: /app
-    docker:
-      - image: docker:19.03.8-git
+    machine:
+      image: ubuntu-1604:202007-01
     steps:
       - checkout
       - setup_remote_docker
@@ -60,8 +60,8 @@ jobs:
 
   build_master:
     working_directory: /app
-    docker:
-      - image: docker:19.03.8-git
+    machine:
+      image: ubuntu-1604:202007-01
     steps:
       - checkout
       - setup_remote_docker
@@ -74,8 +74,8 @@ jobs:
     working_directory: /app
     environment:
       IMAGE_VERSION: nightly
-    docker:
-      - image: docker:19.03.8-git
+    machine:
+      image: ubuntu-1604:202007-01
     steps:
       - checkout
       - setup_remote_docker
@@ -86,8 +86,8 @@ jobs:
 
   build_tags:
     working_directory: /app
-    docker:
-      - image: docker:19.03.8-git
+    machine:
+      image: ubuntu-1604:202007-01
     steps:
       - checkout
       - setup_remote_docker
