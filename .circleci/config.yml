@@ -53,7 +53,6 @@ jobs:
       image: ubuntu-1604:202007-01
     steps:
       - checkout
-      - setup_remote_docker
       - install_deps
       - build_images
       - test_images
@@ -64,7 +63,6 @@ jobs:
       image: ubuntu-1604:202007-01
     steps:
       - checkout
-      - setup_remote_docker
       - install_deps
       - build_images
       - test_images
@@ -78,7 +76,6 @@ jobs:
       image: ubuntu-1604:202007-01
     steps:
       - checkout
-      - setup_remote_docker
       - install_deps
       - build_images
       - test_images
