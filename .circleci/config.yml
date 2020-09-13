@@ -48,7 +48,6 @@ commands:
 
 jobs:
   build_branch:
-    working_directory: /app
     machine:
       image: ubuntu-1604:202007-01
     steps:
@@ -58,7 +57,6 @@ jobs:
       - test_images
 
   build_master:
-    working_directory: /app
     machine:
       image: ubuntu-1604:202007-01
     steps:
@@ -69,7 +67,6 @@ jobs:
       - push_images
 
   build_nightly:
-    working_directory: /app
     environment:
       IMAGE_VERSION: nightly
     machine:
@@ -82,7 +79,6 @@ jobs:
       - push_images
 
   build_tags:
-    working_directory: /app
     machine:
       image: ubuntu-1604:202007-01
     steps:
