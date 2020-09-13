@@ -5,15 +5,6 @@ commands:
     description: "Install Dependencies"
     steps:
       - run:
-          name: Install Dependencies
-          command: |
-            apk add --no-cache \
-              py-pip \
-              curl \
-              curl-dev \
-              bash \
-              docker-compose 
-      - run:
           name: Initialize Submodules
           command: |
             git submodule init &&
