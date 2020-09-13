@@ -10,7 +10,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=1234
     volumes:
       - mongodb:/data/db
-      - ./mongodb/:/scripts
+      - ${COMPOSE_DIRECTORY}/mongodb/:/scripts
 
   volumerize:
     image: fekide/volumerize:${TEST_IMAGE_TAG}
