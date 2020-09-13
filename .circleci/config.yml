@@ -16,14 +16,14 @@ commands:
           name: Build Images
           command: |
             set +o pipefail
-            sh buildscripts/buildSupportedAlpineImages.sh
+            ./buildscripts/buildSupportedAlpineImages.sh
   test_images:
     description: "Test Images"
     steps:
       - run:
           name: Test Images
           command: |
-              sh buildscripts/testSupportedAlpineImages.sh
+              ./buildscripts/testSupportedAlpineImages.sh
       - store_artifacts:
           path: report
       - store_test_results:
@@ -35,7 +35,7 @@ commands:
           name: Push Images to DockerHub
           command: |
               docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
-              sh buildscripts/releaseSupportedAlpineImages.sh
+              ./buildscripts/releaseSupportedAlpineImages.sh
 
 jobs:
   build_branch:
