@@ -2,23 +2,26 @@ version: '3.7'
 
 services:
   volumerize:
-    build: .
+    image: fekide/volumerize:latest
+    volumes:
+      - source_volume1:/source/1
+      - source_volume2:/source/2
+      - backup_volume:/backup
+      - cache_volume:/volumerize-cache
     environment:
-      - VOLUMERIZE_SOURCE=/source
-      - VOLUMERIZE_TARGET=s3://s3.<bucket-region>.amazonaws.com/<bucket-name>[/<path>]
-      - AWS_ACCESS_KEY_ID=accesskey
-      - AWS_SECRET_ACCESS_KEY=secretkey
+      - VOLUMERIZE_SOURCE1=/source/1
+      - VOLUMERIZE_TARGET1=file:///backup/1
+      - VOLUMERIZE_SOURCE2=/source/2
+      - VOLUMERIZE_TARGET2=file:///backup/2
       - TZ=Europe/Paris
-      - VOLUMERIZE_JOBBER_TIME=0 0 3 * * *
-      - MYSQL_USERNAME=root
-      - MYSQL_PASSWORD=1234
-      - MYSQL_HOST=dbhost
+      - VOLUMERIZE_JOBBER_TIME1=0 0 3 * * *
+      - VOLUMERIZE_JOBBER_TIME2=0 0 4 * * *
       - VOLUMERIZE_DUPLICITY_OPTIONS=
       - VOLUMERIZE_FULL_IF_OLDER_THAN=14D
       - REMOVE_ALL_BUT_N_FULL=4
-    volumes:
-      - volumerize-cache:/volumerize-cache
-
 
 volumes:
-  volumerize-cache:
+  source_volume1:
+  source_volume2:
+  backup_volume:
+  cache_volume:

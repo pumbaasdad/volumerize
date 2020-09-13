@@ -4,4 +4,4 @@ set -o errexit
 
 [[ ${DEBUG} == true ]] && set -x
 
-source $VOLUMERIZE_HOME/backup.sh
+source $VOLUMERIZE_HOME/backup "$@"
