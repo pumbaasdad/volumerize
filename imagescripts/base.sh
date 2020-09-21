@@ -85,6 +85,8 @@ function prepareJobCommand() {
   local jobNumber=$1
   DUPLICITY_JOB_COMMAND=$DUPLICITY_COMMAND
   DUPLICITY_JOB_OPTIONS="--allow-source-mismatch"
+  file_env "PASSPHRASE"
+  file_env "VOLUMERIZE_GPG_PRIVATE_KEY"
   local CACHE_VARIABLE="VOLUMERIZE_CACHE${jobNumber}"
   if [ -n "${!CACHE_VARIABLE}" ]; then
     DUPLICITY_JOB_OPTIONS=$DUPLICITY_JOB_OPTIONS" --archive-dir=${!CACHE_VARIABLE}"
@@ -119,6 +121,8 @@ function prepareJobConfiguration() {
   else
     VOLUMERIZE_JOB_SOURCE=
   fi
+
+  file_env ${VARIABLE_TARGET}
   if [ -n "${!VARIABLE_TARGET}" ]; then
     VOLUMERIZE_JOB_TARGET=${!VARIABLE_TARGET}
   else
@@ -131,6 +135,7 @@ function prepareJobConfiguration() {
     VOLUMERIZE_JOB_RESTORE=${!VARIABLE_SOURCE}
   fi
 
+  file_env ${VARIABLE_REPLICATE_TARGET}
   if [ -n "${!VARIABLE_REPLICATE_TARGET}" ]; then
     VOLUMERIZE_JOB_REPLICATE_TARGET=${!VARIABLE_REPLICATE_TARGET}
   else

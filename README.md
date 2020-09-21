@@ -664,6 +664,8 @@ The following variables are supported to be stored in files, the location specif
 - `VOLUMERIZE_GPG_PRIVATE_KEY`
 - `PASSPHRASE`
 - `GOOGLE_DRIVE_SECRET`
+- `VOLUMERIZE_TARGET`
+- `VOLUMERIZE_REPLICATE`
 
 ## All Environment Variables
 
