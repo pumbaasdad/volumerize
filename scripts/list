@@ -5,23 +5,14 @@ set -o errexit
 [[ ${DEBUG} == true ]] && set -x
 
 source /opt/volumerize/base.sh
+source /opt/volumerize/find_job_id.sh
 
 export VOLUMERIZE_COMMAND="list"
 DUPLICITY_RETURN_CODE=0
 
-if [ ! -z "${1##*[!0-9]*}" ]; then
-  export JOB_ID=$1
-  shift
-fi
-
 function commandJob() {
   local returnCode=0;
-  if [ -z "$JOB_ID" ]; then
-    eval ${DUPLICITY_COMMAND} collection-status "$@" ${DUPLICITY_OPTIONS} ${VOLUMERIZE_INCLUDES} ${VOLUMERIZE_EXCLUDES} ${VOLUMERIZE_TARGET} || returnCode=$? && true ;
-  else
-    prepareJob "$JOB_ID"
-    eval ${DUPLICITY_JOB_COMMAND} collection-status "$@" ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_INCLUDES} ${VOLUMERIZE_JOB_EXCLUDES} ${VOLUMERIZE_JOB_TARGET} || returnCode=$? && true ;
-  fi
+  eval ${DUPLICITY_JOB_COMMAND} collection-status "$@" ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_INCLUDES} ${VOLUMERIZE_JOB_EXCLUDES} ${VOLUMERIZE_JOB_TARGET} || returnCode=$? && true ;
   if [ "$returnCode" -gt "$DUPLICITY_RETURN_CODE" ]; then
     DUPLICITY_RETURN_CODE=$returnCode
   fi

@@ -6,7 +6,7 @@
 [![Open Issues](https://img.shields.io/github/issues/fekide/volumerize.svg)](https://github.com/fekide/volumerize/issues) [![Stars on GitHub](https://img.shields.io/github/stars/fekide/volumerize.svg)](https://github.com/fekide/volumerize/stargazers)
 [![Docker Stars](https://img.shields.io/docker/stars/fekide/volumerize.svg)](https://hub.docker.com/r/fekide/volumerize/) [![Docker Pulls](https://img.shields.io/docker/pulls/fekide/volumerize.svg)](https://hub.docker.com/r/fekide/volumerize/)
 
-[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/fekide/volumerize/master/dc-pwd.yml)
+[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/fekide/volumerize/master/docker-compose.yml)
 
 - [Feki.de Volumerize](#fekide-volumerize)
   - [Volume Backups Tutorials](#volume-backups-tutorials)
@@ -669,34 +669,34 @@ The following variables are supported to be stored in files, the location specif
 
 ## All Environment Variables
 
-| Name                             | Use                                                                                                                      | Default                |
-| :------------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :--------------------- |
-| `DEBUG`                          | Enable shell debug output                                                                                                | `false`                |
-| `VOLUMERIZE_SOURCE`              | Source directory of a job                                                                                                | required               |
-| `VOLUMERIZE_CACHE`               | Cache directory for the backup job                                                                                       |                        |
-| `VOLUMERIZE_TARGET`              | Target url for the backup                                                                                                | required               |
-| `VOLUMERIZE_JOBBER_TIME`         | Timer for job execution                                                                                                  | `0 0 4 * * *`          |
-| `VOLUMERIZE_REPLICATE`           | Replicate after a finished backup                                                                                        | `false`                |
-| `VOLUMERIZE_REPLICATE_TARGET`    | Target url for a replication                                                                                             |                        |
-| `VOLUMERIZE_CONTAINERS`          | Containers to stop before and start after backup (space separated)                                                       |                        |
-| `VOLUMERIZE_DUPLICITY_OPTIONS`   | custom options for duplicity                                                                                             |                        |
-| `VOLUMERIZE_FULL_IF_OLDER_THAN`  | Execute full backup if last full backup is older than the specified time                                                 |                        |
-| `VOLUMERIZE_ASYNCHRONOUS_UPLOAD` | (EXPERIMENTAL) upload while already creating the next volume(s)                                                          | `false`                |
-| `VOLUMERIZE_INCLUDE<INCLUDE_ID>` | Includes for the backup                                                                                                  |                        |
-| `VOLUMERIZE_EXCLUDE<INCLUDE_ID>` | Includes for the backup                                                                                                  |                        |
-| `REMOVE_ALL_BUT_N_FULL`          | Remove all but n full backups after finished backup                                                                      |                        |
-| `REMOVE_ALL_INC_BUT_N_FULL`      | Remove all incremental backups ecxept for the last n full backups after finished backup                                  |                        |
-| `REMOVE_OLDER_THAN`              | Remove backups older than time given after finished backup job                                                           |                        |
-| `VOLUMERIZE_GPG_PRIVATE_KEY`     | Private Key for GPG Encryption                                                                                           |                        |
-| `PASSPHRASE`                     | Passphrase for GPG Private Key                                                                                           |                        |
-| `VOLUMERIZE_GPG_PUBLIC_KEY`      | Public Key for GPG Encryption                                                                                            |                        |
-| `VOLUMERIZE_DELAYED_START`       | Start Volumerize delayed by given time (`sleep` command)                                                                 | `0`                    |
-| `JOBBER_NOTIFY_ERR`              | result sink for job errors                                                                                               | `\n     - *stdoutSink` |
-| `JOBBER_NOTIFY_FAIL`             | result sink for job failures                                                                                             | `\n     - *stdoutSink` |
-| `JOBBER_CUSTOM`                  | Specify a custom jobber file file location. You need to bind mount a file to this location or use docker configs/secrets |                        |
-| `JOBBER_DISABLE`                 | Disable Jobber for the root user (It will still run but without jobs)                                                    | `false`                |
-| `GOOGLE_DRIVE_ID`                | ID for google drive                                                                                                      |                        |
-| `GOOGLE_DRIVE_SECRET`            | secret for google drive                                                                                                  |                        |
+| Name                              | Use                                                                                                                      | Default                |
+| :-------------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :--------------------- |
+| `DEBUG`                           | Enable shell debug output                                                                                                | `false`                |
+| `VOLUMERIZE_SOURCE`               | Source directory of a job                                                                                                | required               |
+| `VOLUMERIZE_CACHE`                | Cache directory for the backup job                                                                                       |                        |
+| `VOLUMERIZE_TARGET`               | Target url for the backup                                                                                                | required               |
+| `VOLUMERIZE_JOBBER_TIME`          | Timer for job execution                                                                                                  | `0 0 4 * * *`          |
+| `VOLUMERIZE_REPLICATE`            | Replicate after a finished backup                                                                                        | `false`                |
+| `VOLUMERIZE_REPLICATE_TARGET`     | Target url for a replication                                                                                             |                        |
+| `VOLUMERIZE_CONTAINERS`           | Containers to stop before and start after backup (space separated)                                                       |                        |
+| `VOLUMERIZE_DUPLICITY_OPTIONS`    | custom options for duplicity                                                                                             |                        |
+| `VOLUMERIZE_FULL_IF_OLDER_THAN`   | Execute full backup if last full backup is older than the specified time                                                 |                        |
+| `VOLUMERIZE_ASYNCHRONOUS_UPLOAD`  | (EXPERIMENTAL) upload while already creating the next volume(s)                                                          | `false`                |
+| `VOLUMERIZE_INCLUDE_<INCLUDE_ID>` | Includes for the backup                                                                                                  |                        |
+| `VOLUMERIZE_EXCLUDE_<INCLUDE_ID>` | Includes for the backup                                                                                                  |                        |
+| `REMOVE_ALL_BUT_N_FULL`           | Remove all but n full backups after finished backup                                                                      |                        |
+| `REMOVE_ALL_INC_BUT_N_FULL`       | Remove all incremental backups ecxept for the last n full backups after finished backup                                  |                        |
+| `REMOVE_OLDER_THAN`               | Remove backups older than time given after finished backup job                                                           |                        |
+| `VOLUMERIZE_GPG_PRIVATE_KEY`      | Private Key for GPG Encryption                                                                                           |                        |
+| `PASSPHRASE`                      | Passphrase for GPG Private Key                                                                                           |                        |
+| `VOLUMERIZE_GPG_PUBLIC_KEY`       | Public Key for GPG Encryption                                                                                            |                        |
+| `VOLUMERIZE_DELAYED_START`        | Start Volumerize delayed by given time (`sleep` command)                                                                 | `0`                    |
+| `JOBBER_NOTIFY_ERR`               | result sink for job errors                                                                                               | `\n     - *stdoutSink` |
+| `JOBBER_NOTIFY_FAIL`              | result sink for job failures                                                                                             | `\n     - *stdoutSink` |
+| `JOBBER_CUSTOM`                   | Specify a custom jobber file file location. You need to bind mount a file to this location or use docker configs/secrets |                        |
+| `JOBBER_DISABLE`                  | Disable Jobber for the root user (It will still run but without jobs)                                                    | `false`                |
+| `GOOGLE_DRIVE_ID`                 | ID for google drive                                                                                                      |                        |
+| `GOOGLE_DRIVE_SECRET`             | secret for google drive                                                                                                  |                        |
 
 ## Build the Image
 

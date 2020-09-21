@@ -16,12 +16,7 @@ fi
 
 function commandJob() {
   local returnCode=0;
-  if [ -z "$JOB_ID" ]; then
-    eval ${DUPLICITY_COMMAND} remove-all-but-n-full "$@" ${DUPLICITY_OPTIONS} ${VOLUMERIZE_TARGET} || returnCode=$? && true ;
-  else
-    prepareJob "$JOB_ID"
-    eval ${DUPLICITY_JOB_COMMAND} remove-all-but-n-full "$@" ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_TARGET} || returnCode=$? && true ;
-  fi
+  eval ${DUPLICITY_JOB_COMMAND} remove-all-but-n-full "$@" ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_TARGET} || returnCode=$? && true ;
   if [ "$returnCode" -gt "$DUPLICITY_RETURN_CODE" ]; then
     DUPLICITY_RETURN_CODE=$returnCode
   fi

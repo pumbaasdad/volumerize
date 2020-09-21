@@ -8,56 +8,7 @@ DUPLICITY_COMMAND="duplicity"
 
 DUPLICITY_OPTIONS=""
 
-DUPLICITY_INCLUDES=""
-
-DUPLICITY_EXCLUDES=""
-
 DUPLICITY_MODE=""
-
-function resolveOptions() {
-  file_env "PASSPHRASE"
-  file_env "VOLUMERIZE_GPG_PRIVATE_KEY"
-  DUPLICITY_OPTIONS="--allow-source-mismatch --archive-dir=${VOLUMERIZE_CACHE}"
-  if [ -n "${VOLUMERIZE_DUPLICITY_OPTIONS}" ]; then
-    DUPLICITY_OPTIONS=$DUPLICITY_OPTIONS" "${VOLUMERIZE_DUPLICITY_OPTIONS}
-  fi
-  if [ ! -n "${PASSPHRASE}" ] && [ ! -n "${VOLUMERIZE_GPG_PUBLIC_KEY}" ] && [ ! -n "${VOLUMERIZE_GPG_PRIVATE_KEY}" ]; then
-    DUPLICITY_OPTIONS=$DUPLICITY_OPTIONS" --no-encryption"
-  fi
-  if [ -n "${GPG_KEY_ID}" ]; then
-    DUPLICITY_OPTIONS=$DUPLICITY_OPTIONS" --gpg-options --trust-model=always --encrypt-key ${GPG_KEY_ID}"
-  fi
-  if [ -n "${VOLUMERIZE_FULL_IF_OLDER_THAN}" ]; then
-    DUPLICITY_OPTIONS=$DUPLICITY_OPTIONS" --full-if-older-than ${VOLUMERIZE_FULL_IF_OLDER_THAN}"
-  fi
-  if [ "${VOLUMERIZE_ASYNCHRONOUS_UPLOAD}" = 'true' ]; then
-    DUPLICITY_OPTIONS=$DUPLICITY_OPTIONS" --asynchronous-upload"
-  fi
-}
-
-function resolveIncludes() {
-  local x
-  for (( x=1; ; x++ ))
-  do
-    VOLUMERIZE_INCLUDE="VOLUMERIZE_INCLUDE${x}"
-    if [ ! -n "${!VOLUMERIZE_INCLUDE}" ]; then
-      break
-    fi
-    VOLUMERIZE_INCLUDES=$VOLUMERIZE_INCLUDES" --include "${!VOLUMERIZE_INCLUDE}
-  done
-}
-
-function resolveExcludes() {
-  local x
-  for (( x=1; ; x++ ))
-  do
-    VOLUMERIZE_EXCLUDE="VOLUMERIZE_EXCLUDE${x}"
-    if [ ! -n "${!VOLUMERIZE_EXCLUDE}" ]; then
-      break
-    fi
-    VOLUMERIZE_EXCLUDES=$VOLUMERIZE_EXCLUDES" --exclude "${!VOLUMERIZE_EXCLUDE}
-  done
-}
 
 JOB_COUNT=
 
@@ -191,12 +142,14 @@ function commandLoop() {
   for (( counter=1; counter<=$jobcount; counter++ ))
   do
     JOB_ID=$counter
+    prepareJob $JOB_ID
     commandJob "$@"
   done
 }
 
 function commandExecution() {
   if [ -n "${VOLUMERIZE_SOURCE}" ] || [ -n "${JOB_ID}" ]; then
+    prepareJob $JOB_ID
     commandJob "$@"
   elif [ -n "${JOB_COUNT}" ]; then
     commandLoop "$@"
@@ -208,7 +161,4 @@ function commandJob() {
   exit 1
 }
 
-resolveIncludes
-resolveExcludes
-resolveOptions
 discoverJobs
