@@ -2,6 +2,10 @@
 
 set -o errexit
 
+source /opt/volumerize/env.sh
+
+file_env "GOOGLE_DRIVE_SECRET"
+
 if [ -n "${GOOGLE_DRIVE_ID}" ] && [ -n "${GOOGLE_DRIVE_SECRET}" ]; then
   cat > /credentials/cred.file <<EOF
 client_config_backend: settings

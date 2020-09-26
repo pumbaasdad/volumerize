@@ -5,44 +5,23 @@ set -o errexit
 [[ ${DEBUG} == true ]] && set -x
 
 source /opt/volumerize/base.sh
+source /opt/volumerize/find_job_id.sh
 
+export VOLUMERIZE_COMMAND="backupFull"
 DUPLICITY_RETURN_CODE=0
 
-function commandLoop() {
-  local jobcount=$JOB_COUNT
-  local counter;
-
-  for (( counter=1; counter<=$jobcount; counter++ ))
-  do
-    commandJob "$counter" "$@"
-  done
-}
-
 function commandJob() {
-  local jobNumber=$1
   local returnCode=0;
-  prepareJob "$jobNumber"
-  shift;
-  eval ${DUPLICITY_JOB_COMMAND} full "$@" ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_INCLUDES} ${VOLUMERIZE_JOB_SOURCE} ${VOLUMERIZE_JOB_TARGET} || returnCode=$? && true ;
+  eval ${DUPLICITY_JOB_COMMAND} full "$@" ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_INCLUDES} ${VOLUMERIZE_JOB_EXCLUDES} ${VOLUMERIZE_JOB_SOURCE} ${VOLUMERIZE_JOB_TARGET} || =$? && true ;
   if [ "$returnCode" -gt "$DUPLICITY_RETURN_CODE" ]; then
     DUPLICITY_RETURN_CODE=$returnCode
   fi
 }
 
-function commandExecution() {
-  if [ -n "${VOLUMERIZE_SOURCE}" ]; then
-    eval ${DUPLICITY_COMMAND} full "$@" ${DUPLICITY_OPTIONS} ${VOLUMERIZE_JOB_INCLUDES} ${VOLUMERIZE_SOURCE} ${VOLUMERIZE_TARGET} || DUPLICITY_RETURN_CODE=$? && true ;
-  elif [ ! -z "${1##*[!0-9]*}" ]; then
-    commandJob "$@"
-  elif [ -n "${JOB_COUNT}" ]; then
-    commandLoop "$@"
-  fi
-}
-
 ${VOLUMERIZE_SCRIPT_DIR}/prepoststrategy preAction backup
-source ${VOLUMERIZE_SCRIPT_DIR}/stopContainers.sh
+${VOLUMERIZE_SCRIPT_DIR}/stopContainers.sh
 commandExecution "$@"
-source ${VOLUMERIZE_SCRIPT_DIR}/startContainers.sh
+${VOLUMERIZE_SCRIPT_DIR}/startContainers.sh
 export DUPLICITY_RETURN_CODE
 ${VOLUMERIZE_SCRIPT_DIR}/prepoststrategy postAction backup
 exit $DUPLICITY_RETURN_CODE

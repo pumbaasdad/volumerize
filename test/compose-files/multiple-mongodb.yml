@@ -1,0 +1,60 @@
+version: "3"
+
+services:
+  mongodb1:
+    image: mongo
+    networks:
+      - default
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+    volumes:
+      - mongodb1:/data/db
+      - ${COMPOSE_DIRECTORY}/mongodb/:/scripts
+
+  mongodb2:
+    image: mongo
+    networks:
+      - default
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+    volumes:
+      - mongodb2:/data/db
+      - ${COMPOSE_DIRECTORY}/mongodb/:/scripts
+
+  volumerize:
+    image: fekide/volumerize:${TEST_IMAGE_TAG}
+    networks:
+      - default
+    environment:
+      - DEBUG=true
+      - VOLUMERIZE_SOURCE1=/source/1
+      - VOLUMERIZE_TARGET1=file:///backup/1
+      - VOLUMERIZE_SOURCE2=/source/2
+      - VOLUMERIZE_TARGET2=file:///backup/2
+      - VOLUMERIZE_MONGO_USERNAME1=root
+      - VOLUMERIZE_MONGO_PASSWORD1=1234
+      - VOLUMERIZE_MONGO_PORT1=27017
+      - VOLUMERIZE_MONGO_HOST1=mongodb1
+      - VOLUMERIZE_MONGO_SOURCE1=VOLUMERIZE_SOURCE1
+      - VOLUMERIZE_MONGO_USERNAME2=root
+      - VOLUMERIZE_MONGO_PASSWORD2=1234
+      - VOLUMERIZE_MONGO_PORT2=27017
+      - VOLUMERIZE_MONGO_HOST2=mongodb2
+      - VOLUMERIZE_MONGO_SOURCE2=VOLUMERIZE_SOURCE2
+    volumes:
+      - volumerize-cache:/volumerize-cache
+      - backup:/backup
+    depends_on:
+      - mongodb1
+      - mongodb2
+
+volumes:
+  volumerize-cache:
+  mongodb1:
+  mongodb2:
+  backup:
+
+networks:
+  default:

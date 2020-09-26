@@ -11,8 +11,8 @@ case $1 in
 esac
 
 case $2 in
-    backup | verify | restore ) ;;
-    *) echo "Error: porepoststrategy second parameter 'duplicity action' must be backup, verify or restore"; exit 1 ;;
+    backup | verify | restore | remove | replicate ) ;;
+    *) echo "Error: prepoststrategy second parameter 'duplicity action' must be backup, verify, restore, remove or replicate"; exit 1 ;;
 esac
 
 strategy_path=$strategy_path/$2

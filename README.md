@@ -1,13 +1,14 @@
 
-# Blacklabelops Volumerize
+# Feki.de Volumerize 
+(Fork from [blacklabelops/volumerize](https://github.com/blacklabelops/volumerize))
 
 [![Circle CI](https://circleci.com/gh/Fekide/volumerize.svg?style=shield)](https://circleci.com/gh/Fekide/volumerize)
 [![Open Issues](https://img.shields.io/github/issues/fekide/volumerize.svg)](https://github.com/fekide/volumerize/issues) [![Stars on GitHub](https://img.shields.io/github/stars/fekide/volumerize.svg)](https://github.com/fekide/volumerize/stargazers)
 [![Docker Stars](https://img.shields.io/docker/stars/fekide/volumerize.svg)](https://hub.docker.com/r/fekide/volumerize/) [![Docker Pulls](https://img.shields.io/docker/pulls/fekide/volumerize.svg)](https://hub.docker.com/r/fekide/volumerize/)
 
-[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/fekide/volumerize/master/dc-pwd.yml)
+[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/fekide/volumerize/master/docker-compose.yml)
 
-- [Blacklabelops Volumerize](#blacklabelops-volumerize)
+- [Feki.de Volumerize](#fekide-volumerize)
   - [Volume Backups Tutorials](#volume-backups-tutorials)
   - [Make It Short](#make-it-short)
   - [How It Works](#how-it-works)
@@ -24,15 +25,19 @@
   - [Enforcing Full Backups Periodically](#enforcing-full-backups-periodically)
   - [Automatically remove old backups](#automatically-remove-old-backups)
   - [Post scripts and pre scripts (prepost strategies)](#post-scripts-and-pre-scripts-prepost-strategies)
+    - [Additional variables for prepost-scripts](#additional-variables-for-prepost-scripts)
+    - [Provided PrePost-Strategies](#provided-prepost-strategies)
   - [Container Scripts](#container-scripts)
-  - [Build The Project](#build-the-project)
+  - [Customize Jobber](#customize-jobber)
   - [Multiple Backups](#multiple-backups)
+  - [Docker Secrets](#docker-secrets)
+  - [All Environment Variables](#all-environment-variables)
   - [Build the Image](#build-the-image)
   - [Run the Image](#run-the-image)
 
-Blacklabelops backup and restore solution for Docker volume backups. It is based on the command line tool Duplicity. Dockerized and Parameterized for easier use and configuration.
+Backup and restore solution for Docker volume backups. It is based on the command line tool Duplicity. Dockerized and Parameterized for easier use and configuration.
 
-This is not a tool that can clone and backup data from running databases. You should always stop all containers running on your data before doing backups. Always make sure you're not a victim of unexpected data corruption.
+This is not a tool that can safely clone and backup data from running databases. You should always stop all containers running on your data before doing backups. You can use [pre- and postscripts](#post-scripts-and-pre-scripts-prepost-strategies) to enable maintenance mode or similar. Always make sure you're not a victim of unexpected data corruption.
 
 Also note that the easier the tools the easier it is to lose data! Always make sure the tool works correct by checking the backup data itself, e.g. S3 bucket. Check the configuration double time and enable some check options this image offers. E.g. attaching volumes read only.
 
@@ -500,7 +505,7 @@ Pre-scripts must be located at `/preexecute/$duplicity_action/$your_scripts_here
 
 Post-scripts must be located at `/postexecute/$duplicity_action/$your_scripts_here`.
 
-`$duplicity_action` folder must be named `backup`, `restore` or `verify`.
+`$duplicity_action` can be one of `backup`, `restore`, `verify`, `remove` or `replicate`.
 
 > Note: `backup` action is the same for the scripts `backup`, `backupFull`, `backupIncremental` and `periodicBackup`.
 
@@ -508,31 +513,40 @@ All `.sh` files located in the `$duplicity_action` folder will be executed in al
 
 When using prepost strategies, this will be the execution flow: `pre-scripts -> stop containers -> duplicity action -> start containers -> post-scripts`.
 
-Some premade strategies are available at [prepost strategies](prepost_strategies).
+### Additional variables for prepost-scripts
+
+The following vairables are additionally available in pre and post scripts:
+
+-  `JOB_ID`: The id of the current job executed (only if [multiple sources](#backup-multiple-volumes) are specified)
+-  `VOLUMERIZE_COMMAND`: the exact command that was executed (may be used for further filtering)
+
+### Provided PrePost-Strategies
+Some premade strategies are available at [prepost strategies](prepost_strategies). These are
+
+- [mongodb](prepost_strategies/mongodb/README.md)
+- [mysql](prepost_strategies/mysql/README.md)
+
 
 ## Container Scripts
 
 This image creates at container startup some convenience scripts.
 Under the hood fekide/volumerize uses duplicity. To pass script parameters, see here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
 
-| Script | Description |
-|--------|-------------|
-| backup | Creates an backup with the containers configuration |
-| backupFull | Creates a full backup with the containers configuration |
-| backupIncremental | Creates an incremental backup with the containers configuration |
-| list | List all available backups |
-| verify | Compare the latest backup to your local files |
-| restore | Be Careful! Triggers an immediate force restore with the latest backup |
-| periodicBackup | Same script that will be triggered by the periodic schedule |
-| startContainers | Starts the specified Docker containers |
-| stopContainers | Stops the specified Docker containers |
-| remove-older-than | Delete older backups ([Time formats](http://duplicity.nongnu.org/duplicity.1.html#toc8))|
-| cleanCacheLocks | Cleanup of old Cache locks. |
-| prepoststrategy `$execution_phase` `$duplicity_action` | Execute all `.sh` files for the specified exeuction phase and duplicity action in alphabetical order. |
-
-`$execution_phase` must be `preAction` or `postAction`.
-
-`$duplicity_action` must be `backup`, `verify` or `restpore`.
+| Script                         | Description                                                                              |
+| ------------------------------ | ---------------------------------------------------------------------------------------- |
+| `backup`                       | Creates an backup with the containers configuration                                      |
+| `periodicBackup`               | Script that will be triggered by the periodic schedule, identical to `backup`            |
+| `backupFull`                   | Creates a full backup with the containers configuration                                  |
+| `backupIncremental`            | Creates an incremental backup with the containers configuration                          |
+| `list`                         | List all available backups                                                               |
+| `verify`                       | Compare the latest backup to your local files                                            |
+| `restore`                      | Be Careful! Triggers an immediate force restore with the latest backup                   |
+| `startContainers`              | Starts the specified Docker containers                                                   |
+| `stopContainers`               | Stops the specified Docker containers                                                    |
+| `remove-all-but-n-full`        | Delete all chains except n full backups                                                  |
+| `remove-all-inc-of-but-n-full` | Delete all incremental backups except for the last n full backups                        |
+| `remove-older-than`            | Delete older backups ([Time formats](http://duplicity.nongnu.org/duplicity.1.html#toc8)) |
+| `cleanCacheLocks`              | Cleanup of old Cache locks.                                                              |
 
 Example triggering script inside running container:
 
@@ -550,27 +564,68 @@ $ docker exec volumerize backup --dry-run
 
 > `--dry-run` will simulate not execute the backup procedure.
 
+## Customize Jobber
 
-## Build The Project
+If you want to customize jobber more with different sinks or other commands, you should write your own job file and mount it at `/root/.jobber`. More information on how to write jobber configurations can be found [here](https://dshearer.github.io/jobber/doc/v1.4/#jobfile). For example the file generated by the automated scripts could look like this:
 
-Check out the project at Github.
+```yml
+version: 1.4
+
+resultSinks:
+  - &stdoutSink
+    type: stdout
+    data:
+      - stdout
+      - stderr
+
+prefs:
+  runLog:
+    type: file
+    path: /var/log/jobber-runs
+    maxFileLen: 100m
+    maxHistories: 2
+
+jobs:
+
+  VolumerizeBackupJob1:
+    cmd: /etc/volumerize/periodicBackup 1
+    time: '0 0 3 * * *'
+    onError: Continue
+    notifyOnError: 
+      - *stdoutSink
+    notifyOnFailure: 
+      - *stdoutSink
+
+  VolumerizeBackupJob2:
+    cmd: /etc/volumerize/periodicBackup 2
+    time: '0 0 3 * * *'
+    onError: Continue
+    notifyOnError: 
+      - *stdoutSink
+    notifyOnFailure: 
+      - *stdoutSink
+```
 
 ## Multiple Backups
 
-You can specify multiple backup jobs with one container with enumerated environment variables. Each environment variable must be followed by a number starting with 1. Example `VOLUMERIZE_SOURCE1`, `VOLUMERIZE_SOURCE2` or `VOLUMERIZE_SOURCE3`.
+You can specify multiple backup jobs with one container with enumerated environment variables. Each environment variable must be followed by a number starting with 1. Example `VOLUMERIZE_SOURCE1`, `VOLUMERIZE_SOURCE2` or `VOLUMERIZE_SOURCE3`. If a number is skipped, only the variables before the skipped one are considered
 
 The following environment variables can be enumerated:
 
-* VOLUMERIZE_SOURCE
-* VOLUMERIZE_TARGET
-* VOLUMERIZE_CACHE
-* VOLUMERIZE_INCLUDE
+* `VOLUMERIZE_SOURCE<JOB_ID>`
+* `VOLUMERIZE_TARGET<JOB_ID>`
+* `VOLUMERIZE_REPLICATE_TARGET<JOB_ID>`
+* `VOLUMERIZE_CACHE<JOB_ID>`
+* `VOLUMERIZE_INCLUDE<JOB_ID>_<INLCLUDE_ID>`
+* `VOLUMERIZE_EXCLUDE<JOB_ID>_<EXCLUDE_ID>`
+* `VOLUMERIZE_JOBBER_TIME<JOB_ID>`
+* `JOBBER_NOTIFY_ERR<JOB_ID>`
+* `JOBBER_NOTIFY_FAIL<JOB_ID>`
 
-When using multiple backup jobs you will have to specify a cache directory for each backup. The minimum required environment variables for each job is:
+When using multiple backup jobs you do not necessarily need to specify a cache directory for each backup. By default `<VOLUMERIZE_CACHE>/<JOB_ID>` is used. The minimum required environment variables for each job is:
 
-* VOLUMERIZE_SOURCE
-* VOLUMERIZE_TARGET
-* VOLUMERIZE_CACHE
+* `VOLUMERIZE_SOURCE<JOB_ID>`
+* `VOLUMERIZE_TARGET<JOB_ID>`
 
 Also the included helper scripts will change their behavior when you use enumerated environment variables. By default each script will run on all backup jobs.
 
@@ -601,6 +656,47 @@ $ docker run -d \
     -e "VOLUMERIZE_CACHE2=/volumerize-cache2" \
     fekide/volumerize
 ~~~~
+
+## Docker Secrets
+
+The following variables are supported to be stored in files, the location specified in variables ending with `_FILE`. See [Docker Secrets Documentation](https://docs.docker.com/engine/swarm/secrets/) for more info.
+
+- `VOLUMERIZE_GPG_PRIVATE_KEY`
+- `PASSPHRASE`
+- `GOOGLE_DRIVE_SECRET`
+- `VOLUMERIZE_TARGET`
+- `VOLUMERIZE_REPLICATE`
+
+## All Environment Variables
+
+| Name                              | Use                                                                                                                      | Default                |
+| :-------------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :--------------------- |
+| `DEBUG`                           | Enable shell debug output                                                                                                | `false`                |
+| `VOLUMERIZE_SOURCE`               | Source directory of a job                                                                                                | required               |
+| `VOLUMERIZE_CACHE`                | Cache directory for the backup job                                                                                       |                        |
+| `VOLUMERIZE_TARGET`               | Target url for the backup                                                                                                | required               |
+| `VOLUMERIZE_JOBBER_TIME`          | Timer for job execution                                                                                                  | `0 0 4 * * *`          |
+| `VOLUMERIZE_REPLICATE`            | Replicate after a finished backup                                                                                        | `false`                |
+| `VOLUMERIZE_REPLICATE_TARGET`     | Target url for a replication                                                                                             |                        |
+| `VOLUMERIZE_CONTAINERS`           | Containers to stop before and start after backup (space separated)                                                       |                        |
+| `VOLUMERIZE_DUPLICITY_OPTIONS`    | custom options for duplicity                                                                                             |                        |
+| `VOLUMERIZE_FULL_IF_OLDER_THAN`   | Execute full backup if last full backup is older than the specified time                                                 |                        |
+| `VOLUMERIZE_ASYNCHRONOUS_UPLOAD`  | (EXPERIMENTAL) upload while already creating the next volume(s)                                                          | `false`                |
+| `VOLUMERIZE_INCLUDE_<INCLUDE_ID>` | Includes for the backup                                                                                                  |                        |
+| `VOLUMERIZE_EXCLUDE_<INCLUDE_ID>` | Includes for the backup                                                                                                  |                        |
+| `REMOVE_ALL_BUT_N_FULL`           | Remove all but n full backups after finished backup                                                                      |                        |
+| `REMOVE_ALL_INC_BUT_N_FULL`       | Remove all incremental backups ecxept for the last n full backups after finished backup                                  |                        |
+| `REMOVE_OLDER_THAN`               | Remove backups older than time given after finished backup job                                                           |                        |
+| `VOLUMERIZE_GPG_PRIVATE_KEY`      | Private Key for GPG Encryption                                                                                           |                        |
+| `PASSPHRASE`                      | Passphrase for GPG Private Key                                                                                           |                        |
+| `VOLUMERIZE_GPG_PUBLIC_KEY`       | Public Key for GPG Encryption                                                                                            |                        |
+| `VOLUMERIZE_DELAYED_START`        | Start Volumerize delayed by given time (`sleep` command)                                                                 | `0`                    |
+| `JOBBER_NOTIFY_ERR`               | result sink for job errors                                                                                               | `\n     - *stdoutSink` |
+| `JOBBER_NOTIFY_FAIL`              | result sink for job failures                                                                                             | `\n     - *stdoutSink` |
+| `JOBBER_CUSTOM`                   | Specify a custom jobber file file location. You need to bind mount a file to this location or use docker configs/secrets |                        |
+| `JOBBER_DISABLE`                  | Disable Jobber for the root user (It will still run but without jobs)                                                    | `false`                |
+| `GOOGLE_DRIVE_ID`                 | ID for google drive                                                                                                      |                        |
+| `GOOGLE_DRIVE_SECRET`             | secret for google drive                                                                                                  |                        |
 
 ## Build the Image
 

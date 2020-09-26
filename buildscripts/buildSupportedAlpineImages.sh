@@ -1,14 +1,31 @@
 #!/bin/bash -x
 
 set -o errexit    # abort script at first error
-
-# Setting environment variables
 readonly CUR_DIR=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
-
-printf '%b\n' ":: Reading release config...."
+source $CUR_DIR/buildImage.sh 
 source $CUR_DIR/release.sh
 
-readonly BUILD_IMAGE_TAG=$IMAGE_TAG
-readonly BUILD_IMAGE_PATH=${1:-"."}
+# Setting environment variables
 
-source $CUR_DIR/buildImage.sh $BUILD_IMAGE_TAG $BUILD_IMAGE_PATH
+printf '%b\n' ":: Building default image...."
+release
+export BASE_IMAGE_TAG=$IMAGE_TAG
+
+buildImage $IMAGE_TAG .
+
+
+printf '%b\n' ":: Building mongodb image...."
+export IMAGE_TYPE=mongodb
+release
+
+buildImage $IMAGE_TAG ./prepost_strategies/mongodb --build-arg BASE_IMAGE_TAG
+
+
+printf '%b\n' ":: Building mysql image...."
+export IMAGE_TYPE=mysql
+release
+
+buildImage $IMAGE_TAG ./prepost_strategies/mysql --build-arg BASE_IMAGE_TAG
+
+printf '%b\n' ":: Built images"
+docker image ls fekide/volumerize

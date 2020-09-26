@@ -8,12 +8,14 @@ With this prepost strategy you can create a .sql backup of your MySQL containers
 
 Aside of the required environment variables by Volumerize, this prepost strategy will require a couple of extra variables.
 
-| Name           | Description                                                |
-| -------------- | ---------------------------------------------------------- |
-| MYSQL_USERNAME | Username of the user who will perform the restore or dump. |
-| MYSQL_PASSWORD | Password of the user who will perform the restore or dump. |
-| MYSQL_HOST     | IP or domain of the host machine.                          |
-| MYSQL_DATABASE | Database to restore. (only available for restore)          |	
+| Name                        | Description                                                                        |
+| --------------------------- | ---------------------------------------------------------------------------------- |
+| `VOLUMERIZE_MYSQL_USERNAME` | Username of the user who will perform the restore or dump.                         |
+| `VOLUMERIZE_MYSQL_PASSWORD` | Password of the user who will perform the restore or dump.                         |
+| `VOLUMERIZE_MYSQL_HOST`     | IP or domain of the host machine.                                                  |
+| `VOLUMERIZE_MYSQL_DATABASE` | Database to backup/restore.                                                        |
+| `VOLUMERIZE_MYSQL_SOURCE`   | Variable name of source where dumps are to be stored (default `VOLUMERIZE_SOURCE`) |
+
 
 ## Example with Docker Compose
 
@@ -52,3 +54,13 @@ volumes:
 ```
 
 Then execute `docker-compose exec volumerize backup` to create a backup of your database and `docker-compose exec volumerize restore` to restore it from your backup.
+
+## Multiple Databases
+
+You can also create backups of multiple databases. This is done equivalent to multiple sources in the default image (append number to variable, starting with 1). All variables that are added with this image can be enumerated.
+
+## Docker Secrets
+
+The following additional variables are supported to be stored in files, the location specified in variables ending with `_FILE`. See [Docker Secrets Documentation](https://docs.docker.com/engine/swarm/secrets/) for more info.
+
+- `VOLUMERIZE_MYSQL_PASSWORD`

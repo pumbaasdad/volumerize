@@ -7,13 +7,14 @@ With this prepost strategy you can create dump of your MongoDB containers and sa
 ## Environment Variables
 
 Aside of the required environment variables by Volumerize, this prepost strategy will require a couple of extra variables.
-MONGO_USERNAME MONGO_PASSWORD MONGO_HOST MONGO_PORT
-| Name           | Description                                                |
-| -------------- | ---------------------------------------------------------- |
-| MONGO_USERNAME | Username of the user who will perform the restore or dump. |
-| MONGO_PASSWORD | Password of the user who will perform the restore or dump. |
-| MONGO_HOST     | MongoDB IP or domain.                                      |
-| MONGO_PORT     | MongoDB port.                                              |
+
+| Name                      | Description                                                                        |
+| ------------------------- | ---------------------------------------------------------------------------------- |
+| VOLUMERIZE_MONGO_USERNAME | Username of the user who will perform the restore or dump.                         |
+| VOLUMERIZE_MONGO_PASSWORD | Password of the user who will perform the restore or dump.                         |
+| VOLUMERIZE_MONGO_HOST     | MongoDB IP or domain.                                                              |
+| VOLUMERIZE_MONGO_PORT     | MongoDB port.                                                                      |
+| VOLUMERIZE_MONGO_SOURCE   | Variable name of source where dumps are to be stored (default `VOLUMERIZE_SOURCE`) |
 
 ## Example with Docker Compose
 
@@ -53,3 +54,14 @@ volumes:
 ```
 
 Then execute `docker-compose exec volumerize backup` to create a backup of your database and `docker-compose exec volumerize restore` to restore it from your backup.
+
+
+## Multiple Databases
+
+You can also create backups of multiple databases. This is done equivalent to multiple sources in the default image (append number to variable, starting with 1). All variables that are added with this image can be enumerated.
+
+## Docker Secrets
+
+The following additional variables are supported to be stored in files, the location specified in variables ending with `_FILE`. See [Docker Secrets Documentation](https://docs.docker.com/engine/swarm/secrets/) for more info.
+
+- `MONGO_PASSWORD`

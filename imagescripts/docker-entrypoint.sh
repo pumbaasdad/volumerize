@@ -4,18 +4,13 @@ set -o errexit
 
 [[ ${DEBUG} == true ]] && set -x
 
-function pipeEnvironmentVariables() {
-  local environmentfile="/etc/profile.d/jobber.sh"
-  cat > ${environmentfile} <<EOF
-  #!/bin/sh
-EOF
-  sh -c export >> ${environmentfile}
-}
+source /opt/volumerize/env.sh
 
 GPG_KEY_ID=""
 
 # Install GPG Key
 if [ ! -f "/root/.gnupg/pubring.kbx" ]; then
+  file_env "VOLUMERIZE_GPG_PRIVATE_KEY"
   if [ -n "${VOLUMERIZE_GPG_PRIVATE_KEY}" ]; then
     gpg --allow-secret-key-import --import ${VOLUMERIZE_GPG_PRIVATE_KEY}
     GPG_KEY_ID=$(gpg2 --list-secret-keys --keyid-format LONG | grep sec | awk 'NR==1{print $2; exit}')
@@ -44,7 +39,7 @@ if [ -n "${!VOLUMERIZE_SOURCE*}" ]; then
 fi
 
 if [ "$1" = 'volumerize' ]; then
-  pipeEnvironmentVariables
+  pipeEnvironmentVariables "/etc/profile.d/jobber.sh"
   exec /usr/libexec/jobbermaster
 else
   exec "$@"

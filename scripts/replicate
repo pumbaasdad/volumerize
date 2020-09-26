@@ -7,16 +7,19 @@ set -o errexit
 source /opt/volumerize/base.sh
 source /opt/volumerize/find_job_id.sh
 
-export VOLUMERIZE_COMMAND="cleanup"
+export VOLUMERIZE_COMMAND="replicate"
 DUPLICITY_RETURN_CODE=0
 
 function commandJob() {
   local returnCode=0;
-  eval ${DUPLICITY_JOB_COMMAND} cleanup "$@" ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_INCLUDES} ${VOLUMERIZE_JOB_EXCLUDES} ${VOLUMERIZE_JOB_TARGET} || returnCode=$? && true ;
+  eval ${DUPLICITY_JOB_COMMAND} replicate "$@" ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_TARGET} ${VOLUMERIZE_JOB_REPLICATE_TARGET} || returnCode=$? && true ;
   if [ "$returnCode" -gt "$DUPLICITY_RETURN_CODE" ]; then
     DUPLICITY_RETURN_CODE=$returnCode
   fi
 }
 
+${VOLUMERIZE_SCRIPT_DIR}/prepoststrategy preAction replicate
 commandExecution "$@"
+export DUPLICITY_RETURN_CODE
+${VOLUMERIZE_SCRIPT_DIR}/prepoststrategy postAction replicate
 exit $DUPLICITY_RETURN_CODE

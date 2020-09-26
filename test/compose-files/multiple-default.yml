@@ -2,26 +2,26 @@ version: '3.7'
 
 services:
   volumerize:
-    image: fekide/volumerize:latest
+    image: fekide/volumerize:${TEST_IMAGE_TAG}
+    container_name: volumerize
     volumes:
       - source_volume1:/source/1
       - source_volume2:/source/2
       - backup_volume:/backup
       - cache_volume:/volumerize-cache
     environment:
+      - DEBUG=true
       - VOLUMERIZE_SOURCE1=/source/1
       - VOLUMERIZE_TARGET1=file:///backup/1
       - VOLUMERIZE_SOURCE2=/source/2
       - VOLUMERIZE_TARGET2=file:///backup/2
-      - TZ=Europe/Paris
-      - VOLUMERIZE_JOBBER_TIME1=0 0 3 * * *
-      - VOLUMERIZE_JOBBER_TIME2=0 0 4 * * *
-      - VOLUMERIZE_DUPLICITY_OPTIONS=
-      - VOLUMERIZE_FULL_IF_OLDER_THAN=14D
-      - REMOVE_ALL_BUT_N_FULL=4
 
 volumes:
   source_volume1:
+    external: false
   source_volume2:
+    external: false
   backup_volume:
+    external: false
   cache_volume:
+    external: false
