@@ -20,7 +20,7 @@ strategy_path=$strategy_path/$2
 if [ -d "$strategy_path" ]; then
     for f in $strategy_path/*; do
         case "$f" in
-            *.sh) echo "running $f"; . "$f" ;;
+            *.sh) echo "running $f"; bash "$f" ;;
             *)    echo "ignoring $f" ;;
         esac
         echo
