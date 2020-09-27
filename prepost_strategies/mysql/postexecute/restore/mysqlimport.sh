@@ -15,7 +15,7 @@ function databaseJob() {
   MYSQL_SOURCE=${VOLUMERIZE_DB_SOURCE}/volumerize-mysql
 
   echo "mysql import of ${VOLUMERIZE_DB_HOST} starts"
-  pv ${MYSQL_SOURCE}/dump-${MYSQL_DATABASE}.sql | mysql -h ${VOLUMERIZE_DB_HOST} -u ${VOLUMERIZE_DB_USERNAME} -p${VOLUMERIZE_DB_PASSWORD} ${VOLUMERIZE_DB_DATABASE} || returnCode=$? && true ;
+  pv ${MYSQL_SOURCE}/dump-${VOLUMERIZE_DB_DATABASE}.sql | mysql -h ${VOLUMERIZE_DB_HOST} -u ${VOLUMERIZE_DB_USERNAME} -p${VOLUMERIZE_DB_PASSWORD} ${VOLUMERIZE_DB_DATABASE} || returnCode=$? && true ;
   echo "Import done"
   if [ "$returnCode" -gt "$MYSQL_RETURN_CODE" ]; then
     MYSQL_RETURN_CODE=$returnCode
