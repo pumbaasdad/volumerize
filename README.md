@@ -525,6 +525,7 @@ Some premade strategies are available at [prepost strategies](prepost_strategies
 
 - [mongodb](prepost_strategies/mongodb/README.md)
 - [mysql](prepost_strategies/mysql/README.md)
+- [postgres](prepost_strategies/postgres/README.md)
 
 
 ## Container Scripts
