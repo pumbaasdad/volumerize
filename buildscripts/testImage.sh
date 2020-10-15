@@ -7,12 +7,10 @@ function testImage () {
   export TEST_IMAGE_TYPE=${2:-${IMAGE_TYPE:-default}}
   REPORT_DIR=report
 
-  ./test/libs/bats-core/bin/bats --formatter junit test || TEST_RETURN_CODE=$? && true
-
   if [ ! -d "${REPORT_DIR}/${TEST_IMAGE_TYPE}"  ]; then
     mkdir -p ${REPORT_DIR}/${TEST_IMAGE_TYPE}
   fi
-  mv *.bats.xml ${REPORT_DIR}/${TEST_IMAGE_TYPE}/
 
-  return ${TEST_RETURN_CODE:-0}
+  ./test/libs/bats-core/bin/bats --formatter junit -o ${REPORT_DIR}/${TEST_IMAGE_TYPE} test
+
 }
