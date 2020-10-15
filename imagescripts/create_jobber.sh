@@ -7,12 +7,15 @@ readonly configfile="/root/.jobber"
 
 
 if [[ "$JOBBER_DISABLE" == true ]]; then
-
-  # Exclude root from jobber
-  cat >> "/etc/jobber.conf" <<EOF
-users-exclude:
-  - username: root
+  if [ ! -f "${configfile}" ]; then
+    # create empty jobber config
+    cat > "${configfile}" <<EOF
+version: 1.4
+jobs:
 EOF
+  else
+    echo "Jobber was configured to be disabled, but cannot be disabled because there already is a config file at '/root/.jobber'. Please delete/unmount to disable jobber"
+  fi
 
 elif [[ -n "$JOBBER_CUSTOM" ]]; then
 

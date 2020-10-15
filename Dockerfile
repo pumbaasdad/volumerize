@@ -58,7 +58,7 @@ RUN apk upgrade --update && \
       b2sdk \
       dropbox \
       duplicity==${DUPLICITY_VERSION} && \
-    mkdir -p /etc/volumerize /volumerize-cache /opt/volumerize && \
+    mkdir -p /etc/volumerize /volumerize-cache /opt/volumerize /var/jobber/0 && \
     # Install tools
     apk add \
       asciidoc \

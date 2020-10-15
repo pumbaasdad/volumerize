@@ -40,7 +40,7 @@ fi
 
 if [ "$1" = 'volumerize' ]; then
   pipeEnvironmentVariables "/etc/profile.d/jobber.sh"
-  exec /usr/libexec/jobbermaster
+  exec /usr/libexec/jobberrunner -u /var/jobber/0/cmd.sock /root/.jobber
 else
   exec "$@"
 fi
