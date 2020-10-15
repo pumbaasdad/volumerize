@@ -15,6 +15,9 @@ setup_file() {
   elif [ $TEST_IMAGE_TYPE == mongodb ]; then
     # Wait for database initialisation
     wait_until_running mongodb 120 "MongoDB init process complete; ready for start up." "Waiting for connections"
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    # Wait for database initialisation
+    wait_until_running postgres 120 "PostgreSQL init process complete; ready for start up." "database system is ready to accept connections"
   fi
 }
 
@@ -25,6 +28,9 @@ setup() {
   elif [ $TEST_IMAGE_TYPE == mongodb ]; then
     # Initialize database with simple testing values
     mongo_initialize_db
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    # Initialize database with simple testing values
+    postgres_initialize_db
   else
     docker-compose exec volumerize bash -c 'echo test | cat > /source/test.txt'
   fi
@@ -94,6 +100,9 @@ setup() {
     assert_success
     run mongo_get_values
     refute_output
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    run postgres_drop_table
+    assert_success
   fi
 
   run docker-compose exec volumerize restore
@@ -111,6 +120,9 @@ setup() {
     run mongo_get_values
     assert_success
     assert_output
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    run postgres_check_values
+    assert_success
   fi
 
 }
@@ -123,6 +135,9 @@ teardown() {
   elif [ $TEST_IMAGE_TYPE == mongodb ]; then
     # Drop collection contents
     mongo_drop_collection
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    # Drop Table
+    postgres_drop_table
   fi
   docker-compose --no-ansi logs
 }
@@ -145,6 +160,7 @@ function wait_until_running() {
     wait_time=$(( $wait_time + 1 ))
     sleep 1
   done
+  echo "initialization done, waiting for ${service} to start"
   # Wait unitl service can handle connections
   until docker-compose --no-ansi logs --tail 5 $service | grep "${last_line}" || [ $wait_time -ge $timeout ];
   do
@@ -181,9 +197,20 @@ function mysql_get_values() {
 }
 
 function mysql_check_values() {
-  local actual=$( get_values )
+  local actual=$( mysql_get_values | tr -d '\r' )
   local expected=$( echo ${mysql_value} )
+  echo "-- Actual --"
+  echo "$actual"
+  echo "-- Expected --"
+  echo "$expected"
   if [ ${actual} != ${expected} ]; then
+    echo "-- Difference --"
+    diff <(echo "$actual") <(echo "$expected")
+    echo "-- Hexdump --"
+    echo "- Actual -"
+    hexdump <(echo "$actual")
+    echo "- Expected -"
+    hexdump <(echo "$expected")
     return 1;
   fi
 }
@@ -204,4 +231,46 @@ function mongo_drop_collection() {
 
 function mongo_get_values() {
   eval ${mongo_default_command} "\"/scripts/find.js\""
+}
+
+postgres_table_name=test
+postgres_column_name=test
+postgres_database=postgres
+postgres_value=test
+postgres_user=postgres
+postgres_pwd=1234
+
+postgres_default_command="docker-compose exec -e PGPASSWORD=${postgres_pwd} postgres psql -qtA --username=${postgres_user} ${postgres_database} -c "
+
+function postgres_initialize_db() {
+  eval ${postgres_default_command} "\"create table ${postgres_table_name}(${postgres_column_name} varchar(100))\""
+  eval ${postgres_default_command} "\"insert into ${postgres_table_name} (${postgres_column_name}) values ('${postgres_value}')\""
+}
+
+
+function postgres_drop_table() {
+  eval ${postgres_default_command} "\"drop table ${postgres_table_name}\""
+}
+
+function postgres_get_values() {
+  eval ${postgres_default_command} "\"select * from ${postgres_table_name}\""
+}
+
+function postgres_check_values() {
+  local actual=$( postgres_get_values | tr -d '\r' )
+  local expected=$( echo "${postgres_value}" )
+  echo "-- Actual --"
+  echo "$actual"
+  echo "-- Expected --"
+  echo "$expected"
+  if [[ "${actual}" != "${expected}" ]]; then
+    echo "-- Difference --"
+    diff <(echo "$actual") <(echo "$expected")
+    echo "-- Hexdump --"
+    echo "- Actual -"
+    hexdump <(echo "$actual")
+    echo "- Expected -"
+    hexdump <(echo "$expected")
+    return 1;
+  fi
 }

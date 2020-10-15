@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  postgres1:
+    image: postgres:12.4
+    environment:
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgresdb1:/var/lib/postgresql/data
+  
+  postgres2:
+    image: postgres:12.4
+    environment:
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgresdb2:/var/lib/postgresql/data
+
+  volumerize:
+    image: fekide/volumerize:${TEST_IMAGE_TAG}
+    networks:
+      - default
+    environment:
+      - DEBUG=true
+      - VOLUMERIZE_SOURCE1=/source/1
+      - VOLUMERIZE_TARGET1=file:///backup/1
+      - VOLUMERIZE_SOURCE2=/source/2
+      - VOLUMERIZE_TARGET2=file:///backup/2
+      - VOLUMERIZE_POSTRGES_USERNAME1=postgres
+      - VOLUMERIZE_POSTRGES_PASSWORD1=1234
+      - VOLUMERIZE_POSTRGES_HOST1=postgres1
+      - VOLUMERIZE_POSTRGES_DATABASE1=postgres
+      - VOLUMERIZE_POSTRGES_SOURCE1=VOLUMERIZE_SOURCE1
+      - VOLUMERIZE_POSTRGES_USERNAME2=postgres
+      - VOLUMERIZE_POSTRGES_PASSWORD2=1234
+      - VOLUMERIZE_POSTRGES_HOST2=postgres2
+      - VOLUMERIZE_POSTRGES_DATABASE2=postgres
+      - VOLUMERIZE_POSTRGES_SOURCE2=VOLUMERIZE_SOURCE2
+    volumes:
+      - volumerize-cache:/volumerize-cache
+      - backup:/backup
+    depends_on:
+      - postgres1
+      - postgres2
+
+volumes:
+  volumerize-cache:
+  postgresdb1:
+  postgresdb2:
+  backup:
+
+networks:
+  default:

@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgresdb:/var/lib/postgresql/data
+
+  volumerize:
+    build: .
+    environment:
+      - VOLUMERIZE_SOURCE=/source
+      - VOLUMERIZE_TARGET=file:///backup
+      - VOLUMERIZE_POSTRGES_USERNAME=postgres
+      - VOLUMERIZE_POSTRGES_PASSWORD=1234
+      - VOLUMERIZE_POSTRGES_PORT=5432
+      - VOLUMERIZE_POSTRGES_HOST=postgres
+      - VOLUMERIZE_POSTRGES_DATABASE=postgres
+    volumes:
+      - volumerize-cache:/volumerize-cache
+      - backup:/backup
+    depends_on:
+      - postgres
+
+volumes:
+  volumerize-cache:
+  postgresdb:
+  backup:

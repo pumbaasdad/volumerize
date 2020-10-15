@@ -27,5 +27,13 @@ release
 
 buildImage $IMAGE_TAG ./prepost_strategies/mysql --build-arg BASE_IMAGE_TAG
 
+
+printf '%b\n' ":: Building postgresql image...."
+export IMAGE_TYPE=postgres
+release
+
+buildImage $IMAGE_TAG ./prepost_strategies/postgres --build-arg BASE_IMAGE_TAG
+
+
 printf '%b\n' ":: Built images"
 docker image ls fekide/volumerize

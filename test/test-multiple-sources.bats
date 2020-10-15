@@ -17,6 +17,10 @@ setup_file() {
     # Wait for database initialisation
     wait_until_running mongodb1 120 "MongoDB init process complete; ready for start up." "Waiting for connections"
     wait_until_running mongodb2 120 "MongoDB init process complete; ready for start up." "Waiting for connections"
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    # Wait for database initialisation
+    wait_until_running postgres1 120 "PostgreSQL init process complete; ready for start up." "database system is ready to accept connections"
+    wait_until_running postgres2 120 "PostgreSQL init process complete; ready for start up." "database system is ready to accept connections"
   fi
 }
 
@@ -29,6 +33,10 @@ setup() {
     # Initialize database with simple testing values
     mongo_initialize_db mongodb1
     mongo_initialize_db mongodb2
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    # Initialize database with simple testing values
+    postgres_initialize_db postgres1
+    postgres_initialize_db postgres2
   else
     docker-compose exec volumerize bash -c 'echo test | cat > /source/1/test.txt'
     docker-compose exec volumerize bash -c 'echo test | cat > /source/2/test.txt'
@@ -113,6 +121,11 @@ setup() {
     assert_success
     run mongo_get_values mongodb2
     refute_output
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    run postgres_drop_table postgres1
+    assert_success
+    run postgres_drop_table postgres2
+    assert_success
   fi
 
   run docker-compose exec volumerize restore
@@ -138,6 +151,11 @@ setup() {
     run mongo_get_values mongodb2
     assert_success
     assert_output
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    run postgres_check_values postgres1
+    assert_success
+    run postgres_check_values postgres2
+    assert_success
   fi
 
 }
@@ -168,6 +186,11 @@ setup() {
     assert_success
     run mongo_get_values mongodb2
     refute_output
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    run postgres_drop_table postgres1
+    assert_success
+    run postgres_drop_table postgres2
+    assert_success
   fi
 
   run docker-compose exec volumerize restore 1
@@ -195,6 +218,11 @@ setup() {
     run mongo_get_values mongodb2
     assert_success
     assert_output
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    run postgres_check_values postgres1
+    assert_success
+    run postgres_check_values postgres2
+    assert_success
   fi
 
 }
@@ -209,6 +237,9 @@ teardown() {
     # Drop collection contents
     mongo_drop_collection mongodb1
     mongo_drop_collection mongodb2
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    postgres_drop_table postgres1
+    postgres_drop_table postgres2
   fi
   docker-compose --no-ansi logs
 }
@@ -231,6 +262,7 @@ function wait_until_running() {
     wait_time=$(( $wait_time + 1 ))
     sleep 1
   done
+  echo "initialization done, waiting for ${service} to start"
   # Wait unitl mysql can handle connections
   until docker-compose --no-ansi logs --tail 5 $service | grep "${last_line}" || [ $wait_time -ge $timeout ];
   do
@@ -270,9 +302,20 @@ function mysql_get_values() {
 }
 
 function mysql_check_values() {
-  local actual=$( get_values $@ )
+  local actual=$( mysql_get_values $@ | tr -d '\r' )
   local expected=$( echo ${mysql_value} )
+  echo "-- Actual --"
+  echo "$actual"
+  echo "-- Expected --"
+  echo "$expected"
   if [ ${actual} != ${expected} ]; then
+    echo "-- Difference --"
+    diff <(echo "$actual") <(echo "$expected")
+    echo "-- Hexdump --"
+    echo "- Actual -"
+    hexdump <(echo "$actual")
+    echo "- Expected -"
+    hexdump <(echo "$expected")
     return 1;
   fi
 }
@@ -296,4 +339,50 @@ function mongo_drop_collection() {
 function mongo_get_values() {
   local service=$1
   eval docker-compose exec $service ${mongo_default_command} "\"/scripts/find.js\""
+}
+
+postgres_table_name=test
+postgres_column_name=test
+postgres_database=postgres
+postgres_value=test
+postgres_user=postgres
+postgres_pwd=1234
+
+postgres_compose_exec="docker-compose exec -e PGPASSWORD=${postgres_pwd}"
+postgres_default_command="psql -qtA --username=${postgres_user} ${postgres_database} -c "
+
+function postgres_initialize_db() {
+  local service=$1
+  eval ${postgres_compose_exec} ${service} ${postgres_default_command} "\"create table ${postgres_table_name}(${postgres_column_name} varchar(100))\""
+  eval ${postgres_compose_exec} ${service} ${postgres_default_command} "\"insert into ${postgres_table_name} (${postgres_column_name}) values ('${postgres_value}')\""
+}
+
+
+function postgres_drop_table() {
+  local service=$1
+  eval ${postgres_compose_exec} ${service} ${postgres_default_command} "\"drop table ${postgres_table_name}\""
+}
+
+function postgres_get_values() {
+  local service=$1
+  eval ${postgres_compose_exec} ${service} ${postgres_default_command} "\"select * from ${postgres_table_name}\""
+}
+
+function postgres_check_values() {
+  local actual=$( postgres_get_values $@ | tr -d '\r' )
+  local expected=$( echo "${postgres_value}" )
+  echo "-- Actual --"
+  echo "$actual"
+  echo "-- Expected --"
+  echo "$expected"
+  if [[ "${actual}" != "${expected}" ]]; then
+    echo "-- Difference --"
+    diff <(echo "$actual") <(echo "$expected")
+    echo "-- Hexdump --"
+    echo "- Actual -"
+    hexdump <(echo "$actual")
+    echo "- Expected -"
+    hexdump <(echo "$expected")
+    return 1;
+  fi
 }

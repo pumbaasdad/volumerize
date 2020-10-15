@@ -28,5 +28,10 @@ pushImage $IMAGE_TAG $PUSH_REPOSITORY
 export IMAGE_TYPE=mysql
 printf '%b\n' ":: Release ${IMAGE_TYPE} image...."
 release
+pushImage $IMAGE_TAG $PUSH_REPOSITORY
 
+
+export IMAGE_TYPE=postgres
+printf '%b\n' ":: Release ${IMAGE_TYPE} image...."
+release
 pushImage $IMAGE_TAG $PUSH_REPOSITORY
