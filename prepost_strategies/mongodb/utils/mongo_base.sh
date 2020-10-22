@@ -66,7 +66,7 @@ function databaseLoop() {
     DB_ID=$counter
     prepareDatabase "$@" || returnCode=$? && true ;
     if [ "$returnCode" -gt 0 ]; then
-      echo "WARN: Variables could not be prepared for the job id ${counter}, skipping ..."
+      echo "WARN: Variables could not be prepared for the database id ${counter}, skipping ..."
     else
       databaseJob "$@"
     fi
@@ -75,8 +75,12 @@ function databaseLoop() {
 
 function databaseExecution() {
   if [ -n "${VOLUMERIZE_MONGO_HOST}" ] || [ -n "${DB_ID}" ]; then
-    prepareDatabase "$@"
-    databaseJob "$@"
+    prepareDatabase "$@" || returnCode=$? && true ;
+    if [ "$returnCode" -gt 0 ]; then
+      echo "WARN: Variables could not be prepared for the database id ${DB_ID:-0}, skipping ..."
+    else
+      databaseJob "$@"
+    fi
   elif [ -n "${DB_COUNT}" ]; then
     databaseLoop "$@"
   fi
