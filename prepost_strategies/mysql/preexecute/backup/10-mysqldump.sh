@@ -16,9 +16,11 @@ function databaseJob() {
 
   echo "Creating ${MYSQL_SOURCE} folder if not exists"
   mkdir -p ${MYSQL_SOURCE}
-
-  echo "Starting automatic repair and optimize for all databases..."
-  mysqlcheck -h ${VOLUMERIZE_DB_HOST} -u${VOLUMERIZE_DB_USERNAME} -p${VOLUMERIZE_DB_PASSWORD} --all-databases --optimize --auto-repair --silent 2>&1
+  
+  if [[ "$VOLUMERIZE_MYSQL_OPTIMIZE" == "true" ]]; then
+    echo "Starting automatic repair and optimize for all databases..."
+    mysqlcheck -h ${VOLUMERIZE_DB_HOST} -u${VOLUMERIZE_DB_USERNAME} -p${VOLUMERIZE_DB_PASSWORD} --all-databases --optimize --auto-repair --silent 2>&1
+  fi
 
   # Based on this answer https://stackoverflow.com/a/32361604
   SIZE_BYTES=$(mysql --skip-column-names -h ${VOLUMERIZE_DB_HOST} -u ${VOLUMERIZE_DB_USERNAME} -p${VOLUMERIZE_DB_PASSWORD} ${VOLUMERIZE_DB_DATABASE} -e "SELECT ROUND(SUM(data_length * 0.8), 0) FROM information_schema.TABLES WHERE table_schema='${VOLUMERIZE_DB_DATABASE}';")
