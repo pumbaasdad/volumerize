@@ -1,11 +1,11 @@
-FROM rclone/rclone:1.52.3 as rclone
-FROM docker:19.03.12 as docker
+FROM rclone/rclone:1.54.0 as rclone
+FROM docker:20.10.5 as docker
 
-FROM alpine:3.12.0
+FROM alpine:3.13.2
 LABEL maintainer="Felix Haase <felix.haase@feki.de>"
 
 ARG JOBBER_VERSION=1.4.4
-ARG DUPLICITY_VERSION=0.8.15
+ARG DUPLICITY_VERSION=0.8.18
 ARG MEGATOOLS_VERSION=1.10.3
 
 RUN apk upgrade --update && \
