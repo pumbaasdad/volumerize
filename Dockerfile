@@ -46,6 +46,7 @@ RUN apk upgrade --update && \
       PyDrive \
       chardet \
       azure-storage-blob \
+      boto \
       boto3 \
       paramiko \
       pexpect \
