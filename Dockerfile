@@ -59,6 +59,7 @@ RUN apk upgrade --update && \
       b2sdk \
       dropbox \
       duplicity==${DUPLICITY_VERSION} && \
+    pip install --upgrade --no-cache-dir google-api-python-client && \
     mkdir -p /etc/volumerize /volumerize-cache /opt/volumerize /var/jobber/0 && \
     # Install tools
     apk add \
