@@ -38,6 +38,7 @@ function prepareJobCommand() {
   DUPLICITY_JOB_OPTIONS="--allow-source-mismatch"
   file_env "PASSPHRASE"
   file_env "VOLUMERIZE_GPG_PRIVATE_KEY"
+  file_env "FTP_PASSWORD"
   local CACHE_VARIABLE="VOLUMERIZE_CACHE${jobNumber}"
   if [ -n "${!CACHE_VARIABLE}" ]; then
     DUPLICITY_JOB_OPTIONS=$DUPLICITY_JOB_OPTIONS" --archive-dir=${!CACHE_VARIABLE}"

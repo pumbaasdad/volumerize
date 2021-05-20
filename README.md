@@ -670,6 +670,7 @@ The following variables are supported to be stored in files, the location specif
 - `GOOGLE_DRIVE_SECRET`
 - `VOLUMERIZE_TARGET`
 - `VOLUMERIZE_REPLICATE_TARGET`
+- `FTP_PASSWORD`
 
 ## All Environment Variables
 
