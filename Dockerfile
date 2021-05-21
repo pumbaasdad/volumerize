@@ -43,9 +43,11 @@ RUN apk upgrade --update && \
     pip3 install --no-cache-dir wheel setuptools-scm && \
     pip3 install --no-cache-dir \
       fasteners \
+      google-api-python-client>=2.2.0 \
       PyDrive \
       chardet \
       azure-storage-blob \
+      boto \
       boto3 \
       paramiko \
       pexpect \
