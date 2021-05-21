@@ -3,7 +3,7 @@
 set -o errexit
 
 readonly JOBBER_SCRIPT_DIR=$VOLUMERIZE_HOME
-readonly configfile="/root/.jobber"
+readonly configfile="$(echo ~)/.jobber"
 
 
 if [[ "$JOBBER_DISABLE" == true ]]; then
@@ -14,7 +14,7 @@ version: 1.4
 jobs:
 EOF
   else
-    echo "Jobber was configured to be disabled, but cannot be disabled because there already is a config file at '/root/.jobber'. Please delete/unmount to disable jobber"
+    echo "Jobber was configured to be disabled, but cannot be disabled because there already is a config file at '$(echo ~)/.jobber'. Please delete/unmount to disable jobber"
   fi
 
 elif [[ -n "$JOBBER_CUSTOM" ]]; then
