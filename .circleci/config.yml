@@ -96,7 +96,6 @@ workflows:
       - build_branch:
           filters:
             branches:
-              only: /.*/
               ignore: master
   nightly:
     triggers:
