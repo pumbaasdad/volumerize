@@ -31,6 +31,7 @@
   - [Customize Jobber](#customize-jobber)
   - [Multiple Backups](#multiple-backups)
   - [Docker Secrets](#docker-secrets)
+  - [Run as non-root user](#run-as-non-root-user)
   - [All Environment Variables](#all-environment-variables)
   - [Build the Image](#build-the-image)
   - [Run the Image](#run-the-image)
@@ -671,6 +672,19 @@ The following variables are supported to be stored in files, the location specif
 - `VOLUMERIZE_TARGET`
 - `VOLUMERIZE_REPLICATE_TARGET`
 - `FTP_PASSWORD`
+
+## Run as non-root user
+
+By default, jobber is run as root, since it will most likely require access to other volumes which might have other permissions than a default user. If you want to use a non-root user, you need to add a new user with a home directory (jobber can only run for users [with home directories](https://dshearer.github.io/jobber/doc/v1.4/#jobfile)) by customizing the docker image like this:
+
+```Dockerfile
+FROM fekide/volumerize
+
+RUN useradd -ms /bin/bash --uid <user_id> <your_user>
+
+USER <your_user>
+WORKDIR /home/<your_user>
+```
 
 ## All Environment Variables
 
