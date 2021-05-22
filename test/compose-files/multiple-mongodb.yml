@@ -44,6 +44,8 @@ services:
       - VOLUMERIZE_MONGO_HOST2=mongodb2
       - VOLUMERIZE_MONGO_SOURCE2=VOLUMERIZE_SOURCE2
     volumes:
+      - source_volume1:/source/1
+      - source_volume2:/source/2
       - volumerize-cache:/volumerize-cache
       - backup:/backup
     depends_on:
@@ -51,6 +53,8 @@ services:
       - mongodb2
 
 volumes:
+  source_volume1:
+  source_volume2:
   volumerize-cache:
   mongodb1:
   mongodb2:

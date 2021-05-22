@@ -25,6 +25,8 @@ setup_file() {
 }
 
 setup() {
+  docker-compose exec volumerize bash -c 'echo test | cat > /source/1/test.txt'
+  docker-compose exec volumerize bash -c 'echo test | cat > /source/2/test.txt'
   if [ $TEST_IMAGE_TYPE == mysql ]; then
     # Initialize database with simple testing values
     mysql_initialize_db mariadb1
@@ -37,9 +39,6 @@ setup() {
     # Initialize database with simple testing values
     postgres_initialize_db postgres1
     postgres_initialize_db postgres2
-  else
-    docker-compose exec volumerize bash -c 'echo test | cat > /source/1/test.txt'
-    docker-compose exec volumerize bash -c 'echo test | cat > /source/2/test.txt'
   fi
 }
 
@@ -95,19 +94,84 @@ setup() {
 
 }
 
+@test "jobber restore" {
+
+  run docker-compose exec volumerize jobber test VolumerizeBackupJob1
+  assert_success
+  run docker-compose exec volumerize jobber test VolumerizeBackupJob2
+  assert_success
+
+  # Corrupt data to simulate necessity of restore
+  run docker-compose exec volumerize bash -c 'echo wrong | cat > /source/1/test.txt'
+  assert_success
+  run docker-compose exec volumerize bash -c 'echo wrong | cat > /source/2/test.txt'
+  assert_success
+  if [ $TEST_IMAGE_TYPE == mysql ]; then
+    run mysql_drop_table mariadb1
+    assert_success
+    run mysql_drop_table mariadb2
+    assert_success
+  elif [ $TEST_IMAGE_TYPE == mongodb ]; then
+    run mongo_drop_collection mongodb1
+    assert_success
+    run mongo_get_values mongodb1
+    refute_output
+    run mongo_drop_collection mongodb2
+    assert_success
+    run mongo_get_values mongodb2
+    refute_output
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    run postgres_drop_table postgres1
+    assert_success
+    run postgres_drop_table postgres2
+    assert_success
+  fi
+
+  run docker-compose exec volumerize restore 1
+  assert_success
+
+  run docker-compose exec volumerize restore 2
+  assert_success
+
+  run docker-compose exec volumerize cat /source/1/test.txt 
+  assert_success
+  assert_output --partial test
+  run docker-compose exec volumerize cat /source/2/test.txt 
+  assert_success
+  assert_output --partial test
+  if [ $TEST_IMAGE_TYPE == mysql ]; then
+    run mysql_check_values mariadb1
+    assert_success
+    run mysql_check_values mariadb2
+    assert_success
+  elif [ $TEST_IMAGE_TYPE == mongodb ]; then
+    run mongo_get_values mongodb1
+    assert_success
+    assert_output
+    run mongo_get_values mongodb2
+    assert_success
+    assert_output
+  elif [ $TEST_IMAGE_TYPE == postgres ]; then
+    run postgres_check_values postgres1
+    assert_success
+    run postgres_check_values postgres2
+    assert_success
+  fi
+
+}
+
 @test "restore all" {
 
   run docker-compose exec volumerize backup
   assert_success
   assert_output
 
+  run docker-compose exec volumerize bash -c 'echo wrong | cat > /source/1/test.txt'
+  assert_success
+  run docker-compose exec volumerize bash -c 'echo wrong | cat > /source/2/test.txt'
+  assert_success
   # Corrupt data to simulate necessity of restore
-  if [ $TEST_IMAGE_TYPE == default ]; then
-    run docker-compose exec volumerize bash -c 'echo wrong | cat > /source/1/test.txt'
-    assert_success
-    run docker-compose exec volumerize bash -c 'echo wrong | cat > /source/2/test.txt'
-    assert_success
-  elif [ $TEST_IMAGE_TYPE == mysql ]; then
+  if [ $TEST_IMAGE_TYPE == mysql ]; then
     run mysql_drop_table mariadb1
     assert_success
     run mysql_drop_table mariadb2
@@ -132,14 +196,13 @@ setup() {
   assert_success
 
   # Validate that backup was restored
-  if [ $TEST_IMAGE_TYPE == default ]; then
-    run docker-compose exec volumerize cat /source/1/test.txt 
-    assert_success
-    assert_output --partial test
-    run docker-compose exec volumerize cat /source/2/test.txt 
-    assert_success
-    assert_output --partial test
-  elif [ $TEST_IMAGE_TYPE == mysql ]; then
+  run docker-compose exec volumerize cat /source/1/test.txt 
+  assert_success
+  assert_output --partial test
+  run docker-compose exec volumerize cat /source/2/test.txt 
+  assert_success
+  assert_output --partial test
+  if [ $TEST_IMAGE_TYPE == mysql ]; then
     run mysql_check_values mariadb1
     assert_success
     run mysql_check_values mariadb2
@@ -167,12 +230,11 @@ setup() {
   assert_output
 
   # Corrupt data to simulate necessity of restore
-  if [ $TEST_IMAGE_TYPE == default ]; then
-    run docker-compose exec volumerize bash -c 'echo wrong | cat > /source/1/test.txt'
-    assert_success
-    run docker-compose exec volumerize bash -c 'echo wrong | cat > /source/2/test.txt'
-    assert_success
-  elif [ $TEST_IMAGE_TYPE == mysql ]; then
+  run docker-compose exec volumerize bash -c 'echo wrong | cat > /source/1/test.txt'
+  assert_success
+  run docker-compose exec volumerize bash -c 'echo wrong | cat > /source/2/test.txt'
+  assert_success
+  if [ $TEST_IMAGE_TYPE == mysql ]; then
     run mysql_drop_table mariadb1
     assert_success
     run mysql_drop_table mariadb2
@@ -199,14 +261,14 @@ setup() {
   run docker-compose exec volumerize restore 2
   assert_success
 
-  if [ $TEST_IMAGE_TYPE == default ]; then
-    run docker-compose exec volumerize cat /source/1/test.txt 
-    assert_success
-    assert_output --partial test
-    run docker-compose exec volumerize cat /source/2/test.txt 
-    assert_success
-    assert_output --partial test
-  elif [ $TEST_IMAGE_TYPE == mysql ]; then
+
+  run docker-compose exec volumerize cat /source/1/test.txt 
+  assert_success
+  assert_output --partial test
+  run docker-compose exec volumerize cat /source/2/test.txt 
+  assert_success
+  assert_output --partial test
+  if [ $TEST_IMAGE_TYPE == mysql ]; then
     run mysql_check_values mariadb1
     assert_success
     run mysql_check_values mariadb2

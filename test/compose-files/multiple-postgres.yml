@@ -40,6 +40,8 @@ services:
       - VOLUMERIZE_POSTRGES_DATABASE2=postgres
       - VOLUMERIZE_POSTRGES_SOURCE2=VOLUMERIZE_SOURCE2
     volumes:
+      - source_volume1:/source/1
+      - source_volume2:/source/2
       - volumerize-cache:/volumerize-cache
       - backup:/backup
     depends_on:
@@ -47,6 +49,8 @@ services:
       - postgres2
 
 volumes:
+  source_volume1:
+  source_volume2:
   volumerize-cache:
   postgresdb1:
   postgresdb2:
