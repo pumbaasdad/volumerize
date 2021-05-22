@@ -11,6 +11,6 @@ function testImage () {
     mkdir -p ${REPORT_DIR}/${TEST_IMAGE_TYPE}
   fi
 
-  ./test/libs/bats-core/bin/bats --formatter junit -o ${REPORT_DIR}/${TEST_IMAGE_TYPE} test
+  ./test/libs/bats-core/bin/bats --report-formatter junit -o ${REPORT_DIR}/${TEST_IMAGE_TYPE} test
 
 }
