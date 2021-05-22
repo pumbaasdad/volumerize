@@ -96,8 +96,8 @@ workflows:
       - build_branch:
           filters:
             branches:
-              ignore:
-                - master
+              only: /.*/
+              ignore: master
   nightly:
     triggers:
       - schedule:
