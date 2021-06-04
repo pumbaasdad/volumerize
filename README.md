@@ -528,6 +528,11 @@ Some premade strategies are available at [prepost strategies](prepost_strategies
 - [mysql](prepost_strategies/mysql/README.md)
 - [postgres](prepost_strategies/postgres/README.md)
 
+The provided prepoststrategies are also pushed as combinations:
+- `mongodb-mysql`
+- `mongodb-postgres`
+- `mongodb-mysql-postgres`
+- `mysql-postgres`
 
 ## Container Scripts
 
