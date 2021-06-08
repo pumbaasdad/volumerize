@@ -10,11 +10,12 @@ Aside of the required environment variables by Volumerize, this prepost strategy
 
 | Name                         | Description                                                                        |
 | ---------------------------- | ---------------------------------------------------------------------------------- |
-| VOLUMERIZE_POSTRGES_USERNAME | Username of the user who will perform the restore or dump.                         |
-| VOLUMERIZE_POSTRGES_PASSWORD | Password of the user who will perform the restore or dump.                         |
-| VOLUMERIZE_POSTRGES_HOST     | PostgreSQL IP or domain.                                                           |
-| VOLUMERIZE_POSTRGES_PORT     | PostgreSQL port. (default: 5432)                                                                   |
-| VOLUMERIZE_POSTRGES_SOURCE   | Variable name of source where dumps are to be stored (default `VOLUMERIZE_SOURCE`) |
+| VOLUMERIZE_POSTGRES_USERNAME | Username of the user who will perform the restore or dump.                         |
+| VOLUMERIZE_POSTGRES_PASSWORD | Password of the user who will perform the restore or dump.                         |
+| VOLUMERIZE_POSTGRES_HOST     | PostgreSQL IP or domain.                                                           |
+| VOLUMERIZE_POSTGRES_DATABASE | PostgreSQL database.                                                               |
+| VOLUMERIZE_POSTGRES_PORT     | PostgreSQL port. (default: 5432)                                                   |
+| VOLUMERIZE_POSTGRES_SOURCE   | Variable name of source where dumps are to be stored (default `VOLUMERIZE_SOURCE`) |
 
 ## Example with Docker Compose
 
@@ -27,9 +28,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTRGES_USERNAME=postgres
-      - POSTRGES_PASSWORD=1234
-      - POSTRGES_DATABASE=postgres
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DATABASE=postgres
     volumes:
       - postgresdb:/var/lib/postgresql/data
 
@@ -38,11 +39,11 @@ services:
     environment:
       - VOLUMERIZE_SOURCE=/source
       - VOLUMERIZE_TARGET=file:///backup
-      - VOLUMERIZE_POSTRGES_USERNAME=postgres
-      - VOLUMERIZE_POSTRGES_PASSWORD=1234
-      - VOLUMERIZE_POSTRGES_PORT=5432
-      - VOLUMERIZE_POSTRGES_HOST=postgres
-      - VOLUMERIZE_POSTRGES_DATABASE=postgres
+      - VOLUMERIZE_POSTGRES_USERNAME=postgres
+      - VOLUMERIZE_POSTGRES_PASSWORD=1234
+      - VOLUMERIZE_POSTGRES_PORT=5432
+      - VOLUMERIZE_POSTGRES_HOST=postgres
+      - VOLUMERIZE_POSTGRES_DATABASE=postgres
     volumes:
       - volumerize-cache:/volumerize-cache
       - backup:/backup
@@ -66,4 +67,4 @@ You can also create backups of multiple databases. This is done equivalent to mu
 
 The following additional variables are supported to be stored in files, the location specified in variables ending with `_FILE`. See [Docker Secrets Documentation](https://docs.docker.com/engine/swarm/secrets/) for more info.
 
-- `VOLUMERIZE_POSTRGES_PASSWORD`
+- `VOLUMERIZE_POSTGRES_PASSWORD`

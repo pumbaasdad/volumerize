@@ -7,7 +7,7 @@ source /opt/volumerize/env.sh
 function discoverDatabases() {
   local x
   for ((x = 1; ; x++)); do
-    local VARIABLE_DB_HOST="VOLUMERIZE_POSTRGES_HOST${x}"
+    local VARIABLE_DB_HOST="VOLUMERIZE_POSTGRES_HOST${x}"
     if [ ! -n "${!VARIABLE_DB_HOST}" ]; then
       break
     else
@@ -22,12 +22,12 @@ function prepareDBConfiguration() {
     jobNumber=
   fi
   local jobType=${1:-"unknown"}
-  local VARIABLE_DB_HOST="VOLUMERIZE_POSTRGES_HOST${jobNumber}"
-  local VARIABLE_DB_PASSWORD="VOLUMERIZE_POSTRGES_PASSWORD${jobNumber}"
-  local VARIABLE_DB_USERNAME="VOLUMERIZE_POSTRGES_USERNAME${jobNumber}"
-  local VARIABLE_DB_PORT="VOLUMERIZE_POSTRGES_PORT${jobNumber}"
-  local VARIABLE_DB_SOURCE="VOLUMERIZE_POSTRGES_SOURCE${jobNumber}"
-  local VARIABLE_DB_DATABASE="VOLUMERIZE_POSTRGES_DATABASE${jobNumber}"
+  local VARIABLE_DB_HOST="VOLUMERIZE_POSTGRES_HOST${jobNumber}"
+  local VARIABLE_DB_PASSWORD="VOLUMERIZE_POSTGRES_PASSWORD${jobNumber}"
+  local VARIABLE_DB_USERNAME="VOLUMERIZE_POSTGRES_USERNAME${jobNumber}"
+  local VARIABLE_DB_PORT="VOLUMERIZE_POSTGRES_PORT${jobNumber}"
+  local VARIABLE_DB_SOURCE="VOLUMERIZE_POSTGRES_SOURCE${jobNumber}"
+  local VARIABLE_DB_DATABASE="VOLUMERIZE_POSTGRES_DATABASE${jobNumber}"
   
   file_env ${VARIABLE_DB_PASSWORD}
   if [ -n "${!VARIABLE_DB_SOURCE}" ]; then
@@ -54,8 +54,8 @@ function prepareDBConfiguration() {
 
 function prepareDatabase() {
   local jobNumber=$DB_ID
-  local jobType=$POSTRGES_JOB_TYPE
-  HOST_VARIABLE="VOLUMERIZE_POSTRGES_HOST${jobNumber}"
+  local jobType=$POSTGRES_JOB_TYPE
+  HOST_VARIABLE="VOLUMERIZE_POSTGRES_HOST${jobNumber}"
   if [ -n "${!HOST_VARIABLE}" ]; then
     prepareDBConfiguration $jobType
   else
@@ -79,7 +79,7 @@ function databaseLoop() {
 }
 
 function databaseExecution() {
-  if [ -n "${VOLUMERIZE_POSTRGES_HOST}" ] || [ -n "${DB_ID}" ]; then
+  if [ -n "${VOLUMERIZE_POSTGRES_HOST}" ] || [ -n "${DB_ID}" ]; then
     prepareDatabase "$@" || returnCode=$? && true ;
     if [ "$returnCode" -gt 0 ]; then
       echo "WARN: Variables could not be prepared for the database id ${DB_ID:-0}, skipping ..."
