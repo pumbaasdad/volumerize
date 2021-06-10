@@ -350,7 +350,7 @@ You can encrypt your backups by setting a secure passphrase inside the environme
 Creating a secure passphrase:
 
 ~~~~
-$ docker run --rm fekide/volumerize openssl rand 128 -base64
+$ docker run --rm fekide/volumerize openssl rand -base64 128
 ~~~~
 
 > Prints an appropriate password on the console.
