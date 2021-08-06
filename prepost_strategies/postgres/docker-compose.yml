@@ -17,11 +17,11 @@ services:
     environment:
       - VOLUMERIZE_SOURCE=/source
       - VOLUMERIZE_TARGET=file:///backup
-      - VOLUMERIZE_POSTRGES_USERNAME=postgres
-      - VOLUMERIZE_POSTRGES_PASSWORD=1234
-      - VOLUMERIZE_POSTRGES_PORT=5432
-      - VOLUMERIZE_POSTRGES_HOST=postgres
-      - VOLUMERIZE_POSTRGES_DATABASE=postgres
+      - VOLUMERIZE_POSTGRES_USERNAME=postgres
+      - VOLUMERIZE_POSTGRES_PASSWORD=1234
+      - VOLUMERIZE_POSTGRES_PORT=5432
+      - VOLUMERIZE_POSTGRES_HOST=postgres
+      - VOLUMERIZE_POSTGRES_DATABASE=postgres
     volumes:
       - volumerize-cache:/volumerize-cache
       - backup:/backup

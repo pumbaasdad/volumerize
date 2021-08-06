@@ -59,6 +59,7 @@ RUN apk upgrade --update && \
       urllib3 \
       b2sdk \
       dropbox \
+      apprise \
       duplicity==${DUPLICITY_VERSION} && \
     mkdir -p /etc/volumerize /volumerize-cache /opt/volumerize /var/jobber/0 && \
     # Install tools
