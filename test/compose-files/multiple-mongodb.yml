@@ -2,7 +2,7 @@ version: "3"
 
 services:
   mongodb1:
-    image: mongo
+    image: mongo:4
     networks:
       - default
     environment:
@@ -13,7 +13,7 @@ services:
       - ${COMPOSE_DIRECTORY}/mongodb/:/scripts
 
   mongodb2:
-    image: mongo
+    image: mongo:4
     networks:
       - default
     environment:
