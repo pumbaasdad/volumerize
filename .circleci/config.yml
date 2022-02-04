@@ -40,7 +40,7 @@ commands:
 jobs:
   build_branch:
     machine:
-      image: ubuntu-1604:202007-01
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
       - install_deps
@@ -49,7 +49,7 @@ jobs:
 
   build_master:
     machine:
-      image: ubuntu-1604:202007-01
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
       - install_deps
@@ -61,7 +61,7 @@ jobs:
     environment:
       IMAGE_VERSION: nightly
     machine:
-      image: ubuntu-1604:202007-01
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
       - install_deps
@@ -71,7 +71,7 @@ jobs:
 
   build_tags:
     machine:
-      image: ubuntu-1604:202007-01
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
       - install_deps
