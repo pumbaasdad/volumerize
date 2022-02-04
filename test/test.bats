@@ -8,7 +8,7 @@ setup_file() {
   docker-compose version
   export COMPOSE_DIRECTORY=${BATS_TEST_DIRNAME}/compose-files
   export COMPOSE_FILE=${COMPOSE_DIRECTORY}/${TEST_IMAGE_TYPE:-default}.yml
-  docker-compose --ansi never up -d
+  docker-compose --no-ansi up -d
   if [ $TEST_IMAGE_TYPE == mysql ]; then
     # Wait for database initialisation
     wait_until_running mariadb 120 "MariaDB init process done. Ready for start up." "mariadbd: ready for connections."
@@ -128,7 +128,7 @@ setup() {
 }
 
 teardown() {
-  docker-compose --ansi never exec volumerize bash -c 'rm -rf /volumerize-cache/* /backup/* /source/*'
+  docker-compose --no-ansi exec volumerize bash -c 'rm -rf /volumerize-cache/* /backup/* /source/*'
   if [ $TEST_IMAGE_TYPE == mysql ]; then
     # Drop Table
     mysql_drop_table
@@ -139,11 +139,11 @@ teardown() {
     # Drop Table
     postgres_drop_table
   fi
-  docker-compose --ansi never logs
+  docker-compose --no-ansi logs
 }
 
 teardown_file() {
-  docker-compose --ansi never down -v
+  docker-compose --no-ansi down -v
 }
 
 function wait_until_running() {
@@ -154,7 +154,7 @@ function wait_until_running() {
 
   local wait_time=0
 
-  until docker-compose --ansi never logs $service | grep "${first_line}" || [ $wait_time -ge $timeout ];
+  until docker-compose --no-ansi logs $service | grep "${first_line}" || [ $wait_time -ge $timeout ];
   do
     echo "waiting for ${service} to be up and running"
     wait_time=$(( $wait_time + 1 ))
@@ -162,7 +162,7 @@ function wait_until_running() {
   done
   echo "initialization done, waiting for ${service} to start"
   # Wait unitl service can handle connections
-  until docker-compose --ansi never logs --tail 5 $service | grep "${last_line}" || [ $wait_time -ge $timeout ];
+  until docker-compose --no-ansi logs --tail 5 $service | grep "${last_line}" || [ $wait_time -ge $timeout ];
   do
     echo "waiting for ${service} to be up and running"
     wait_time=$(( $wait_time + 1 ))
