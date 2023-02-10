@@ -1,11 +1,11 @@
-FROM rclone/rclone:1.57.0 as rclone
-FROM docker:20.10.12 as docker
+FROM rclone/rclone:1.61.1 as rclone
+FROM docker:23.0.1 as docker
 
-FROM alpine:3.15.0
+FROM alpine:3.17.1
 LABEL maintainer="Felix Haase <felix.haase@feki.de>"
 
 ARG JOBBER_VERSION=1.4.4
-ARG DUPLICITY_VERSION=0.8.21.post7
+ARG DUPLICITY_VERSION=1.2.2
 
 RUN apk upgrade --update && \
     apk add \
@@ -41,6 +41,7 @@ RUN apk upgrade --update && \
     pip3 install --upgrade pip && \
     pip3 install --no-cache-dir wheel setuptools-scm && \
     pip3 install --no-cache-dir \
+      azure-core \
       azure-storage-blob \
       boto \
       boto3 \
@@ -63,7 +64,7 @@ RUN apk upgrade --update && \
       python-swiftclient \
       python-keystoneclient \
       requests \
-      requests_oauthlib \
+      requests-oauthlib \
       pycrypto \
       urllib3 \
       apprise \
@@ -82,8 +83,6 @@ RUN apk upgrade --update && \
       gcc \
       musl-dev \
       librsync-dev && \
-    apk add \
-        openssl && \
     rm -rf /var/cache/apk/* && rm -rf /tmp/*
 
 COPY --from=rclone /usr/local/bin/rclone /usr/local/bin/rclone
