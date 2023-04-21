@@ -1,7 +1,7 @@
 FROM rclone/rclone:1.61.1 as rclone
 FROM docker:23.0.1 as docker
 
-FROM alpine:3.17.1
+FROM alpine:3.17.3
 LABEL maintainer="Felix Haase <felix.haase@feki.de>"
 
 ARG JOBBER_VERSION=1.4.4
