@@ -290,7 +290,7 @@ setup() {
 }
 
 teardown() {
-  docker-compose --no-ansi exec volumerize bash -c 'rm -rf /volumerize-cache/**/* /backup/**/* /source/**/*'
+  docker-compose --ansi never exec -T volumerize bash -c 'rm -rf /volumerize-cache/**/* /backup/**/* /source/**/*'
   if [ $TEST_IMAGE_TYPE == mysql ]; then
     # Drop Table
     mysql_drop_table mariadb1
@@ -303,11 +303,11 @@ teardown() {
     postgres_drop_table postgres1
     postgres_drop_table postgres2
   fi
-  docker-compose --no-ansi logs
+  docker-compose --ansi never logs
 }
 
 teardown_file() {
-  docker-compose --no-ansi down -v
+  docker-compose --ansi never down -v
 }
 
 function wait_until_running() {
