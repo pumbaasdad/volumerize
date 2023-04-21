@@ -4,11 +4,11 @@
 # CONTAINER VARIABLES
 #------------------
 function release() {
-  local BUILD_VERSION=${BUILD_BRANCH:-${CIRCLE_BRANCH:-$(git branch | grep -e "^*" | cut -d' ' -f 2)}}
+  local BUILD_VERSION=${BUILD_BRANCH:-${GITHUB_REF_NAME:-$(git branch | grep -e "^*" | cut -d' ' -f 2)}}
   if [ $BUILD_VERSION == master ]; then
     BUILD_VERSION=latest
   fi
-  local IMAGE_VERSION=${IMAGE_VERSION:-${CIRCLE_TAG:-$BUILD_VERSION}}
+  local IMAGE_VERSION=${IMAGE_VERSION:-$BUILD_VERSION}
 
   if [ -z $IMAGE_TYPE ]; then
     export IMAGE_TAG=${IMAGE_VERSION}
