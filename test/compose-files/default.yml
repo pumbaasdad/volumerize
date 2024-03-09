@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   volumerize:
-    image: fekide/volumerize:${TEST_IMAGE_TAG}
+    image: ${TEST_IMAGE}
     container_name: volumerize
     volumes:
       - source_volume:/source

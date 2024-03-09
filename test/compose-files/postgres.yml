@@ -11,7 +11,7 @@ services:
       - postgresdb:/var/lib/postgresql/data
 
   volumerize:
-    image: fekide/volumerize:${TEST_IMAGE_TAG}
+    image: ${TEST_IMAGE}
     networks:
       - default
     environment:

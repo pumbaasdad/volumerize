@@ -344,7 +344,7 @@ mysql_value=test
 mysql_user=root
 mysql_pwd=1234
 
-mysql_default_command="mysql -u ${mysql_user} --password=${mysql_pwd} somedatabase -e "
+mysql_default_command="mariadb -u ${mysql_user} --password=${mysql_pwd} somedatabase -e "
 
 function mysql_initialize_db() {
   local service=$1

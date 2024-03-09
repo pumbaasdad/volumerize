@@ -1,0 +1,33 @@
+name: Docker Test Jobs
+
+on:
+  workflow_call:
+    inputs:
+      tag-suffix:
+        required: true
+        type: string
+      image-name:
+        required: true
+        type: string
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  test-default:
+    if: ${{ inputs.tag-suffix == '' }}
+    uses: ./.github/workflows/docker-test.yml
+    with:
+      image-name: ${{ inputs.image-name }}
+      image-type: default
+  test-database:
+    strategy:
+      matrix:
+        database: [mongodb, mysql, postgres]
+    uses: ./.github/workflows/docker-test.yml
+    with:
+      image-name: ${{ inputs.image-name }}
+      image-type: ${{ matrix.database }}

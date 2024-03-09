@@ -24,7 +24,7 @@ services:
       - ${COMPOSE_DIRECTORY}/mongodb/:/scripts
 
   volumerize:
-    image: fekide/volumerize:${TEST_IMAGE_TAG}
+    image: ${TEST_IMAGE}
     networks:
       - default
     environment:
