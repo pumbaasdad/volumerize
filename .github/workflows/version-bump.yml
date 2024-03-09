@@ -21,10 +21,9 @@ jobs:
       id: bump
       uses: anothrNick/github-tag-action@1.67.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.TAGGING_TOKEN }}
         WITH_V: true
         DEFAULT_BUMP: patch
-        GIT_API_TAGGING: false
     - name: Create release
       uses: ncipollo/release-action@v1.14.0
       with:
