@@ -1,0 +1,37 @@
+name: Docker Test
+
+on:
+  workflow_call:
+    inputs:
+      image-name:
+        required: true
+        type: string
+      image-type:
+        required: true
+        type: string
+
+jobs:
+  test:
+    name: test ${{ inputs.image-type }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        if: ${{ inputs.image-type == 'default' || contains(inputs.image-name, inputs.image-type) }}
+        uses: actions/checkout@v4.1.1
+        with:
+          submodules: true
+
+      - name: Test image
+        if: ${{ inputs.image-type == 'default' || contains(inputs.image-name, inputs.image-type) }}
+        env:
+          TEST_IMAGE: ${{ inputs.image-name }}
+          TEST_IMAGE_TYPE: ${{ inputs.image-type }}
+        run: ./test/libs/bats-core/bin/bats --report-formatter junit test
+
+      - name: Report results
+        if: ${{ inputs.image-type == 'default' || contains(inputs.image-name, inputs.image-type) }}
+        uses: dorny/test-reporter@v1.8.0
+        with:
+          name: ${{ inputs.image-name }} ${{ inputs.image-type }} Tests
+          path: ./report.xml
+          reporter: java-junit

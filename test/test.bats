@@ -180,7 +180,7 @@ mysql_value=test
 mysql_user=root
 mysql_pwd=1234
 
-mysql_default_command="docker-compose exec -T mariadb mysql -u ${mysql_user} --password=${mysql_pwd} somedatabase -e "
+mysql_default_command="docker-compose exec -T mariadb mariadb -u ${mysql_user} --password=${mysql_pwd} somedatabase -e "
 
 function mysql_initialize_db() {
   eval ${mysql_default_command} "\"create table ${mysql_table_name}(${mysql_column_name} varchar(100))\""

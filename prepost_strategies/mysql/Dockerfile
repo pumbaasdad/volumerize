@@ -1,6 +1,6 @@
-ARG BASE_IMAGE_TAG=latest
+ARG BASE_IMAGE=
 
-FROM fekide/volumerize:${BASE_IMAGE_TAG}
+FROM ${BASE_IMAGE}
 
 RUN apk add --no-cache \
     mysql-client pv
