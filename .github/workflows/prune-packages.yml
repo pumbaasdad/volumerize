@@ -1,0 +1,22 @@
+name: Prune Docker Images
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prune tags
+        uses: vlaurin/action-ghcr-prune@v0.6.0
+        with:
+          token: ${{ secrets.CLEANING_TOKEN }}
+          container: volumerize
+          keep-tags-regexes: |
+            .sig$
+          prune-tags-regexes: |
+            ^pr-${{ github.event.number }}
+          prune-untagged: true
