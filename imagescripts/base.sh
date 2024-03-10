@@ -35,7 +35,6 @@ VOLUMERIZE_JOB_EXCLUDES=
 function prepareJobCommand() {
   local jobNumber=$1
   DUPLICITY_JOB_COMMAND=$DUPLICITY_COMMAND
-  DUPLICITY_JOB_OPTIONS="--allow-source-mismatch"
   file_env "PASSPHRASE"
   file_env "VOLUMERIZE_GPG_PRIVATE_KEY"
   file_env "FTP_PASSWORD"
