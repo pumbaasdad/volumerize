@@ -12,7 +12,7 @@ DUPLICITY_RETURN_CODE=0
 
 function commandJob() {
   local returnCode=0;
-  eval ${DUPLICITY_JOB_COMMAND} incremental "$@" ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_INCLUDES} ${VOLUMERIZE_JOB_EXCLUDES} ${VOLUMERIZE_JOB_SOURCE} ${VOLUMERIZE_JOB_TARGET} || returnCode=$? && true ;
+  eval ${DUPLICITY_JOB_COMMAND} incremental "$@" --allow-source-mismatch ${DUPLICITY_JOB_OPTIONS} ${VOLUMERIZE_JOB_INCLUDES} ${VOLUMERIZE_JOB_EXCLUDES} ${VOLUMERIZE_JOB_SOURCE} ${VOLUMERIZE_JOB_TARGET} || returnCode=$? && true ;
   if [ "$returnCode" -gt "$DUPLICITY_RETURN_CODE" ]; then
     DUPLICITY_RETURN_CODE=$returnCode
   fi

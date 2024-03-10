@@ -2,10 +2,12 @@ FROM rclone/rclone:1.62.2 as rclone
 FROM docker:23.0.4 as docker
 
 FROM alpine:3.17.3
-LABEL maintainer="Felix Haase <felix.haase@feki.de>"
+LABEL maintainer="Pumbaa's Dad <32616257+pumbaasdad@users.noreply.github.com>"
 
 ARG JOBBER_VERSION=1.4.4
-ARG DUPLICITY_VERSION=1.2.2
+
+ENV POETRY_NO_INTERACTION=1 \
+  POETRY_VIRTUALENVS_CREATE=false
 
 RUN apk upgrade --update && \
     apk add \
@@ -41,49 +43,29 @@ RUN apk upgrade --update && \
     pip3 install --upgrade pip && \
     pip3 install --no-cache-dir wheel setuptools-scm && \
     pip3 install --no-cache-dir \
-      azure-core \
-      azure-storage-blob \
-      boto \
-      boto3 \
-      b2sdk \
-      boxsdk[jwt] \
-      dropbox \
-      fasteners \
-      gdata-python3 \
-      google-api-python-client>=2.2.0 \
-      google-auth-oauthlib \
-      jottalib \
-      mediafire \
-      megatools \
-      paramiko \
-      pexpect \
-      psutil \
-      PyDrive \
-      PyDrive2 \
-      pyrax \
-      python-swiftclient \
-      python-keystoneclient \
-      requests \
-      requests-oauthlib \
-      pycrypto \
-      urllib3 \
-      apprise \
-      duplicity==${DUPLICITY_VERSION} && \
+      pyrax && \
     mkdir -p /etc/volumerize /volumerize-cache /opt/volumerize /var/jobber/0 && \
     # Install Jobber
     wget --directory-prefix=/tmp https://github.com/dshearer/jobber/releases/download/v${JOBBER_VERSION}/jobber-${JOBBER_VERSION}-r0.apk && \
     apk add --allow-untrusted --no-scripts /tmp/jobber-${JOBBER_VERSION}-r0.apk && \
+    # Install poetry
+    curl -sSL https://install.python-poetry.org | python3 - && \
     # Cleanup
     apk del \
       curl \
       wget \
-      python3-dev \
-      alpine-sdk \
       linux-headers \
-      gcc \
-      musl-dev \
-      librsync-dev && \
+      musl-dev && \
     rm -rf /var/cache/apk/* && rm -rf /tmp/*
+
+COPY poetry.lock pyproject.toml /
+
+RUN /root/.local/bin/poetry install --no-ansi && \
+    apk del \
+      alpine-sdk \
+      gcc \
+      librsync-dev \
+      python3-dev
 
 COPY --from=rclone /usr/local/bin/rclone /usr/local/bin/rclone
 COPY --from=docker /usr/local/bin/ /usr/local/bin/
