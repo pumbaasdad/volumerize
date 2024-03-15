@@ -65,6 +65,7 @@ jobs:
         uses: docker/metadata-action@v5.5.1
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          sep-labels: ','
           flavor: |
             latest=${{ inputs.strategies == 'default' && 'auto' || 'false' }}
           tags: |
@@ -89,8 +90,6 @@ jobs:
           push: true
           tags: ${{ steps.docker-config.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       # Sign the resulting Docker image digest.
       # This will only write to the public Rekor transparency log when the Docker
