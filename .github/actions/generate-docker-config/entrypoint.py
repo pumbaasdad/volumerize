@@ -35,7 +35,7 @@ if __name__ == "__main__" :
     print(f"context: {context}")
 
     if "GITHUB_OUTPUT" in os.environ:
-        with open(os.environ["GITHUB_OUTPUT"], "a") as file :
+        with open(os.environ["GITHUB_OUTPUT"], "a") as file:
             print(f"tags={','.join(allTags)}", file=file)
             print(f"primaryTag={allTags[0]}", file=file)
             print(f"context={context}", file=file)
