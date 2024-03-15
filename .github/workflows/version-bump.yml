@@ -5,11 +5,13 @@ on:
       - closed
     branches:
       - master
+    paths-ignore:
+      - '.github/**'
 
 jobs:
   bump-version:
     if: github.event.pull_request.merged == true
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:

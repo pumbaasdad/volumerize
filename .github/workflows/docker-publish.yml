@@ -1,4 +1,4 @@
-name: Docker
+name: Docker Publish
 
 on:
   push:
@@ -7,55 +7,99 @@ on:
   pull_request:
     branches: [ "master" ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  # Pass tag-suffix as a list, write a custom action that:
+  #  * Uses last entry in list to determine context
+  #  * computes all permutations of the list
+  #  * takes cartesian product of docker generated tags with suffixes
   build-base:
     uses: ./.github/workflows/docker-build.yml
+    with:
+      strategies: default
   build-mongodb:
     needs: [build-base]
     uses: ./.github/workflows/docker-build.yml
     with:
-      tag-suffix: -mongodb
-      context: ./prepost_strategies/mongodb
+      strategies: mongodb
       base-image: ${{ needs.build-base.outputs.image }}
   build-mysql:
     needs: [build-base]
     uses: ./.github/workflows/docker-build.yml
     with:
-      tag-suffix: -mysql
-      context: ./prepost_strategies/mysql
+      strategies: mysql
       base-image: ${{ needs.build-base.outputs.image }}
   build-postgres:
     needs: [build-base]
     uses: ./.github/workflows/docker-build.yml
     with:
-      tag-suffix: -postgres
-      context: ./prepost_strategies/postgres
+      strategies: postgres
       base-image: ${{ needs.build-base.outputs.image }}
   build-mongodb-mysql:
     needs: [build-mongodb]
     uses: ./.github/workflows/docker-build.yml
     with:
-      tag-suffix: -mongodb-mysql
-      context: ./prepost_strategies/mysql
+      strategies: mongodb,mysql
       base-image: ${{ needs.build-mongodb.outputs.image }}
   build-mongodb-postgres:
     needs: [build-mongodb]
     uses: ./.github/workflows/docker-build.yml
     with:
-      tag-suffix: -mongodb-postgres
-      context: ./prepost_strategies/postgres
+      strategies: mongodb,postgres
       base-image: ${{ needs.build-mongodb.outputs.image }}
-  build-mongodb-mysql-postgres:
-    needs: [build-mongodb-mysql]
-    uses: ./.github/workflows/docker-build.yml
-    with:
-      tag-suffix: -mongodb-mysql-postgres
-      context: ./prepost_strategies/postgres
-      base-image: ${{ needs.build-mongodb-mysql.outputs.image }}
   build-mysql-postgres:
     needs: [build-mysql]
     uses: ./.github/workflows/docker-build.yml
     with:
-      tag-suffix: -mysql-postgres
-      context: ./prepost_strategies/postgres
+      strategies: mysql,postgres
       base-image: ${{ needs.build-mysql.outputs.image }}
+  build-mongodb-mysql-postgres:
+    needs: [build-mongodb-mysql]
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      strategies: mongodb,mysql,postgres
+      base-image: ${{ needs.build-mongodb-mysql.outputs.image }}
+
+  test-base:
+    needs: build-base
+    uses: ./.github/workflows/docker-test-jobs.yml
+    with:
+      image-name: ${{ needs.build-base.outputs.image }}
+  test-mongodb:
+    needs: build-mongodb
+    uses: ./.github/workflows/docker-test-jobs.yml
+    with:
+      image-name: ${{ needs.build-mongodb.outputs.image }}
+  test-mysql:
+    needs: build-mysql
+    uses: ./.github/workflows/docker-test-jobs.yml
+    with:
+      image-name: ${{ needs.build-mysql.outputs.image }}
+  test-postgres:
+    needs: build-postgres
+    uses: ./.github/workflows/docker-test-jobs.yml
+    with:
+      image-name: ${{ needs.build-postgres.outputs.image }}
+  test-mongodb-mysql:
+    needs: build-mongodb-mysql
+    uses: ./.github/workflows/docker-test-jobs.yml
+    with:
+      image-name: ${{ needs.build-mongodb-mysql.outputs.image }}
+  test-mongodb-postgres:
+    needs: build-mongodb-postgres
+    uses: ./.github/workflows/docker-test-jobs.yml
+    with:
+      image-name: ${{ needs.build-mongodb-postgres.outputs.image }}
+  test-mysql-postgres:
+    needs: build-mysql-postgres
+    uses: ./.github/workflows/docker-test-jobs.yml
+    with:
+      image-name: ${{ needs.build-mysql-postgres.outputs.image }}
+  test-mongodb-mysql-postgres:
+    needs: build-mongodb-mysql-postgres
+    uses: ./.github/workflows/docker-test-jobs.yml
+    with:
+      image-name: ${{ needs.build-mongodb-mysql-postgres.outputs.image }}

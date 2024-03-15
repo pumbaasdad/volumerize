@@ -14,24 +14,38 @@ jobs:
   test:
     name: test ${{ inputs.image-type }}
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && contains(inputs.image-name, inputs.image-type) }}
     steps:
       - name: Checkout repository
-        if: ${{ inputs.image-type == 'default' || contains(inputs.image-name, inputs.image-type) }}
         uses: actions/checkout@v4.1.1
         with:
           submodules: true
 
+      - name: Get image tag
+        uses: xom9ikk/split@v1.1
+        id: tag
+        with:
+          string: ${{ inputs.image-name }}
+          separator: ":"
+
+      - name: Get test results file name
+        uses: mad9000/actions-find-and-replace-string@5
+        id: results-name
+        with:
+          source: ${{ steps.tag.outputs._1 }}
+          find: pr-${{ github.event.number }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ github.run_id }}-
+          replace: ""
+
       - name: Test image
-        if: ${{ inputs.image-type == 'default' || contains(inputs.image-name, inputs.image-type) }}
         env:
           TEST_IMAGE: ${{ inputs.image-name }}
           TEST_IMAGE_TYPE: ${{ inputs.image-type }}
         run: ./test/libs/bats-core/bin/bats --report-formatter junit test
 
       - name: Report results
-        if: ${{ inputs.image-type == 'default' || contains(inputs.image-name, inputs.image-type) }}
+        if: ${{ success() || failure() }}
         uses: dorny/test-reporter@v1.8.0
         with:
-          name: ${{ inputs.image-name }} ${{ inputs.image-type }} Tests
+          name: ${{ steps.results-name.outputs.value }} ${{ inputs.image-type }} Tests
           path: ./report.xml
           reporter: java-junit
