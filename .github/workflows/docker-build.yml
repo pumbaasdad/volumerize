@@ -10,6 +10,9 @@ on:
         required: false
         type: string
         default: ''
+      version:
+        required: true
+        type: string
     outputs:
       image:
         value: ${{ jobs.build.outputs.image }}
@@ -63,13 +66,16 @@ jobs:
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5.5.1
+        env:
+          VERSION: ",${{ inputs.version }}"
+          LATEST: ${{ inputs.version != '' && 'true' || 'auto' }}
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           sep-tags: ','
-          flavor: |
-            latest=${{ inputs.strategies == 'default' && 'auto' || 'false' }}
+          flavor: | 
+            latest=${{ inputs.strategies == 'default' && env.LATEST || 'false' }}
           tags: |
-            type=semver,pattern={{version}}
+            type=semver,pattern={{version}}${{ env.VERSION != ',' && env.VERSION || '' }}
             type=ref,event=pr
 
       - name: Generate docker config
