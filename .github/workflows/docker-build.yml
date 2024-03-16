@@ -65,7 +65,7 @@ jobs:
         uses: docker/metadata-action@v5.5.1
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          sep-labels: ','
+          sep-tags: ','
           flavor: |
             latest=${{ inputs.strategies == 'default' && 'auto' || 'false' }}
           tags: |
