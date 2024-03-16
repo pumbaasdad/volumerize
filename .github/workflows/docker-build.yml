@@ -70,7 +70,7 @@ jobs:
             latest=${{ inputs.strategies == 'default' && 'auto' || 'false' }}
           tags: |
             type=semver,pattern={{version}}
-            type=ref,event=pr            
+            type=ref,event=pr
 
       - name: Generate docker config
         id: docker-config
@@ -104,4 +104,4 @@ jobs:
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
-        run: echo "${TAGS}" | xargs -d "," -I {} cosign sign --yes {}@${DIGEST}
+        run: echo -n "${TAGS}" | xargs --verbose -d "," -I {} cosign sign --yes {}@${DIGEST}
