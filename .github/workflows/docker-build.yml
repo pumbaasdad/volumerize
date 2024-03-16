@@ -67,7 +67,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5.5.1
         env:
-          VERSION: ",${{ inputs.version }}"
+          VERSION: ",value=${{ inputs.version }}"
           LATEST: ${{ inputs.version != '' && 'true' || 'auto' }}
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
