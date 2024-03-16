@@ -5,8 +5,14 @@ on:
       - closed
     branches:
       - master
-    paths-ignore:
-      - '.github/**'
+    paths:
+      - 'imagescripts/**'
+      - 'postexecute/**'
+      - 'prepost_strategies/**'
+      - 'scripts'
+      - 'Dockerfile'
+      - 'poetry.lock'
+      - 'pyproject.toml'
 
 jobs:
   bump-version:
