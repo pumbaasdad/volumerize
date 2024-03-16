@@ -12,6 +12,7 @@ on:
         description: "Version of the container to be published"
         required: true
         type: string
+        default: ''
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -26,56 +27,56 @@ jobs:
     uses: ./.github/workflows/docker-build.yml
     with:
       strategies: default
-      version: ${{ github.event == 'workflow_dispatch' && inputs.version || '' }}
+      version: ${{ inputs.version }}
   build-mongodb:
     needs: [build-base]
     uses: ./.github/workflows/docker-build.yml
     with:
       strategies: mongodb
       base-image: ${{ needs.build-base.outputs.image }}
-      version: ${{ github.event == 'workflow_dispatch' && inputs.version || '' }}
+      version: ${{ inputs.version }}
   build-mysql:
     needs: [build-base]
     uses: ./.github/workflows/docker-build.yml
     with:
       strategies: mysql
       base-image: ${{ needs.build-base.outputs.image }}
-      version: ${{ github.event == 'workflow_dispatch' && inputs.version || '' }}
+      version: ${{ inputs.version }}
   build-postgres:
     needs: [build-base]
     uses: ./.github/workflows/docker-build.yml
     with:
       strategies: postgres
       base-image: ${{ needs.build-base.outputs.image }}
-      version: ${{ github.event == 'workflow_dispatch' && inputs.version || '' }}
+      version: ${{ inputs.version }}
   build-mongodb-mysql:
     needs: [build-mongodb]
     uses: ./.github/workflows/docker-build.yml
     with:
       strategies: mongodb,mysql
       base-image: ${{ needs.build-mongodb.outputs.image }}
-      version: ${{ github.event == 'workflow_dispatch' && inputs.version || '' }}
+      version: ${{ inputs.version }}
   build-mongodb-postgres:
     needs: [build-mongodb]
     uses: ./.github/workflows/docker-build.yml
     with:
       strategies: mongodb,postgres
       base-image: ${{ needs.build-mongodb.outputs.image }}
-      version: ${{ github.event == 'workflow_dispatch' && inputs.version || '' }}
+      version: ${{ inputs.version }}
   build-mysql-postgres:
     needs: [build-mysql]
     uses: ./.github/workflows/docker-build.yml
     with:
       strategies: mysql,postgres
       base-image: ${{ needs.build-mysql.outputs.image }}
-      version: ${{ github.event == 'workflow_dispatch' && inputs.version || '' }}
+      version: ${{ inputs.version }}
   build-mongodb-mysql-postgres:
     needs: [build-mongodb-mysql]
     uses: ./.github/workflows/docker-build.yml
     with:
       strategies: mongodb,mysql,postgres
       base-image: ${{ needs.build-mongodb-mysql.outputs.image }}
-      version: ${{ github.event == 'workflow_dispatch' && inputs.version || '' }}
+      version: ${{ inputs.version }}
 
   test-base:
     needs: build-base
