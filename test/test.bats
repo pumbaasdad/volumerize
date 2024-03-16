@@ -127,6 +127,11 @@ setup() {
 
 }
 
+@test "container_version" {
+  run docker run $TEST_IMAGE /bin/sh -c 'cat /.expected_os_release /.expected_python_version /.expected_poetry_version | diff /.container_version -'
+  assert_success
+}
+
 teardown() {
   docker-compose --ansi never exec -T volumerize bash -c 'rm -rf /volumerize-cache/* /backup/* /source/*'
   if [ $TEST_IMAGE_TYPE == mysql ]; then
