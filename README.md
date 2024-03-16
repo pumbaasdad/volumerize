@@ -43,7 +43,6 @@ This is not a tool that can safely clone and backup data from running databases.
 
 Also note that the easier the tools the easier it is to lose data! Always make sure the tool works correct by checking the backup data itself, e.g. S3 bucket. Check the configuration double time and enable some check options this image offers. E.g. attaching volumes read only.
 
-
 Features:
 
 * Multiple Backends
