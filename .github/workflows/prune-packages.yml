@@ -19,4 +19,3 @@ jobs:
             .sig$
           prune-tags-regexes: |
             ^pr-${{ github.event.number }}
-          prune-untagged: true
