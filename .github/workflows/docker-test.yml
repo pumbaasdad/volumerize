@@ -22,17 +22,14 @@ jobs:
           submodules: true
 
       - name: Get image tag
-        uses: xom9ikk/split@v1.1
         id: tag
-        with:
-          string: ${{ inputs.image-name }}
-          separator: ":"
+        run: echo version=$(echo ${{ inputs.image-name }} | cut -f2 -d':') >> $GITHUB_OUTPUT
 
       - name: Get test results file name
         uses: mad9000/actions-find-and-replace-string@5
         id: results-name
         with:
-          source: ${{ steps.tag.outputs._1 }}
+          source: ${{ steps.tag.outputs.version }}
           find: pr-${{ github.event.number }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ github.run_id }}-
           replace: ""
 
