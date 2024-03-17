@@ -1,0 +1,17 @@
+name: Dependabot auto-merge
+on:
+  pull_request:
+    types:
+      - labeled
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: |
+      ${{ contains( github.event.pull_request.labels.*.name, 'python' ) }}
+    steps:
+      - run: echo ${{ github.actor }}
