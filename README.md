@@ -1,14 +1,8 @@
 
-# Feki.de Volumerize 
-(Fork from [blacklabelops/volumerize](https://github.com/blacklabelops/volumerize))
+# Volumerize 
+(Fork from [pumbaasdad/volumerize](https://github.com/pumbaasdad/volumerize) [blacklabelops/volumerize](https://github.com/blacklabelops/volumerize))
 
-[![Circle CI](https://circleci.com/gh/Fekide/volumerize/tree/master.svg?style=shield)](https://circleci.com/gh/Fekide/volumerize/tree/master)
-[![Open Issues](https://img.shields.io/github/issues/fekide/volumerize.svg)](https://github.com/fekide/volumerize/issues) [![Stars on GitHub](https://img.shields.io/github/stars/fekide/volumerize.svg)](https://github.com/fekide/volumerize/stargazers)
-[![Docker Stars](https://img.shields.io/docker/stars/fekide/volumerize.svg)](https://hub.docker.com/r/fekide/volumerize/) [![Docker Pulls](https://img.shields.io/docker/pulls/fekide/volumerize.svg)](https://hub.docker.com/r/fekide/volumerize/)
-
-[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/fekide/volumerize/master/docker-compose.yml)
-
-- [Feki.de Volumerize](#fekide-volumerize)
+- [Volumerize](#volumerize)
   - [Volume Backups Tutorials](#volume-backups-tutorials)
   - [Make It Short](#make-it-short)
   - [How It Works](#how-it-works)
@@ -64,13 +58,13 @@ and many more: [Duplicity Supported Backends](http://duplicity.nongnu.org/index.
 
 Docker Volume Backups on:
 
-Backblaze B2: [Readme](https://github.com/fekide/volumerize/tree/master/backends/BackblazeB2)
+Backblaze B2: [Readme](https://github.com/pumbaasdad/volumerize/tree/master/backends/BackblazeB2)
 
-Amazon S3: [Readme](https://github.com/fekide/volumerize/tree/master/backends/AmazonS3)
+Amazon S3: [Readme](https://github.com/pumbaasdad/volumerize/tree/master/backends/AmazonS3)
 
-Dropbox: [Readme](https://github.com/fekide/volumerize/tree/master/backends/Dropbox)
+Dropbox: [Readme](https://github.com/pumbaasdad/volumerize/tree/master/backends/Dropbox)
 
-Google Drive: [Readme](https://github.com/fekide/volumerize/tree/master/backends/GoogleDrive)
+Google Drive: [Readme](https://github.com/pumbaasdad/volumerize/tree/master/backends/GoogleDrive)
 
 ## Make It Short
 
@@ -84,7 +78,7 @@ $ docker run --rm \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    fekide/volumerize backup
+    pumbaasdad/volumerize backup
 ~~~~
 
 > Hooks up your volume with the name `yourvolume` and backups to the volume `backup_volume`
@@ -107,7 +101,7 @@ $ docker run \
 
 > Starts Jenkins and stores its data inside the Docker volume `jenkins_volume`.
 
-Now attach the Jenkins data to folders inside the container and tell fekide/volumerize to backup folder `/source` to folder `/backup`.
+Now attach the Jenkins data to folders inside the container and tell pumbaasdad/volumerize to backup folder `/source` to folder `/backup`.
 
 ~~~~
 $ docker run -d \
@@ -117,7 +111,7 @@ $ docker run -d \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 > Will start the Volumerizer. The volume jenkins_volume is now folder `/source` and backups_volume is now folder `/backup` inside the container.
@@ -152,7 +146,7 @@ $ docker run -d \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 > Will run Volumerize on the common parent folder `/source`.
@@ -176,7 +170,7 @@ $ docker run -d \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 Then stop the backup container and restore with the following command. The only difference is that we exclude the read-only option `:ro` from the source volume and added it to the backup volume:
@@ -189,7 +183,7 @@ $ docker run --rm \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    fekide/volumerize restore
+    pumbaasdad/volumerize restore
 $ docker start volumerize
 ~~~~
 
@@ -210,7 +204,7 @@ $ docker run --rm \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    fekide/volumerize restore --dry-run
+    pumbaasdad/volumerize restore --dry-run
 ~~~~
 
 But in order to see the differences between backup and source you need the verify command:
@@ -222,7 +216,7 @@ $ docker run --rm \
     -v cache_volume:/volumerize-cache \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
-    fekide/volumerize verify
+    pumbaasdad/volumerize verify
 ~~~~
 
 ## Periodic Backups
@@ -245,7 +239,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
     -e "VOLUMERIZE_JOBBER_TIME=0 0 3 * * *" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 > Backups at three o'clock in the morning according to german local time.
@@ -273,7 +267,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
     -e "VOLUMERIZE_CONTAINERS=application application_database" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 > The startup routine will be applied to the following scripts: backup, backupFull, restore and periodBackup.
@@ -316,16 +310,16 @@ $ docker run -d \
     -e "DOCKER_API_VERSION=1.23" \
     ...
     ...
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 #### Additional Docker considerations
 Warning: Make sure your container is running under the correct restart policy. Tools like Docker, Docker-Compose, Docker-Swarm, Kubernetes and Cattle may restart the container even when Volumerize stops it. Backups done under running instances may end in corrupted backups and even corrupted data. Always make sure that the command `docker stop` really stops an instance and there will be no restart of the underlying deployment technology. You can test this by running `docker stop` and check with `docker ps` that the container is really stopped.
 
 ## Duplicity Parameters
 
-Under the hood fekide/volumerize uses duplicity. See here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
+Under the hood pumbaasdad/volumerize uses duplicity. See here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
 
-You can pass duplicity options inside Volumerize. Duplicity options will be passed by the environment-variable `VOLUMERIZE_DUPLICITY_OPTIONS`. The options will be added to all fekide/volumerize commands and scripts. E.g. the option `--dry-run` will put the whole container in demo mode as all duplicity commands will only be simulated.
+You can pass duplicity options inside Volumerize. Duplicity options will be passed by the environment-variable `VOLUMERIZE_DUPLICITY_OPTIONS`. The options will be added to all pumbaasdad/volumerize commands and scripts. E.g. the option `--dry-run` will put the whole container in demo mode as all duplicity commands will only be simulated.
 
 Example:
 
@@ -338,7 +332,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
     -e "VOLUMERIZE_DUPLICITY_OPTIONS=--dry-run" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 > Will only operate in dry-run simulation mode.
@@ -350,7 +344,7 @@ You can encrypt your backups by setting a secure passphrase inside the environme
 Creating a secure passphrase:
 
 ~~~~
-$ docker run --rm fekide/volumerize openssl rand -base64 128
+$ docker run --rm pumbaasdad/volumerize openssl rand -base64 128
 ~~~~
 
 > Prints an appropriate password on the console.
@@ -366,7 +360,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
     -e "PASSPHRASE=Jzwv1V83LHwtsbulVS7mMyijStBAs7Qr/V2MjuYtKg4KQVadRM" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 > Same functionality as described above but all backups will be encrypted.
@@ -436,7 +430,7 @@ $ docker run -d \
     -e "VOLUMERIZE_GPG_PRIVATE_KEY=/key/MyKey.asc" \
     -e GPG_KEY_ID=<MyKeyID>
     -e "PASSPHRASE=" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 > This will import a key without a password set.
@@ -471,7 +465,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
     -e "VOLUMERIZE_FULL_IF_OLDER_THAN=7D" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 > Will enforce a full backup after seven days.
@@ -497,7 +491,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=file:///backup" \
     -e "REMOVE_OLDER_THAN=30D" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 ## Post scripts and pre scripts (prepost strategies)
@@ -538,7 +532,7 @@ The provided prepoststrategies are also pushed as combinations:
 ## Container Scripts
 
 This image creates at container startup some convenience scripts.
-Under the hood fekide/volumerize uses duplicity. To pass script parameters, see here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
+Under the hood pumbaasdad/volumerize uses duplicity. To pass script parameters, see here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
 
 | Script                         | Description                                                                              |
 | ------------------------------ | ---------------------------------------------------------------------------------------- |
@@ -689,7 +683,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE2=/source2" \
     -e "VOLUMERIZE_TARGET2=file:///backup2" \
     -e "VOLUMERIZE_CACHE2=/volumerize-cache2" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 ## Docker Secrets
@@ -710,7 +704,7 @@ The following variables are supported to be stored in files, the location specif
 By default, jobber is run as root, since it will most likely require access to other volumes which might have other permissions than a default user. If you want to use a non-root user, you need to add a new user with a home directory (jobber can only run for users [with home directories](https://dshearer.github.io/jobber/doc/v1.4/#jobfile)) by customizing the docker image like this:
 
 ```Dockerfile
-FROM fekide/volumerize
+FROM pumbaasdad/volumerize
 
 RUN useradd -ms /bin/bash --uid <user_id> <your_user>
 
@@ -756,11 +750,11 @@ WORKDIR /home/<your_user>
 ## Build the Image
 
 ~~~~
-$ docker build -t fekide/volumerize .
+$ docker build -t pumbaasdad/volumerize .
 ~~~~
 
 ## Run the Image
 
 ~~~~
-$ docker run -it --rm fekide/volumerize bash
+$ docker run -it --rm pumbaasdad/volumerize bash
 ~~~~

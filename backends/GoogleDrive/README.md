@@ -19,7 +19,7 @@ $ docker run \
      -d -p 80:8080 \
      --name jenkins \
      -v jenkins_volume:/jenkins \
-     blacklabelops/jenkins
+     pumbaasdad/jenkins
 ~~~~
 
 > Starts Jenkins and stores its data inside the Docker volume `jenkins_volume`.
@@ -35,7 +35,7 @@ $ docker run -it --rm \
     -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
     -e "GOOGLE_DRIVE_ID=12312786-e99grj1k5lwjepofjwpoejfpe5nqvkd3e.apps.googleusercontent.com" \
     -e "GOOGLE_DRIVE_SECRET=FWeofWefkefnkef" \
-    fekide/volumerize backup
+    pumbaasdad/volumerize backup
 ~~~~
 
 > Note: The routine will fail, you still have to enable the Google Drive API for your project. See the URL inside the log output.
@@ -52,7 +52,7 @@ $ docker run -d \
     -v jenkins_volume:/source:ro \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 > `volumerize_cache` is the local data cache.
@@ -75,7 +75,7 @@ $ docker run --rm \
     -v volumerize_credentials:/credentials \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
-    fekide/volumerize restore
+    pumbaasdad/volumerize restore
 ~~~~
 
 > Will perform a test restore inside a separate volume `jenkins_test_restore`
@@ -85,7 +85,7 @@ Check the contents of the volume:
 ~~~~
 $ docker run --rm \
     -v jenkins_test_restore:/source \
-    blacklabelops/alpine ls -R /source
+    pumbaasdad/alpine ls -R /source
 ~~~~
 
 > Lists files inside the source volume
@@ -98,7 +98,7 @@ $ docker run --rm \
     -v volumerize_credentials:/credentials \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
-    fekide/volumerize verify
+    pumbaasdad/volumerize verify
 ~~~~
 
 > Will perform a single verification of the volume contents against the Google Drive archive.
@@ -114,7 +114,7 @@ $ docker run \
      -d -p 80:8080 \
      --name jenkins \
      -v jenkins_volume:/jenkins \
-     blacklabelops/jenkins
+     pumbaasdad/jenkins
 ~~~~
 
 > Starts Jenkins and stores its data inside the Docker volume `jenkins_volume`.
@@ -131,7 +131,7 @@ $ docker run -d \
     -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
     -e "VOLUMERIZE_CONTAINERS=jenkins" \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 > Needs access to the docker host over the directive `-v /var/run/docker.sock:/var/run/docker.sock`
