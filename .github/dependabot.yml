@@ -1,0 +1,40 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "01:00"
+      timezone: "America/Toronto"
+    groups:
+      dependencies:
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "01:00"
+      timezone: "America/Toronto"
+    groups:
+      dependencies:
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+      time: "01:00"
+      timezone: "America/Toronto"
+    groups:
+      dependencies:
+        update-types:
+          - "minor"
+          - "patch"
