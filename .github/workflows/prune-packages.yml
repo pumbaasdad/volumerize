@@ -24,4 +24,4 @@ jobs:
           keep-tags-regexes: |
             .sig$
           prune-tags-regexes: |
-            ^pr-${{ github.event.number || inputs.pr-number }}
+            ^pr-${{ github.event_name == 'pull_request' && github.event.number || inputs.pr-number }}
