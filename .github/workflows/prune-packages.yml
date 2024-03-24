@@ -5,6 +5,12 @@ on:
       - closed
     branches:
       - master
+  workflow_dispatch:
+    inputs:
+      pr-numer:
+        description: "PR Number"
+        required: true
+        type: number
 
 jobs:
   prune:
@@ -18,4 +24,4 @@ jobs:
           keep-tags-regexes: |
             .sig$
           prune-tags-regexes: |
-            ^pr-${{ github.event.number }}
+            ^pr-${{ github.event.number || inputs.pr-number }}
