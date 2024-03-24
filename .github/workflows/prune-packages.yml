@@ -7,7 +7,7 @@ on:
       - master
   workflow_dispatch:
     inputs:
-      pr-numer:
+      pr-number:
         description: "PR Number"
         required: true
         type: number
@@ -24,4 +24,4 @@ jobs:
           keep-tags-regexes: |
             .sig$
           prune-tags-regexes: |
-            ^pr-${{ github.event_name == 'pull_request' && github.event.number || inputs.pr-number }}
+            ^pr-${{ github.event.number || inputs.pr-number }}
