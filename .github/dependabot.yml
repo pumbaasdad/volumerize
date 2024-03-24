@@ -8,7 +8,7 @@ updates:
       time: "01:00"
       timezone: "America/Toronto"
     groups:
-      dependencies:
+      python:
         update-types:
           - "minor"
           - "patch"
@@ -21,7 +21,7 @@ updates:
       time: "01:00"
       timezone: "America/Toronto"
     groups:
-      dependencies:
+      docker:
         update-types:
           - "minor"
           - "patch"
@@ -34,7 +34,7 @@ updates:
       time: "01:00"
       timezone: "America/Toronto"
     groups:
-      dependencies:
+      github-actions:
         update-types:
           - "minor"
           - "patch"
