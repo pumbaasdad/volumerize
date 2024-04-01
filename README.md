@@ -2,6 +2,8 @@
 # Volumerize 
 (Fork from [pumbaasdad/volumerize](https://github.com/pumbaasdad/volumerize) [blacklabelops/volumerize](https://github.com/blacklabelops/volumerize))
 
+This fork was created in an attempt to keep dependencies up to date.  This will primarily be accomplished automatically using dependabot for minor and patch releases.  I will make an effort to manually update major version releases, but am not making any promises.  There is no active feature development planned for this fork, although I am happy to review pull requests.  
+
 - [Volumerize](#volumerize)
   - [Volume Backups Tutorials](#volume-backups-tutorials)
   - [Make It Short](#make-it-short)
@@ -189,7 +191,7 @@ $ docker start volumerize
 
 > Triggers a once time restore. The container for executing the restore command will be deleted afterwards
 
-You can restore from a particular backup by adding a time parameter to the command `restore`. For example, using `restore -t 3D` at the end in the above command will restore a backup from 3 days ago. See [the Duplicity manual](http://duplicity.nongnu.org/duplicity.1.html#sect8) to view the accepted time formats.
+You can restore from a particular backup by adding a time parameter to the command `restore`. For example, using `restore -t 3D` at the end in the above command will restore a backup from 3 days ago. See [the Duplicity manual](https://duplicity.gitlab.io/stable/duplicity.1.htm;#sect8) to view the accepted time formats.
 
 To see the available backups, use the command `list` before doing a `restore`.
 
@@ -317,7 +319,7 @@ Warning: Make sure your container is running under the correct restart policy. T
 
 ## Duplicity Parameters
 
-Under the hood pumbaasdad/volumerize uses duplicity. See here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
+Under the hood pumbaasdad/volumerize uses duplicity. See here for duplicity command line options: [Duplicity CLI Options](https://duplicity.gitlab.io/stable/duplicity.1.htm;#sect5)
 
 You can pass duplicity options inside Volumerize. Duplicity options will be passed by the environment-variable `VOLUMERIZE_DUPLICITY_OPTIONS`. The options will be added to all pumbaasdad/volumerize commands and scripts. E.g. the option `--dry-run` will put the whole container in demo mode as all duplicity commands will only be simulated.
 
@@ -470,7 +472,7 @@ $ docker run -d \
 
 > Will enforce a full backup after seven days.
 
-For the difference between a full and incremental backup, see [Duplicity's documentation](http://duplicity.nongnu.org/duplicity.1.html).
+For the difference between a full and incremental backup, see [Duplicity's documentation](https://duplicity.gitlab.io/stable/duplicity.1.htm;).
 
 ## Automatically remove old backups
 > **Use with caution!**
@@ -532,7 +534,7 @@ The provided prepoststrategies are also pushed as combinations:
 ## Container Scripts
 
 This image creates at container startup some convenience scripts.
-Under the hood pumbaasdad/volumerize uses duplicity. To pass script parameters, see here for duplicity command line options: [Duplicity CLI Options](http://duplicity.nongnu.org/duplicity.1.html#sect5)
+Under the hood pumbaasdad/volumerize uses duplicity. To pass script parameters, see here for duplicity command line options: [Duplicity CLI Options](https://duplicity.gitlab.io/stable/duplicity.1.htm;#sect5)
 
 | Script                         | Description                                                                              |
 | ------------------------------ | ---------------------------------------------------------------------------------------- |
@@ -548,7 +550,7 @@ Under the hood pumbaasdad/volumerize uses duplicity. To pass script parameters, 
 | `stopContainers`               | Stops the specified Docker containers                                                    |
 | `remove-all-but-n-full`        | Delete all chains except n full backups                                                  |
 | `remove-all-inc-of-but-n-full` | Delete all incremental backups except for the last n full backups                        |
-| `remove-older-than`            | Delete older backups ([Time formats](http://duplicity.nongnu.org/duplicity.1.html#toc8)) |
+| `remove-older-than`            | Delete older backups ([Time formats](https://duplicity.gitlab.io/stable/duplicity.1.htm;#toc8)) |
 | `cleanCacheLocks`              | Cleanup of old Cache locks.                                                              |
 
 Example triggering script inside running container:

@@ -2,15 +2,15 @@
 
 Volumerize can backup Docker volumes on Google Drive.
 
+Note: If you previously created Google Drive credentials using PyDrive and your key has not expired, those keys can still be used via the `GOOGLE_DRIVE_ID` and `GOOGLE_DRIVE_SECRET` environment variables.  However, since Google has removed the ability for out of band OAuth authentication, this is no longer the recommended approach.
+
 You have to perform the following steps:
 
-Login to Google developers console and create a service account.
+Login to [Google developers console](https://console.developers.google.com) and create a service account.
 
-Read on how to create the app key on Google directive: [Note on PyDrive](http://duplicity.nongnu.org/duplicity.1.html#sect22)
+Create a new JSON key for the service account, and save the key to a location that can be mounted to the Volumerize container.
 
-The Google developers console: [Google Developers Console](https://console.developers.google.com./)
-
-On the app page you need to generate the `OAuth client ID` and retrieve the `Client ID` and `Client Secret`.
+Share a folder in your google drive with the e-mail address of the service account.
 
 First we start our example container with some data to backup:
 
@@ -24,23 +24,11 @@ $ docker run \
 
 > Starts Jenkins and stores its data inside the Docker volume `jenkins_volume`.
 
-Start the container in `Authorization Mode` follow the authorization instructions and store your credentials inside a Docker volume!
-
-~~~~
-$ docker run -it --rm \
-    -v volumerize_cache:/volumerize-cache \
-    -v volumerize_credentials:/credentials \
-    -v jenkins_volume:/source:ro \
-    -e "VOLUMERIZE_SOURCE=/source" \
-    -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
-    -e "GOOGLE_DRIVE_ID=12312786-e99grj1k5lwjepofjwpoejfpe5nqvkd3e.apps.googleusercontent.com" \
-    -e "GOOGLE_DRIVE_SECRET=FWeofWefkefnkef" \
-    pumbaasdad/volumerize backup
-~~~~
-
-> Note: The routine will fail, you still have to enable the Google Drive API for your project. See the URL inside the log output.
-
 Setup Volumerize to use Google Drive for backups of the volume `jenkins_volume`.
+
+See [A Note on GDrive Backend](https://duplicity.gitlab.io/stable/duplicity.1.html#a-note-on-gdrive-backend) for a description of the `gdrive://` path structure.
+
+This example assumes that the service account key is stored in the `volumerize_credentials` volume.
 
 Start the container in demon mode:
 
@@ -51,7 +39,8 @@ $ docker run -d \
     -v volumerize_credentials:/credentials \
     -v jenkins_volume:/source:ro \
     -e "VOLUMERIZE_SOURCE=/source" \
-    -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
+    -e "VOLUMERIZE_TARGET=gdrive://service-account@project-projectid.iam.gserviceaccount.com?myDriveFolderID=folderId" \
+    -e "GOOGLE_SERVICE_JSON_FILE=/credentials/google_service_account.json" \
     pumbaasdad/volumerize
 ~~~~
 
@@ -74,7 +63,8 @@ $ docker run --rm \
     -v jenkins_test_restore:/source \
     -v volumerize_credentials:/credentials \
     -e "VOLUMERIZE_SOURCE=/source" \
-    -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
+    -e "VOLUMERIZE_TARGET=gdrive://service-account@project-projectid.iam.gserviceaccount.com?myDriveFolderID=folderId" \
+    -e "GOOGLE_SERVICE_JSON_FILE=/credentials/google_service_account.json" \
     pumbaasdad/volumerize restore
 ~~~~
 
@@ -97,7 +87,8 @@ $ docker run --rm \
     -v jenkins_test_restore:/source \
     -v volumerize_credentials:/credentials \
     -e "VOLUMERIZE_SOURCE=/source" \
-    -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
+    -e "VOLUMERIZE_TARGET=gdrive://service-account@project-projectid.iam.gserviceaccount.com?myDriveFolderID=folderId" \
+    -e "GOOGLE_SERVICE_JSON_FILE=/credentials/google_service_account.json" \
     pumbaasdad/volumerize verify
 ~~~~
 
@@ -128,7 +119,8 @@ $ docker run -d \
     -v volumerize_cache:/volumerize-cache \
     -v volumerize_credentials:/credentials \
     -e "VOLUMERIZE_SOURCE=/source" \
-    -e "VOLUMERIZE_TARGET=gdocs://youremail@gmail.com/backup" \
+    -e "VOLUMERIZE_TARGET=gdrive://service-account@project-projectid.iam.gserviceaccount.com?myDriveFolderID=folderId" \
+    -e "GOOGLE_SERVICE_JSON_FILE=/credentials/google_service_account.json" \
     -e "VOLUMERIZE_CONTAINERS=jenkins" \
     -v /var/run/docker.sock:/var/run/docker.sock \
     pumbaasdad/volumerize

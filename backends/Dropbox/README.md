@@ -6,7 +6,7 @@ You have to perform the following steps:
 
 Login to you Dropbox account and create an app key.
 
-Read on how to create the app key on Dropbox: [Note on Dropbox Access](http://duplicity.nongnu.org/duplicity.1.html#toc12)
+Read on how to create the app key on Dropbox: [Note on Dropbox Access](https://duplicity.gitlab.io/stable/duplicity.1.htm;#toc12)
 
 The Dropbox App Creation Page: [Dropbox App Creation](https://www.dropbox.com/developers/apps/create)
 
