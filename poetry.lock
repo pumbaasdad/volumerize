@@ -1395,16 +1395,6 @@ files = [
 ]
 
 [[package]]
-name = "pycrypto"
-version = "2.6.1"
-description = "Cryptographic modules for Python."
-optional = false
-python-versions = "*"
-files = [
-    {file = "pycrypto-2.6.1.tar.gz", hash = "sha256:f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c"},
-]
-
-[[package]]
 name = "pydrive2"
 version = "1.19.0"
 description = "Google Drive API made easy. Maintained fork of PyDrive."
@@ -1919,4 +1909,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "d33f3a3a25978c593b02508f7e5e34a5f480dc2a706abcc66273d761864f04bf"
+content-hash = "6bd4e5e601ec289d66f3151ba8529ce01f5e7e9c45619d81bb917dad769d7ebb"
