@@ -6,7 +6,7 @@ You have to perform the following steps:
 
 Login to you Dropbox account and create an app key.
 
-Read on how to create the app key on Dropbox: [Note on Dropbox Access](http://duplicity.nongnu.org/duplicity.1.html#toc12)
+Read on how to create the app key on Dropbox: [Note on Dropbox Access](https://duplicity.gitlab.io/stable/duplicity.1.htm;#toc12)
 
 The Dropbox App Creation Page: [Dropbox App Creation](https://www.dropbox.com/developers/apps/create)
 
@@ -19,7 +19,7 @@ $ docker run \
      -d -p 80:8080 \
      --name jenkins \
      -v jenkins_volume:/jenkins \
-     blacklabelops/jenkins
+     pumbaasdad/jenkins
 ~~~~
 
 > Starts Jenkins and stores its data inside the Docker volume `jenkins_volume`.
@@ -38,7 +38,7 @@ $ docker run -d \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=dpbx:///Apps/Volumerize" \
     -e "DPBX_ACCESS_TOKEN=JUtoLXXwNNMAAAAAAA" \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 > `volumerize_cache` is the local data cache.
@@ -61,7 +61,7 @@ $ docker run --rm \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=dpbx:///Apps/Volumerize" \
     -e "DPBX_ACCESS_TOKEN=JUtoLXXwNNMAAAAAAA" \
-    fekide/volumerize restore
+    pumbaasdad/volumerize restore
 ~~~~
 
 > Will perform a test restore inside a separate volume `jenkins_test_restore`
@@ -71,7 +71,7 @@ Check the contents of the volume:
 ~~~~
 $ docker run --rm \
     -v jenkins_test_restore:/source \
-    blacklabelops/alpine ls -R /source
+    pumbaasdad/alpine ls -R /source
 ~~~~
 
 > Lists files inside the source volume
@@ -84,7 +84,7 @@ $ docker run --rm \
     -e "VOLUMERIZE_SOURCE=/source" \
     -e "VOLUMERIZE_TARGET=dpbx:///Apps/Volumerize" \
     -e "DPBX_ACCESS_TOKEN=JUtoLXXwNNMAAAAAAA" \
-    fekide/volumerize verify
+    pumbaasdad/volumerize verify
 ~~~~
 
 > Will perform a single verification of the volume contents against the dropbox archive.
@@ -100,7 +100,7 @@ $ docker run \
      -d -p 80:8080 \
      --name jenkins \
      -v jenkins_volume:/jenkins \
-     blacklabelops/jenkins
+     pumbaasdad/jenkins
 ~~~~
 
 > Starts Jenkins and stores its data inside the Docker volume `jenkins_volume`.
@@ -117,7 +117,7 @@ $ docker run -d \
     -e "DPBX_ACCESS_TOKEN=JUtoLXXwNNMAAAAAAA" \
     -e "VOLUMERIZE_CONTAINERS=jenkins" \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    fekide/volumerize
+    pumbaasdad/volumerize
 ~~~~
 
 > Needs access to the docker host over the directive `-v /var/run/docker.sock:/var/run/docker.sock`

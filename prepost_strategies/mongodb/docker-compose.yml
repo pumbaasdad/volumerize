@@ -12,7 +12,7 @@ services:
       - mongodb:/data/db
 
   volumerize:
-    image: fekide/volumerize:mongodb
+    image: pumbaasdad/volumerize:mongodb
     environment:
       - VOLUMERIZE_SOURCE=/source
       - VOLUMERIZE_TARGET=file:///backup

@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   volumerize:
-    image: fekide/volumerize:latest
+    image: pumbaasdad/volumerize:latest
     volumes:
       - source_volume1:/source/1
       - source_volume2:/source/2
