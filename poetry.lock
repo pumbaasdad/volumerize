@@ -2,13 +2,13 @@
 
 [[package]]
 name = "apprise"
-version = "1.7.4"
+version = "1.7.5"
 description = "Push Notifications that work with just about every platform!"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "apprise-1.7.4-py3-none-any.whl", hash = "sha256:71edb0f29532c0c35b6c52d882880f1649f8bd1bdc97c7480fda3e1358603325"},
-    {file = "apprise-1.7.4.tar.gz", hash = "sha256:ef5e830051140d4228a759c5bc2d6857bcc7f8664df3e44f30f64617ce0c7a73"},
+    {file = "apprise-1.7.5-py3-none-any.whl", hash = "sha256:4e5bba4ba763b237f80a8e386266a5538e6be262c3da4d4578e877c556d7070c"},
+    {file = "apprise-1.7.5.tar.gz", hash = "sha256:0ac34b27009d5c625e87d33ec85fa577062b57f3bced6d7223e17c5afbb40e68"},
 ]
 
 [package.dependencies]
@@ -161,17 +161,17 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.34.71"
+version = "1.34.76"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "boto3-1.34.71-py3-none-any.whl", hash = "sha256:7ce8c9a50af2f8a159a0dd86b40011d8dfdaba35005a118e51cd3ac72dc630f1"},
-    {file = "boto3-1.34.71.tar.gz", hash = "sha256:d786e7fbe3c4152866199786468a625dc77b9f27294cd7ad4f63cd2e0c927287"},
+    {file = "boto3-1.34.76-py3-none-any.whl", hash = "sha256:530a4cea3d40a6bd2f15a368ea395beef1ea6dff4491823bc48bd20c7d4da655"},
+    {file = "boto3-1.34.76.tar.gz", hash = "sha256:8c598382e8fb61cfa8f75056197e9b509eb52039ebc291af3b1096241ba2542c"},
 ]
 
 [package.dependencies]
-botocore = ">=1.34.71,<1.35.0"
+botocore = ">=1.34.76,<1.35.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -180,13 +180,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.34.71"
+version = "1.34.76"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "botocore-1.34.71-py3-none-any.whl", hash = "sha256:3bc9e23aee73fe6f097823d61f79a8877790436038101a83fa96c7593e8109f8"},
-    {file = "botocore-1.34.71.tar.gz", hash = "sha256:c58f9ed71af2ea53d24146187130541222d7de8c27eb87d23f15457e7b83d88b"},
+    {file = "botocore-1.34.76-py3-none-any.whl", hash = "sha256:62e45e7374844ee39e86a96fe7f5e973eb5bf3469da028b4e3a8caba0909fb1f"},
+    {file = "botocore-1.34.76.tar.gz", hash = "sha256:68be44487a95132fccbc0b836fded4190dae30324f6bf822e1b6efd385ffdc83"},
 ]
 
 [package.dependencies]
@@ -627,20 +627,20 @@ grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0.dev0)"]
 
 [[package]]
 name = "google-api-python-client"
-version = "2.123.0"
+version = "2.125.0"
 description = "Google API Client Library for Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google-api-python-client-2.123.0.tar.gz", hash = "sha256:a17226b02f71de581afe045437b441844110a9cd91580b73549d41108cf1b9f0"},
-    {file = "google_api_python_client-2.123.0-py2.py3-none-any.whl", hash = "sha256:1c2bcaa846acf5bac4d6f244d8373d4de9de73d64eb6e77b56767ab4cf681419"},
+    {file = "google-api-python-client-2.125.0.tar.gz", hash = "sha256:51a0385cff65ec135106e8be60ee7112557396dde5f44113ae23912baddda143"},
+    {file = "google_api_python_client-2.125.0-py2.py3-none-any.whl", hash = "sha256:0a62b60fbd61b61a455f15d925264b3301099b67cafd2d33cf8bf151f1fca4f4"},
 ]
 
 [package.dependencies]
 google-api-core = ">=1.31.5,<2.0.dev0 || >2.3.0,<3.0.0.dev0"
-google-auth = ">=1.19.0,<3.0.0.dev0"
-google-auth-httplib2 = ">=0.1.0"
-httplib2 = ">=0.15.0,<1.dev0"
+google-auth = ">=1.32.0,<2.24.0 || >2.24.0,<2.25.0 || >2.25.0,<3.0.0.dev0"
+google-auth-httplib2 = ">=0.2.0,<1.0.0"
+httplib2 = ">=0.19.0,<1.dev0"
 uritemplate = ">=3.0.1,<5"
 
 [[package]]
@@ -1909,4 +1909,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "6bd4e5e601ec289d66f3151ba8529ce01f5e7e9c45619d81bb917dad769d7ebb"
+content-hash = "ebf1f539b34303994bcbdcd291dc57615efa3fb71c0166163ccc6785f5bcf4d5"
