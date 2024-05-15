@@ -21,7 +21,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && contains(inputs.image-name, inputs.image-type) }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.1.5
         with:
           submodules: true
 
@@ -45,7 +45,7 @@ jobs:
 
       - name: Report results
         if: ${{ success() || failure() }}
-        uses: dorny/test-reporter@v1.9.0
+        uses: dorny/test-reporter@v1.9.1
         with:
           name: ${{ steps.results-name.outputs.value }} ${{ inputs.image-type }} Tests
           path: ./report.xml
