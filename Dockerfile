@@ -1,15 +1,15 @@
 FROM rclone/rclone:1.66.0 as rclone
-FROM docker:26.0.1 as docker
+FROM docker:27.0.3 as docker
 
-FROM alpine:3.19.1 as alpine
+FROM alpine:3.20.1 as alpine
 
-FROM python:3.12.2 as python
+FROM python:3.12.4 as python
 RUN python -V > .python_version
 
-FROM ghcr.io/pumbaasdad/poetry:1.8.2 as poetry
+FROM ghcr.io/pumbaasdad/poetry:2024-07-06 as poetry
 RUN poetry -V > .poetry_version
 
-FROM ghcr.io/pumbaasdad/poetry:2024-03-16
+FROM ghcr.io/pumbaasdad/poetry:2024-07-06
 
 LABEL maintainer="Pumbaa's Dad <32616257+pumbaasdad@users.noreply.github.com>"
 
