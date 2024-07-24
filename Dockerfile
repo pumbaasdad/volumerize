@@ -1,7 +1,7 @@
 FROM rclone/rclone:1.67.0 as rclone
 FROM docker:27.1.1 as docker
 
-FROM alpine:3.20.1 as alpine
+FROM alpine:3.20.2 as alpine
 
 FROM python:3.12.4 as python
 RUN python -V > .python_version
