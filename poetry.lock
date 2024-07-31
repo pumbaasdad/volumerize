@@ -13,13 +13,13 @@ files = [
 
 [[package]]
 name = "apprise"
-version = "1.8.0"
+version = "1.8.1"
 description = "Push Notifications that work with just about every platform!"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "apprise-1.8.0-py3-none-any.whl", hash = "sha256:29307f9b7eeb5db70de13bd19f7f98700ad75369d14d1dcc49a6fcc06ed8a546"},
-    {file = "apprise-1.8.0.tar.gz", hash = "sha256:e8f58cebfea1a34f569cb4c68809a3175be80ec06f0a2ec473522b92023212c5"},
+    {file = "apprise-1.8.1-py3-none-any.whl", hash = "sha256:371ea400305bd3bf5e8af8e56f151e131ee6357ae009418f9dc3c279909ba0ee"},
+    {file = "apprise-1.8.1.tar.gz", hash = "sha256:08a20fe72672b7e90f7969d5b879d657c2e2db385a8a8c10f54cba565bf237f2"},
 ]
 
 [package.dependencies]
@@ -158,13 +158,13 @@ aio = ["azure-core[aio] (>=1.28.0)"]
 
 [[package]]
 name = "b2sdk"
-version = "2.4.1"
+version = "2.5.0"
 description = "Backblaze B2 SDK"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "b2sdk-2.4.1-py3-none-any.whl", hash = "sha256:7ce6301cb119fdbf9826d4a11c7ea783194a2ffbfaf2fb1c437c3643e22bfe36"},
-    {file = "b2sdk-2.4.1.tar.gz", hash = "sha256:257510b7c661dc6d513588560b436f2424fcbb4213834fa3ca52c7a5fd8d44b7"},
+    {file = "b2sdk-2.5.0-py3-none-any.whl", hash = "sha256:38bf80a6cd2bff5b104f7fd10023cf9e338c6f9d41da6108db5ad68f76f5abaa"},
+    {file = "b2sdk-2.5.0.tar.gz", hash = "sha256:d7c20125e64508a730e56307d75284790079cdb88e63851fff820a09b24fb1d9"},
 ]
 
 [package.dependencies]
@@ -241,17 +241,17 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.34.147"
+version = "1.34.151"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "boto3-1.34.147-py3-none-any.whl", hash = "sha256:e1cef9a1a301866bcdee32ae0c699465eb2345f9a8e613a5835821430165ff6d"},
-    {file = "boto3-1.34.147.tar.gz", hash = "sha256:9ec1c6ab22588242a47549f51a63dfc7c21fdf95a94820fc6e629ab060c38bd9"},
+    {file = "boto3-1.34.151-py3-none-any.whl", hash = "sha256:35bc76faacf1667d3fbb66c1966acf2230ef26206557efc26d9d9d79337bef43"},
+    {file = "boto3-1.34.151.tar.gz", hash = "sha256:30498a76b6f651ee2af7ae8edc1704379279ab8b91f1a8dd1f4ddf51259b0bc2"},
 ]
 
 [package.dependencies]
-botocore = ">=1.34.147,<1.35.0"
+botocore = ">=1.34.151,<1.35.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -260,13 +260,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.34.147"
+version = "1.34.151"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "botocore-1.34.147-py3-none-any.whl", hash = "sha256:be94a2f4874b1d1705cae2bd512c475047497379651678593acb6c61c50d91de"},
-    {file = "botocore-1.34.147.tar.gz", hash = "sha256:2e8f000b77e4ca345146cb2edab6403769a517b564f627bb084ab335417f3dbe"},
+    {file = "botocore-1.34.151-py3-none-any.whl", hash = "sha256:9018680d7d4a8060c26d127ceec5ab5b270879f423ea39b863d8a46f3e34c404"},
+    {file = "botocore-1.34.151.tar.gz", hash = "sha256:0d0968e427a94378f295b49d59170dad539938487ec948de3d030f06092ec6dc"},
 ]
 
 [package.dependencies]
@@ -725,13 +725,13 @@ grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0.dev0)"]
 
 [[package]]
 name = "google-api-python-client"
-version = "2.137.0"
+version = "2.139.0"
 description = "Google API Client Library for Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google_api_python_client-2.137.0-py2.py3-none-any.whl", hash = "sha256:a8b5c5724885e5be9f5368739aa0ccf416627da4ebd914b410a090c18f84d692"},
-    {file = "google_api_python_client-2.137.0.tar.gz", hash = "sha256:e739cb74aac8258b1886cb853b0722d47c81fe07ad649d7f2206f06530513c04"},
+    {file = "google_api_python_client-2.139.0-py2.py3-none-any.whl", hash = "sha256:1850a92505d91a82e2ca1635ab2b8dff179f4b67082c2651e1db332e8039840c"},
+    {file = "google_api_python_client-2.139.0.tar.gz", hash = "sha256:ed4bc3abe2c060a87412465b4e8254620bbbc548eefc5388e2c5ff912d36a68b"},
 ]
 
 [package.dependencies]
@@ -2426,4 +2426,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "02f4e9cb4a238fdf5e43dabee3130f5110a5847a961bab5f9724ebd8d4df61f6"
+content-hash = "9f12ea6d5dc48abb81cab832584cc82e6737c41a0f803ed4615caad0401839c5"
