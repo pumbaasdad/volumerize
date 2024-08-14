@@ -3,7 +3,7 @@ FROM docker:27.1.1 as docker
 
 FROM alpine:3.20.1 as alpine
 
-FROM python:3.12.4 as python
+FROM python:3.12.5 as python
 RUN python -V > .python_version
 
 FROM ghcr.io/pumbaasdad/poetry:2024-07-06 as poetry
