@@ -138,13 +138,13 @@ aio = ["aiohttp (>=3.0)"]
 
 [[package]]
 name = "azure-storage-blob"
-version = "12.21.0"
+version = "12.22.0"
 description = "Microsoft Azure Blob Storage Client Library for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "azure-storage-blob-12.21.0.tar.gz", hash = "sha256:b9722725072f5b7373c0f4dd6d78fbae2bb37bffc5c3e01731ab8c750ee8dd7e"},
-    {file = "azure_storage_blob-12.21.0-py3-none-any.whl", hash = "sha256:f9ede187dd5a0ef296b583a7c1861c6938ddd6708d6e70f4203a163c2ab42d43"},
+    {file = "azure-storage-blob-12.22.0.tar.gz", hash = "sha256:b3804bb4fe8ab1c32771fa464053da772a682c2737b19da438a3f4e5e3b3736e"},
+    {file = "azure_storage_blob-12.22.0-py3-none-any.whl", hash = "sha256:bb7d2d824ce3f11f14a27ee7d9281289f7e072ac8311c52e3652672455b7d5e8"},
 ]
 
 [package.dependencies]
@@ -158,13 +158,13 @@ aio = ["azure-core[aio] (>=1.28.0)"]
 
 [[package]]
 name = "b2sdk"
-version = "2.5.0"
+version = "2.5.1"
 description = "Backblaze B2 SDK"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "b2sdk-2.5.0-py3-none-any.whl", hash = "sha256:38bf80a6cd2bff5b104f7fd10023cf9e338c6f9d41da6108db5ad68f76f5abaa"},
-    {file = "b2sdk-2.5.0.tar.gz", hash = "sha256:d7c20125e64508a730e56307d75284790079cdb88e63851fff820a09b24fb1d9"},
+    {file = "b2sdk-2.5.1-py3-none-any.whl", hash = "sha256:71de4a24c113ea1836ba4aa4569e4e6374daeaa58272e342679070424440fee1"},
+    {file = "b2sdk-2.5.1.tar.gz", hash = "sha256:fb75c831d6ea875522e78f0c42b784771dc31e6bb64f3eb9f379bdc85eb35a3f"},
 ]
 
 [package.dependencies]
@@ -241,17 +241,17 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.34.151"
+version = "1.35.10"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "boto3-1.34.151-py3-none-any.whl", hash = "sha256:35bc76faacf1667d3fbb66c1966acf2230ef26206557efc26d9d9d79337bef43"},
-    {file = "boto3-1.34.151.tar.gz", hash = "sha256:30498a76b6f651ee2af7ae8edc1704379279ab8b91f1a8dd1f4ddf51259b0bc2"},
+    {file = "boto3-1.35.10-py3-none-any.whl", hash = "sha256:add26dd58e076dfd387013da4704716d5cff215cf14f6d4347c4b9b7fc1f0b8e"},
+    {file = "boto3-1.35.10.tar.gz", hash = "sha256:189ab1e2b4cd86df56f82438d89b4040eb140c92683f1bda7cb2e62624f20ea5"},
 ]
 
 [package.dependencies]
-botocore = ">=1.34.151,<1.35.0"
+botocore = ">=1.35.10,<1.36.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -260,13 +260,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.34.151"
+version = "1.35.10"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "botocore-1.34.151-py3-none-any.whl", hash = "sha256:9018680d7d4a8060c26d127ceec5ab5b270879f423ea39b863d8a46f3e34c404"},
-    {file = "botocore-1.34.151.tar.gz", hash = "sha256:0d0968e427a94378f295b49d59170dad539938487ec948de3d030f06092ec6dc"},
+    {file = "botocore-1.35.10-py3-none-any.whl", hash = "sha256:0d96d023b9b0cea99a0a428a431d011329d3a958730aee6ed6a6fec5d9bfbc03"},
+    {file = "botocore-1.35.10.tar.gz", hash = "sha256:6c8a1377b6636a0d80218115e1cd41bcceba0a2f050b79c206f4cf8d002c54d7"},
 ]
 
 [package.dependencies]
@@ -275,17 +275,17 @@ python-dateutil = ">=2.1,<3.0.0"
 urllib3 = {version = ">=1.25.4,<2.2.0 || >2.2.0,<3", markers = "python_version >= \"3.10\""}
 
 [package.extras]
-crt = ["awscrt (==0.20.11)"]
+crt = ["awscrt (==0.21.2)"]
 
 [[package]]
 name = "boxsdk"
-version = "3.11.0"
+version = "3.13.0"
 description = "Official Box Python SDK"
 optional = false
 python-versions = "*"
 files = [
-    {file = "boxsdk-3.11.0-py2.py3-none-any.whl", hash = "sha256:e2b82a9fc304fea8c6e8c9f2f6f4f09e5e65f5036dd039e830e9a257ce913d7e"},
-    {file = "boxsdk-3.11.0.tar.gz", hash = "sha256:9b09e50a18fe9607493468961a2211b16b0ac19fdad5d91602a7e50eb1438a09"},
+    {file = "boxsdk-3.13.0-py2.py3-none-any.whl", hash = "sha256:028b339ae2a5a13215ca550167e4ac094ed3e66ac2f9b20613b467f2b4d77c8b"},
+    {file = "boxsdk-3.13.0.tar.gz", hash = "sha256:c01350bdb0d24aa7927a64f6e9e8d7899be2ff43ea0e1410d4a1a273763146d2"},
 ]
 
 [package.dependencies]
@@ -725,13 +725,13 @@ grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0.dev0)"]
 
 [[package]]
 name = "google-api-python-client"
-version = "2.139.0"
+version = "2.143.0"
 description = "Google API Client Library for Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google_api_python_client-2.139.0-py2.py3-none-any.whl", hash = "sha256:1850a92505d91a82e2ca1635ab2b8dff179f4b67082c2651e1db332e8039840c"},
-    {file = "google_api_python_client-2.139.0.tar.gz", hash = "sha256:ed4bc3abe2c060a87412465b4e8254620bbbc548eefc5388e2c5ff912d36a68b"},
+    {file = "google_api_python_client-2.143.0-py2.py3-none-any.whl", hash = "sha256:d5654134522b9b574b82234e96f7e0aeeabcbf33643fbabcd449ef0068e3a476"},
+    {file = "google_api_python_client-2.143.0.tar.gz", hash = "sha256:6a75441f9078e6e2fcdf4946a153fda1e2cc81b5e9c8d6e8c0750c85c7f8a566"},
 ]
 
 [package.dependencies]
@@ -1600,13 +1600,13 @@ files = [
 
 [[package]]
 name = "paramiko"
-version = "3.4.0"
+version = "3.4.1"
 description = "SSH2 protocol library"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "paramiko-3.4.0-py3-none-any.whl", hash = "sha256:43f0b51115a896f9c00f59618023484cb3a14b98bbceab43394a39c6739b7ee7"},
-    {file = "paramiko-3.4.0.tar.gz", hash = "sha256:aac08f26a31dc4dffd92821527d1682d99d52f9ef6851968114a8728f3c274d3"},
+    {file = "paramiko-3.4.1-py3-none-any.whl", hash = "sha256:8e49fd2f82f84acf7ffd57c64311aa2b30e575370dc23bdb375b10262f7eac32"},
+    {file = "paramiko-3.4.1.tar.gz", hash = "sha256:8b15302870af7f6652f2e038975c1d2973f06046cb5d7d65355668b3ecbece0c"},
 ]
 
 [package.dependencies]
@@ -1923,13 +1923,13 @@ files = [
 
 [[package]]
 name = "python-keystoneclient"
-version = "5.4.0"
+version = "5.5.0"
 description = "Client Library for OpenStack Identity"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "python-keystoneclient-5.4.0.tar.gz", hash = "sha256:b2b4bdbe9daf7b0b353b8807672eeed01f87dd03b4f8b42d0d061b09b8931f41"},
-    {file = "python_keystoneclient-5.4.0-py3-none-any.whl", hash = "sha256:9918043849032f387a0000104c553aac5ace02918a6b7afcdb99690164029867"},
+    {file = "python-keystoneclient-5.5.0.tar.gz", hash = "sha256:c2f5934f95576936c98e45bf599ad48bcb0ac451593e5f8344ebf52cb0f411f5"},
+    {file = "python_keystoneclient-5.5.0-py3-none-any.whl", hash = "sha256:52fe7eb35c7345387c2488eb0b95f28a1d73edcad1ac3d8d80cf8ce6a7c9a8ee"},
 ]
 
 [package.dependencies]
@@ -1937,31 +1937,31 @@ debtcollector = ">=1.2.0"
 keystoneauth1 = ">=3.4.0"
 "oslo.config" = ">=5.2.0"
 "oslo.i18n" = ">=3.15.3"
-"oslo.serialization" = ">=2.18.0,<2.19.1 || >2.19.1"
+"oslo.serialization" = ">=2.18.0"
 "oslo.utils" = ">=3.33.0"
 packaging = ">=20.4"
-pbr = ">=2.0.0,<2.1.0 || >2.1.0"
+pbr = ">=2.0.0"
 requests = ">=2.14.2"
 stevedore = ">=1.20.0"
 
 [[package]]
 name = "python-novaclient"
-version = "18.6.0"
+version = "18.7.0"
 description = "Client library for OpenStack Compute API"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "python-novaclient-18.6.0.tar.gz", hash = "sha256:573c10aa420b0898d35fb146edd8bb005806bfff0131ae2b5a30ca22ac89477b"},
-    {file = "python_novaclient-18.6.0-py3-none-any.whl", hash = "sha256:ec88aa47a4cf9bc411eb65fb1623adcd68b02079386a644d6accb74e8349b529"},
+    {file = "python-novaclient-18.7.0.tar.gz", hash = "sha256:94cad0f0f4c161ced52a5ecd85d134fd673b997da7194a031c0ca69344340b0d"},
+    {file = "python_novaclient-18.7.0-py3-none-any.whl", hash = "sha256:4e9f1ff681a635168c7635b1facce369d9117b60400ea03a5b58487880670553"},
 ]
 
 [package.dependencies]
 iso8601 = ">=0.1.11"
 keystoneauth1 = ">=3.5.0"
 "oslo.i18n" = ">=3.15.3"
-"oslo.serialization" = ">=2.18.0,<2.19.1 || >2.19.1"
+"oslo.serialization" = ">=2.20.0"
 "oslo.utils" = ">=3.33.0"
-pbr = ">=2.0.0,<2.1.0 || >2.1.0"
+pbr = ">=3.0.0"
 PrettyTable = ">=0.7.2"
 stevedore = ">=2.0.1"
 
@@ -2426,4 +2426,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "9f12ea6d5dc48abb81cab832584cc82e6737c41a0f803ed4615caad0401839c5"
+content-hash = "a1f30ec54cb3d00eb927fdd420cfad2141323269faeb58bc4c23f00c7bb0e4ad"
