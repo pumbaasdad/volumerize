@@ -20,8 +20,6 @@ Aside of the required environment variables by Volumerize, this prepost strategy
 ## Example with Docker Compose
 
 ```YAML
-version: "3"
-
 services:
   postgres:
     image: postgres
