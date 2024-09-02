@@ -20,8 +20,6 @@ Aside of the required environment variables by Volumerize, this prepost strategy
 ## Example with Docker Compose
 
 ```YAML
-version: "3"
-
 services:
   postgres:
     image: postgres
@@ -56,7 +54,7 @@ volumes:
   backup:
 ```
 
-Then execute `docker-compose exec volumerize backup` to create a backup of your database and `docker-compose exec volumerize restore` to restore it from your backup.
+Then execute `docker compose exec volumerize backup` to create a backup of your database and `docker compose exec volumerize restore` to restore it from your backup.
 
 
 ## Multiple Databases

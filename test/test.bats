@@ -5,10 +5,10 @@ load 'libs/bats-assert/load'
 
 setup_file() {
   docker version
-  docker-compose version
+  docker compose version
   export COMPOSE_DIRECTORY=${BATS_TEST_DIRNAME}/compose-files
   export COMPOSE_FILE=${COMPOSE_DIRECTORY}/${TEST_IMAGE_TYPE:-default}.yml
-  docker-compose --no-ansi up -d
+  docker compose --no-ansi up -d
   if [ $TEST_IMAGE_TYPE == mysql ]; then
     # Wait for database initialisation
     wait_until_running mariadb 120 "MariaDB init process done. Ready for start up." "mariadbd: ready for connections."
@@ -32,34 +32,34 @@ setup() {
     # Initialize database with simple testing values
     postgres_initialize_db
   else
-    docker-compose exec -T volumerize bash -c 'echo test | cat > /source/test.txt'
+    docker compose exec -T volumerize bash -c 'echo test | cat > /source/test.txt'
   fi
 }
 
 
 @test "version" {
 
-  run docker-compose exec -T volumerize duplicity -V
+  run docker compose exec -T volumerize duplicity -V
   assert_success
 
 }
 
 @test "manual backup" {
 
-  run docker-compose exec -T volumerize backup
+  run docker compose exec -T volumerize backup
   assert_success
 
-  run echo $(docker-compose exec -T volumerize bash -c "ls --color=never /backup | grep -Ec \"duplicity-full(-signatures)?\.[0-9A-Z]{16}\.(manifest|(vol1\.difftar|sigtar)\.gz)\"")
+  run echo $(docker compose exec -T volumerize bash -c "ls --color=never /backup | grep -Ec \"duplicity-full(-signatures)?\.[0-9A-Z]{16}\.(manifest|(vol1\.difftar|sigtar)\.gz)\"")
   assert_output '3'
 
 }
 
 @test "jobber" {
 
-  run docker-compose exec -T volumerize jobber test VolumerizeBackupJob
+  run docker compose exec -T volumerize jobber test VolumerizeBackupJob
   assert_success
 
-  run echo $(docker-compose exec -T volumerize bash -c "ls --color=never /backup | grep -Ec \"duplicity-full(-signatures)?\.[0-9A-Z]{16}\.(manifest|(vol1\.difftar|sigtar)\.gz)\"")
+  run echo $(docker compose exec -T volumerize bash -c "ls --color=never /backup | grep -Ec \"duplicity-full(-signatures)?\.[0-9A-Z]{16}\.(manifest|(vol1\.difftar|sigtar)\.gz)\"")
   assert_output '3'
 
 }
@@ -68,29 +68,29 @@ setup() {
   for i in {1..5}
   do
     if [ $TEST_IMAGE_TYPE == default ]; then
-      run docker-compose exec -T volumerize bash -c "echo test${i} | cat >> /source/test.txt"
+      run docker compose exec -T volumerize bash -c "echo test${i} | cat >> /source/test.txt"
       assert_success
     fi
-    run docker-compose exec -T -e REMOVE_ALL_BUT_N_FULL=3 volumerize backupFull
+    run docker compose exec -T -e REMOVE_ALL_BUT_N_FULL=3 volumerize backupFull
     assert_success
     assert_output
     sleep 1
   done
 
-  run echo $(docker-compose exec -T volumerize bash -c "ls --color=never /backup | grep -Ec \"duplicity-full(-signatures)?\.[0-9A-Z]{16}\.(manifest|(vol1\.difftar|sigtar)\.gz)\"")
+  run echo $(docker compose exec -T volumerize bash -c "ls --color=never /backup | grep -Ec \"duplicity-full(-signatures)?\.[0-9A-Z]{16}\.(manifest|(vol1\.difftar|sigtar)\.gz)\"")
   assert_output '9'
 
 }
 
 @test "restore" {
 
-  run docker-compose exec -T volumerize backup
+  run docker compose exec -T volumerize backup
   assert_success
   assert_output
 
   # Corrupt data to simulate necessity of restore
   if [ $TEST_IMAGE_TYPE == default ]; then
-    run docker-compose exec -T volumerize bash -c 'echo wrong | cat > /source/test.txt'
+    run docker compose exec -T volumerize bash -c 'echo wrong | cat > /source/test.txt'
     assert_success
   elif [ $TEST_IMAGE_TYPE == mysql ]; then
     run mysql_drop_table
@@ -105,12 +105,12 @@ setup() {
     assert_success
   fi
 
-  run docker-compose exec -T volumerize restore
+  run docker compose exec -T volumerize restore
   assert_success
 
   # Validate that backup was restored
   if [ $TEST_IMAGE_TYPE == default ]; then
-    run docker-compose exec -T volumerize cat /source/test.txt 
+    run docker compose exec -T volumerize cat /source/test.txt
     assert_success
     assert_output --partial test
   elif [ $TEST_IMAGE_TYPE == mysql ]; then
@@ -133,7 +133,7 @@ setup() {
 }
 
 teardown() {
-  docker-compose --ansi never exec -T volumerize bash -c 'rm -rf /volumerize-cache/* /backup/* /source/*'
+  docker compose --ansi never exec -T volumerize bash -c 'rm -rf /volumerize-cache/* /backup/* /source/*'
   if [ $TEST_IMAGE_TYPE == mysql ]; then
     # Drop Table
     mysql_drop_table
@@ -144,11 +144,11 @@ teardown() {
     # Drop Table
     postgres_drop_table
   fi
-  docker-compose --ansi never logs
+  docker compose --ansi never logs
 }
 
 teardown_file() {
-  docker-compose --ansi never down -v
+  docker compose --ansi never down -v
 }
 
 function wait_until_running() {
@@ -159,7 +159,7 @@ function wait_until_running() {
 
   local wait_time=0
 
-  until docker-compose --no-ansi logs $service | grep "${first_line}" || [ $wait_time -ge $timeout ];
+  until docker compose --no-ansi logs $service | grep "${first_line}" || [ $wait_time -ge $timeout ];
   do
     echo "waiting for ${service} to be up and running"
     wait_time=$(( $wait_time + 1 ))
@@ -167,7 +167,7 @@ function wait_until_running() {
   done
   echo "initialization done, waiting for ${service} to start"
   # Wait unitl service can handle connections
-  until docker-compose --no-ansi logs --tail 5 $service | grep "${last_line}" || [ $wait_time -ge $timeout ];
+  until docker compose --no-ansi logs --tail 5 $service | grep "${last_line}" || [ $wait_time -ge $timeout ];
   do
     echo "waiting for ${service} to be up and running"
     wait_time=$(( $wait_time + 1 ))
@@ -185,7 +185,7 @@ mysql_value=test
 mysql_user=root
 mysql_pwd=1234
 
-mysql_default_command="docker-compose exec -T mariadb mariadb -u ${mysql_user} --password=${mysql_pwd} somedatabase -e "
+mysql_default_command="docker compose exec -T mariadb mariadb -u ${mysql_user} --password=${mysql_pwd} somedatabase -e "
 
 function mysql_initialize_db() {
   eval ${mysql_default_command} "\"create table ${mysql_table_name}(${mysql_column_name} varchar(100))\""
@@ -223,7 +223,7 @@ function mysql_check_values() {
 mongo_user=root
 mongo_pwd=1234
 
-mongo_default_command="docker-compose exec -T mongodb mongo --quiet -u ${mongo_user} -p ${mongo_pwd} "
+mongo_default_command="docker compose exec -T mongodb mongo --quiet -u ${mongo_user} -p ${mongo_pwd} "
 
 function mongo_initialize_db() {
   eval ${mongo_default_command} "\"/scripts/init.js\""
@@ -245,7 +245,7 @@ postgres_value=test
 postgres_user=postgres
 postgres_pwd=1234
 
-postgres_default_command="docker-compose exec -T -e PGPASSWORD=${postgres_pwd} postgres psql -qtA --username=${postgres_user} ${postgres_database} -c "
+postgres_default_command="docker compose exec -T -e PGPASSWORD=${postgres_pwd} postgres psql -qtA --username=${postgres_user} ${postgres_database} -c "
 
 function postgres_initialize_db() {
   eval ${postgres_default_command} "\"create table ${postgres_table_name}(${postgres_column_name} varchar(100))\""

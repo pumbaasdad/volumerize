@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   mariadb1:
     image: mariadb
