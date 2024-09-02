@@ -53,7 +53,7 @@ volumes:
   backup:
 ```
 
-Then execute `docker-compose exec volumerize backup` to create a backup of your database and `docker-compose exec volumerize restore` to restore it from your backup.
+Then execute `docker compose exec volumerize backup` to create a backup of your database and `docker compose exec volumerize restore` to restore it from your backup.
 
 ## Multiple Databases
 
