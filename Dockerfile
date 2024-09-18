@@ -1,4 +1,4 @@
-FROM rclone/rclone:1.67.0 as rclone
+FROM rclone/rclone:1.68.0 as rclone
 FROM docker:27.2.1 as docker
 
 FROM alpine:3.20.3 as alpine
