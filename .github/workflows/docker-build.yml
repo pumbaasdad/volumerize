@@ -36,7 +36,7 @@ jobs:
       image: ${{ steps.docker-config.outputs.primaryTag }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
@@ -89,7 +89,7 @@ jobs:
       # https://github.com/docker/build-push-action
       - name: Build and Push Docker image
         id: build-and-push
-        uses: docker/build-push-action@v6.7.0
+        uses: docker/build-push-action@v6.9.0
         with:
           context: ${{ steps.docker-config.outputs.context }}
           build-args: BASE_IMAGE=${{ inputs.base-image }}
