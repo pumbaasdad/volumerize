@@ -3,13 +3,13 @@ FROM docker:27.3.1 as docker
 
 FROM alpine:3.20.3 as alpine
 
-FROM python:3.12.5 as python
+FROM python:3.13.0 as python
 RUN python -V > .python_version
 
-FROM ghcr.io/pumbaasdad/poetry:2024-09-07 as poetry
+FROM ghcr.io/pumbaasdad/poetry:2024-10-15 as poetry
 RUN poetry -V > .poetry_version
 
-FROM ghcr.io/pumbaasdad/poetry:2024-09-07
+FROM ghcr.io/pumbaasdad/poetry:2024-10-15
 
 LABEL maintainer="Pumbaa's Dad <32616257+pumbaasdad@users.noreply.github.com>"
 
@@ -42,6 +42,8 @@ RUN apk upgrade --update && \
       libffi-dev \
       librsync \
       librsync-dev \
+      libxml2-dev \
+      libxslt-dev \
       libcurl && \
     pip3 install --no-cache-dir pyrax && \
     mkdir -p /etc/volumerize /volumerize-cache /opt/volumerize /var/jobber/0 && \
