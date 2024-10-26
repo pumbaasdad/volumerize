@@ -1,12 +1,12 @@
-FROM rclone/rclone:1.68.1 as rclone
-FROM docker:27.3.1 as docker
+FROM rclone/rclone:1.68.1 AS rclone
+FROM docker:27.3.1 AS docker
 
-FROM alpine:3.20.3 as alpine
+FROM alpine:3.20.3 AS alpine
 
-FROM python:3.12.5 as python
+FROM python:3.12.5 AS python
 RUN python -V > .python_version
 
-FROM ghcr.io/pumbaasdad/poetry:2024-09-07 as poetry
+FROM ghcr.io/pumbaasdad/poetry:2024-09-07 AS poetry
 RUN poetry -V > .poetry_version
 
 FROM ghcr.io/pumbaasdad/poetry:2024-09-07
