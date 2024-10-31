@@ -16,14 +16,14 @@ on:
 
 jobs:
   bump-version:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request_target.merged == true
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
     - uses: actions/checkout@v4.2.1
       with:
-        ref: ${{ github.event.pull_request.merge_commit_sha }}
+        ref: ${{ github.event.pull_request_target.merge_commit_sha }}
         fetch-depth: '0'
     - name: Bump version and push tag
       id: bump
