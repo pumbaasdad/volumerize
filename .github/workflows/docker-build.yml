@@ -41,7 +41,7 @@ jobs:
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
-        if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ github.event_name != 'pull_request_target' }}
         uses: sigstore/cosign-installer@v3.7.0
         with:
           cosign-release: 'v2.2.2'
@@ -96,7 +96,7 @@ jobs:
           push: true
           tags: ${{ steps.docker-config.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          provenance: ${{ github.event_name != 'pull_request' }}
+          provenance: ${{ github.event_name != 'pull_request_target' }}
 
       # Sign the resulting Docker image digest.
       # This will only write to the public Rekor transparency log when the Docker
@@ -104,7 +104,7 @@ jobs:
       # transparency data even for private images, pass --force to cosign below.
       # https://github.com/sigstore/cosign
       - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ github.event_name != 'pull_request_target' }}
         env:
           # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
           TAGS: ${{ steps.meta.outputs.tags }}
