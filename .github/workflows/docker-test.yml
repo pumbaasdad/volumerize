@@ -21,7 +21,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request_target' && contains(inputs.image-name, inputs.image-type) }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4.2.1
+        uses: actions/checkout@v4.2.2
         with:
           submodules: true
 
