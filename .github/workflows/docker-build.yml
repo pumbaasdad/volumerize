@@ -36,7 +36,7 @@ jobs:
       image: ${{ steps.docker-config.outputs.primaryTag }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4.2.1
+        uses: actions/checkout@v4.2.2
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
