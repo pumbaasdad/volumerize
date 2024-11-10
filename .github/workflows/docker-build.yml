@@ -97,6 +97,8 @@ jobs:
           tags: ${{ steps.docker-config.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           provenance: ${{ github.event_name != 'pull_request' }}
+          secrets: |
+            GIT_AUTH_TOKEN=${{ secrets.CONTAINER_PUSH_TOKEN }}
 
       # Sign the resulting Docker image digest.
       # This will only write to the public Rekor transparency log when the Docker
