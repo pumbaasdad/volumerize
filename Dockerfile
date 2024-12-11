@@ -1,15 +1,15 @@
 FROM rclone/rclone:1.68.2 AS rclone
 FROM docker:27.4.0 AS docker
 
-FROM alpine:3.20.3 AS alpine
+FROM alpine:3.21.0 AS alpine
 
-FROM python:3.12.5 AS python
+FROM python:3.13.1 AS python
 RUN python -V > .python_version
 
-FROM ghcr.io/pumbaasdad/poetry:2024-09-07 AS poetry
+FROM ghcr.io/pumbaasdad/poetry:2024-12-10 AS poetry
 RUN poetry -V > .poetry_version
 
-FROM ghcr.io/pumbaasdad/poetry:2024-09-07
+FROM ghcr.io/pumbaasdad/poetry:2024-12-10
 
 LABEL maintainer="Pumbaa's Dad <32616257+pumbaasdad@users.noreply.github.com>"
 
@@ -43,7 +43,7 @@ RUN apk upgrade --update && \
       librsync \
       librsync-dev \
       libcurl && \
-    pip3 install --no-cache-dir pyrax && \
+    CFLAGS=-Wno-int-conversion pip3 install --no-cache-dir pyrax && \
     mkdir -p /etc/volumerize /volumerize-cache /opt/volumerize /var/jobber/0 && \
     # Install Jobber
     wget --directory-prefix=/tmp https://github.com/dshearer/jobber/releases/download/v${JOBBER_VERSION}/jobber-${JOBBER_VERSION}-r0.apk && \
