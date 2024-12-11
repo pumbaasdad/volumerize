@@ -6,10 +6,10 @@ FROM alpine:3.20.3 AS alpine
 FROM python:3.12.5 AS python
 RUN python -V > .python_version
 
-FROM ghcr.io/pumbaasdad/poetry:2024-09-07 AS poetry
+FROM ghcr.io/pumbaasdad/poetry:2024-12-10 AS poetry
 RUN poetry -V > .poetry_version
 
-FROM ghcr.io/pumbaasdad/poetry:2024-09-07
+FROM ghcr.io/pumbaasdad/poetry:2024-12-10
 
 LABEL maintainer="Pumbaa's Dad <32616257+pumbaasdad@users.noreply.github.com>"
 
