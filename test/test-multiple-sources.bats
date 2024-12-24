@@ -59,7 +59,6 @@ setup() {
 
   run echo $(docker compose exec -T volumerize bash -c "ls --color=never /backup/2 | grep -Ec \"duplicity-full(-signatures)?\.[0-9A-Z]{16}\.(manifest|(vol1\.difftar|sigtar)\.gz)\"")
   assert_output '3'
-
 }
 
 @test "backup single" {
