@@ -34,6 +34,6 @@ jobs:
         DEFAULT_BUMP: patch
         INITIAL_VERSION: 1.0.0
     - name: Create release
-      uses: ncipollo/release-action@v1.14.0
+      uses: ncipollo/release-action@v1.15.0
       with:
         tag:  ${{ steps.bump.outputs.new_tag }}
