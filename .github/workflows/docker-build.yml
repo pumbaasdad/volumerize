@@ -54,7 +54,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request_target' }}
         uses: actions/checkout@v4.2.2
         with:
-          ref: ${{ github.event.pull_request_target.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Checkout repository
         if: ${{ github.event_name != 'pull_request_target' }}
