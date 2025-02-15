@@ -18,9 +18,17 @@ jobs:
       contents: read
       actions: read
       checks: write
-    if: ${{ github.event_name == 'pull_request' && contains(inputs.image-name, inputs.image-type) }}
+    if: ${{ github.event_name == 'pull_request_target' && contains(inputs.image-name, inputs.image-type) }}
     steps:
       - name: Checkout repository
+        if: ${{ github.event_name == 'pull_request_target' }}
+        uses: actions/checkout@v4.2.2
+        with:
+          submodules: true
+          ref: ${{ github.event.pull_request_target.head.sha }}
+
+      - name: Checkout repository
+        if: ${{ github.event_name != 'pull_request_target' }}
         uses: actions/checkout@v4.2.2
         with:
           submodules: true

@@ -9,7 +9,7 @@ if __name__ == "__main__" :
     strategies = sys.argv[2].split(",")
     runId = sys.argv[3]
 
-    isPr = os.getenv("GITHUB_EVENT_NAME") == "pull_request"
+    isPr = os.getenv("GITHUB_EVENT_NAME") == "pull_request_target"
     strategyPrefix = (runId,) if isPr else ()
 
     allStrategies = map(
