@@ -28,7 +28,6 @@ jobs:
     with:
       strategies: default
       version: ${{ inputs.version }}
-      secrets: inherit
   build-mongodb:
     needs: [build-base]
     uses: ./.github/workflows/docker-build.yml
@@ -36,7 +35,6 @@ jobs:
       strategies: mongodb
       base-image: ${{ needs.build-base.outputs.image }}
       version: ${{ inputs.version }}
-      secrets: inherit
   build-mysql:
     needs: [build-base]
     uses: ./.github/workflows/docker-build.yml
@@ -44,7 +42,6 @@ jobs:
       strategies: mysql
       base-image: ${{ needs.build-base.outputs.image }}
       version: ${{ inputs.version }}
-      secrets: inherit
   build-postgres:
     needs: [build-base]
     uses: ./.github/workflows/docker-build.yml
@@ -52,7 +49,6 @@ jobs:
       strategies: postgres
       base-image: ${{ needs.build-base.outputs.image }}
       version: ${{ inputs.version }}
-      secrets: inherit
   build-mongodb-mysql:
     needs: [build-mongodb]
     uses: ./.github/workflows/docker-build.yml
@@ -60,7 +56,6 @@ jobs:
       strategies: mongodb,mysql
       base-image: ${{ needs.build-mongodb.outputs.image }}
       version: ${{ inputs.version }}
-      secrets: inherit
   build-mongodb-postgres:
     needs: [build-mongodb]
     uses: ./.github/workflows/docker-build.yml
@@ -68,7 +63,6 @@ jobs:
       strategies: mongodb,postgres
       base-image: ${{ needs.build-mongodb.outputs.image }}
       version: ${{ inputs.version }}
-      secrets: inherit
   build-mysql-postgres:
     needs: [build-mysql]
     uses: ./.github/workflows/docker-build.yml
@@ -76,7 +70,6 @@ jobs:
       strategies: mysql,postgres
       base-image: ${{ needs.build-mysql.outputs.image }}
       version: ${{ inputs.version }}
-      secrets: inherit
   build-mongodb-mysql-postgres:
     needs: [build-mongodb-mysql]
     uses: ./.github/workflows/docker-build.yml
@@ -84,7 +77,6 @@ jobs:
       strategies: mongodb,mysql,postgres
       base-image: ${{ needs.build-mongodb-mysql.outputs.image }}
       version: ${{ inputs.version }}
-      secrets: inherit
 
   test-base:
     needs: build-base
