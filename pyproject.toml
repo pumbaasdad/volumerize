@@ -10,7 +10,7 @@ boto = "^2.49.0"
 boto3 = "^1.36.18"
 boxsdk = {extras = ["jwt"], version = "^3.13.0"}
 dropbox = "^12.0.2"
-duplicity = "^3.0.0"
+duplicity = {version = "^3.0.3.2", python = ">=3.10,<3.14"}
 fasteners = "^0.19"
 gdata-python3 = "^3.0.1"
 google-api-python-client = "^2.160.0"
