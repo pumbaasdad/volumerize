@@ -682,12 +682,12 @@ stone = ">=2,<3.3.3"
 
 [[package]]
 name = "duplicity"
-version = "3.0.4a0"
+version = "3.0.4.0"
 description = "Encrypted backup using rsync algorithm"
 optional = false
 python-versions = "<3.14,>=3.8"
 files = [
-    {file = "duplicity-3.0.4a0.tar.gz", hash = "sha256:d0c8f3b5345dabb6abae490e367ae9cc7bf84761c83ed8d421341cbbe3a60518"},
+    {file = "duplicity-3.0.4.0.tar.gz", hash = "sha256:a5a6454041b21db1b97033d37b297b301b9c0bf3faa459c89b5eafb5ff7e0103"},
 ]
 
 [package.dependencies]
@@ -2526,4 +2526,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "d5f848bd7c4de2b6c295fb879cab9b6a24418f60cadeb82542d6fadbe5743c1d"
+content-hash = "afbf5a5bbc41b59dc52a7832f5d21663ca48cc80d254fe855f6d2b7d249edf7c"
