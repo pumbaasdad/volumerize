@@ -53,7 +53,7 @@ jobs:
 
       - name: Report results
         if: ${{ success() || failure() }}
-        uses: dorny/test-reporter@v1.9.1
+        uses: dorny/test-reporter@v2.0.0
         with:
           name: ${{ steps.results-name.outputs.value }} ${{ inputs.image-type }} Tests
           path: ./report.xml
