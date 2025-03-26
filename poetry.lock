@@ -300,18 +300,18 @@ files = [
 
 [[package]]
 name = "boto3"
-version = "1.37.15"
+version = "1.37.20"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "boto3-1.37.15-py3-none-any.whl", hash = "sha256:78cc1b483cc637e1df8e81498d66f89550d4ee92175ccab5be1a2226672fe6b9"},
-    {file = "boto3-1.37.15.tar.gz", hash = "sha256:586332456fff19328d57a88214a2ac2eda1bafab743556a836eda46a4ce613c6"},
+    {file = "boto3-1.37.20-py3-none-any.whl", hash = "sha256:225dbc75d79816cb9b28cc74a63c9fa0f2d70530d603dacd82634f362f6679c1"},
+    {file = "boto3-1.37.20.tar.gz", hash = "sha256:87d9bd6ad49be754d4ae2724cfb892eb3f9f17bcafd781fb3ce0d98cc539bdd6"},
 ]
 
 [package.dependencies]
-botocore = ">=1.37.15,<1.38.0"
+botocore = ">=1.37.20,<1.38.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.11.0,<0.12.0"
 
@@ -320,14 +320,14 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.37.15"
+version = "1.37.20"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "botocore-1.37.15-py3-none-any.whl", hash = "sha256:996b8d6a342ad7735eb07d8b4a81dad86e60ce0889ccb3edec0cd66eece85393"},
-    {file = "botocore-1.37.15.tar.gz", hash = "sha256:72e6f1db6ebc4112d6ba719c97ad71ac7cf4a2f3729ae74fa225641e3ddcba92"},
+    {file = "botocore-1.37.20-py3-none-any.whl", hash = "sha256:c34f4f25fda7c4f726adf5a948590bd6bd7892c05278d31e344b5908e7b43301"},
+    {file = "botocore-1.37.20.tar.gz", hash = "sha256:9295385740f9d30f9b679f76ee51f49b80ae73183d84d499c1c3f1d54d820f54"},
 ]
 
 [package.dependencies]
@@ -832,21 +832,21 @@ grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0.dev0)"]
 
 [[package]]
 name = "google-api-python-client"
-version = "2.164.0"
+version = "2.165.0"
 description = "Google API Client Library for Python"
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "google_api_python_client-2.164.0-py2.py3-none-any.whl", hash = "sha256:b2037c3d280793c8d5180b04317b16be4acd5f77af5dfa7213ace32d140a9ffe"},
-    {file = "google_api_python_client-2.164.0.tar.gz", hash = "sha256:116f5a05dfb95ed7f7ea0d0f561fc5464146709c583226cc814690f9bb221492"},
+    {file = "google_api_python_client-2.165.0-py2.py3-none-any.whl", hash = "sha256:4eaab7d4a20be0d3d1dde462fa95e9e0ccc2a3e177a656701bf73fe738ddef7d"},
+    {file = "google_api_python_client-2.165.0.tar.gz", hash = "sha256:0d2aee76727a104705630bebbc43669c864b766924e9329051ef7b7e2468eb72"},
 ]
 
 [package.dependencies]
-google-api-core = ">=1.31.5,<2.0.dev0 || >2.3.0,<3.0.0.dev0"
-google-auth = ">=1.32.0,<2.24.0 || >2.24.0,<2.25.0 || >2.25.0,<3.0.0.dev0"
+google-api-core = ">=1.31.5,<2.0.dev0 || >2.3.0,<3.0.0"
+google-auth = ">=1.32.0,<2.24.0 || >2.24.0,<2.25.0 || >2.25.0,<3.0.0"
 google-auth-httplib2 = ">=0.2.0,<1.0.0"
-httplib2 = ">=0.19.0,<1.dev0"
+httplib2 = ">=0.19.0,<1.0.0"
 uritemplate = ">=3.0.1,<5"
 
 [[package]]
@@ -2656,4 +2656,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "8f69ecc7fd12bfc9f7a4413aaabbd2f072969bca958bb5cda75b3c071d82653b"
+content-hash = "aa0314043cb9d07030b2b25fc4790ecf6d17429407d6bf095ff07d4be5e9d4ba"
